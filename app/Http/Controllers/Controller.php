@@ -388,71 +388,70 @@ class Controller extends BaseController
             }
         }
 
-        foreach ($request->directors as $key => $director) {
-            if ($post->directors()->pluck('name')->contains($director)) {
-                continue;
-            }
-            if ($id = Director::check($director)) {
-                $post->directors()->attach($id);
-            } else {
+        if (isset($request->directors)) {
+            foreach ($request->directors as $key => $director) {
+                if ($post->directors()->pluck('name')->contains($director)) {
+                    continue;
+                }
+                if ($id = Director::check($director)) {
+                    $post->directors()->attach($id);
+                } else {
 
-                $post->directors()->create(['name' => $director]);
-            }
-        }
-
-        foreach ($request->writers as $key => $writer) {
-            if ($post->writers()->pluck('name')->contains($writer)) {
-                continue;
-            }
-            if ($id = Writer::check($writer)) {
-                $post->writers()->attach($id);
-            } else {
-
-                $post->writers()->create(['name' => $writer]);
-            }
-        }
-
-        foreach ($request->languages as $key => $language) {
-            if ($post->languages()->pluck('name')->contains($language)) {
-                continue;
-            }
-            if ($id = Language::check($language)) {
-
-                $post->languages()->attach($id);
-            } else {
-
-                $post->languages()->create(['name' => $language]);
-            }
-        }
-
-
-        $videos = $post->videos();
-
-        $videos->delete();
-
-
-
-        if (isset($request->file)) {
-            foreach ($request->file as $key => $file) {
-                if ($file[1] !== null) {
-                    if ($id = Quality::check($file[2])) {
-                        $quality_id = $id;
-                    } else {
-                        $quality = Quality::create(['name' => $file[2]]);
-                        $quality_id = $quality->id;
-                    }
-
-
-                    $video = $post->videos()->create([
-                        'url' => $file[1],
-                        'quality_id' => $quality_id
-                    ]);
+                    $post->directors()->create(['name' => $director]);
                 }
             }
         }
 
-        if (isset($request->captions)) {
-            $this->SaveCaption($request, $post, $destinationPath);
+        if (isset($request->writers)) {
+            foreach ($request->writers as $key => $writer) {
+                if ($post->writers()->pluck('name')->contains($writer)) {
+                    continue;
+                }
+                if ($id = Writer::check($writer)) {
+                    $post->writers()->attach($id);
+                } else {
+                    $post->writers()->create(['name' => $writer]);
+                }
+            }
+        }
+
+        if (isset($request->languages)) {
+            foreach ($request->languages as $key => $language) {
+                if ($post->languages()->pluck('name')->contains($language)) {
+                    continue;
+                }
+                if ($id = Language::check($language)) {
+                    $post->languages()->attach($id);
+                } else {
+                    $post->languages()->create(['name' => $language]);
+                }
+            }
+        }
+
+
+        if ($post->type == 'movies') {
+            $videos = $post->videos();
+            $videos->delete();
+            if (isset($request->file)) {
+                foreach ($request->file as $key => $file) {
+                    if ($file[1] !== null) {
+                        if ($id = Quality::check($file[2])) {
+                            $quality_id = $id;
+                        } else {
+                            $quality = Quality::create(['name' => $file[2]]);
+                            $quality_id = $quality->id;
+                        }
+                        $video = $post->videos()->create([
+                            'url' => $file[1],
+                            'quality_id' => $quality_id
+                        ]);
+                    }
+                }
+            }
+
+            if (isset($request->captions)) {
+                $this->SaveCaption($request, $post, $destinationPath);
+            }
         }
     }
 

@@ -28,6 +28,18 @@ class Episode extends Model
         return $this->belongsTo(Post::class,'post_id');
     }
 
+    public function image()
+    {
+        $poster = $this->poster;
+        if($poster) {
+            return asset($poster);
+        }else{
+            $serie = $this->serie;
+            return $serie->show_poster('resize');
+            
+        }
+    }
+
     public function play()
     {
         $slug_serie = $this->serie->slug;

@@ -67,9 +67,9 @@ class CategoryController extends Controller
 
 
         if ($request->hasFile('poster')) {
-            if (!File::exists("/$category->image")) {
+            
                 File::delete(public_path() . "/$category->image");
-            }
+            
            $Poster = $this->savePoster($request->file('poster'), 'category_', $destinationPath);
 
             $picPath = $this->image_resize(340, 191, $Poster, $destinationPath);

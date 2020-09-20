@@ -10,9 +10,11 @@
             <li><a href="{{route('Panel.MoviesList')}}"><i class="fas fa-film"></i> <span class="pr-4">فیلم </span> </a>
 
             </li>
-            <li><a href="{{route('Panel.SeriesList')}}"><i class="fas fa-video"></i> <span class="pr-4">سریال</span> </a>
+            <li><a href="{{route('Panel.SeriesList')}}"><i class="fas fa-video"></i> <span class="pr-4">سریال</span>
+                </a>
             </li>
-            <li><a href="{{route('Panel.SeriesList')}}?type=documentary"><i class="fas fa-video"></i> <span class="pr-4">مستند</span> </a>
+            <li><a href="{{route('Panel.SeriesList')}}?type=documentary"><i class="fas fa-video"></i> <span
+                        class="pr-4">مستند</span> </a>
             </li>
             <li><a href="#"><i class="fas fa-blog"></i> <span class="pr-4">وبلاگ</span> </a>
                 <ul>
@@ -26,10 +28,15 @@
                     <li><a href="{{route('Panel.AdvertList')}}">لیست</a></li>
                 </ul>
             </li>
-              <li><a href="{{route('Panel.SliderList')}}"><i class="fas fa-sliders-h"></i> <span class="pr-4">اسلایدشو</span> </a>
-             <li><a href="{{route('Panel.CatList')}}"><i class="fas fa-list-alt"></i> <span class="pr-4">دسته بندی ها</span> </a>
-                <li><a href="{{route('Panel.ActorsList')}}"><i class="fas fa-list-alt"></i> <span class="pr-4">هنرمندان</span> </a>
-                <li><a href="#"><i class="fas fa-star"></i> <span class="pr-4">اشتراک</span> </a>
+            <li><a href="{{route('Panel.SliderList')}}"><i class="fas fa-sliders-h"></i> <span
+                        class="pr-4">اسلایدشو</span> </a>
+            <li><a href="{{route('Panel.CatList')}}"><i class="fas fa-list-alt"></i> <span class="pr-4">دسته بندی
+                        ها</span> </a>
+            <li><a href="{{route('Panel.CollectionList')}}"><i class="fas fa-th"></i> <span class="pr-4">کالکشن ها</span> </a>
+
+            <li><a href="{{route('Panel.ActorsList')}}"><i class="fas fa-list-alt"></i> <span
+                        class="pr-4">هنرمندان</span> </a>
+            <li><a href="#"><i class="fas fa-star"></i> <span class="pr-4">اشتراک</span> </a>
                 <ul>
                     <li><a href="{{route('Panel.AddPlan')}}">افزودن</a></li>
                     <li><a href="{{route('Panel.PlanList')}}">لیست</a></li>
@@ -44,8 +51,7 @@
             <li><a href="{{route('Panel.UnconfirmedComments')}}"><i class="fas fa-comment"></i> <span
                         class="pr-4">دیدگاه ها</span> </a>
             </li>
-             <li><a href="{{route('Panel.Setting')}}"><i class="fas fa-cog"></i> <span
-                        class="pr-4">تنظیمات</span> </a>
+            <li><a href="{{route('Panel.Setting')}}"><i class="fas fa-cog"></i> <span class="pr-4">تنظیمات</span> </a>
             </li>
 
         </ul>

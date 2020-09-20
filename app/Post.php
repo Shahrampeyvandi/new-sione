@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     protected $guarded = ['id'];
-    protected $with = ['categories', 'languages', 'actors', 'directors'];
+    protected $with = ['categories', 'languages', 'actors', 'directors', 'episodes'];
     protected $casts = [
         'awards' => 'array',
     ];
@@ -37,6 +37,10 @@ class Post extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'post_category', 'post_id', 'category_id');
+    }
+    public function collections()
+    {
+        return $this->belongsToMany(Collection::class, 'post_collection', 'post_id', 'collection_id');
     }
 
     public function episodes()
@@ -119,6 +123,15 @@ class Post extends Model
             } else {
                 return route('ShowMovie', ['slug' => $this->slug]);
             }
+        }
+    }
+
+    public function has_season()
+    {
+        if(count($this->seasons)) {
+            return true;
+        }else{
+            return false;
         }
     }
 
@@ -209,14 +222,23 @@ class Post extends Model
 
     public function last_updated()
     {
-        $last_season = $this->seasons()->orderBy('number','desc')->first();
-        $episode = $last_season->sections()->orderBy('section','desc')->first();
-        return 'فصل ' . $last_season->number . ' قسمت ' . $episode->section . ' ';
+        $last_season = $this->seasons()->orderBy('number', 'desc')->first();
+        if ($last_season) {
+            $episode = $last_season->sections()->orderBy('section', 'desc')->first();
+            return 'فصل ' . $last_season->number . ' قسمت ' . $episode->section . ' ';
+        }
+        $last_section = $this->episodes()->orderBy('section', 'desc')->first();
+        if ($last_section) {
+            return ' قسمت ' . $last_section->section . ' ';
+        }
+        return null;
     }
+
+
+
 
     public function likes()
     {
-       return $this->votes()->where('status',1)->count();
-        
+        return $this->votes()->where('status', 1)->count();
     }
 }

@@ -33,21 +33,27 @@
                             <div class="col-6 col-md-12">
                                 <a href="{{$section->play()}}">
                                     <div class="Season-movie-img-box">
-                                        <img src="{{asset($section->poster)}}" alt="">
+                                        <img src="{{$section->image()}}" alt="">
                                         <i class="fa fa-play-circle"></i>
                                     </div>
                                 </a>
                             </div>
                             <div class="col-6 col-md-12">
                                 <h3>
+                                    @if ($post->has_season())
                                     {{$section->serie->title}} - فصل {{$season->number}} - قسمت {{$section->section}}
+                                    @else
+                                    {{$section->serie->title}} - قسمت {{$section->section}}
+                                    @endif
+
+
                                     <a href="#" class="section-download" data-episode="{{$section->id}}"
                                         data-id="{{$post->id}}" onclick="call(event)">
                                         <i class="fa fa-cloud-download-alt"></i>
                                     </a>
                                 </h3>
                                 <h4>
-                                    {{$post->duration}}
+                                    {{$post->duration}}  دقیقه
                                 </h4>
                             </div>
                             <div class="col-12">

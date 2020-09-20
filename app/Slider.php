@@ -25,8 +25,15 @@ class Slider extends Model
 
   public static function LastSliders($type)
   {
-    return static::whereHas('post',function($q)use($type){
+     
+    $sliders = static::whereHas('post',function($q)use($type){
       $q->where('type',$type);
     })->latest()->take(5)->get();
+    if(count($sliders)){
+       return $sliders;
+    }else{
+     return static::latest()->take(5)->get();
+    }
+     
   }
 }

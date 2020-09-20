@@ -371,6 +371,7 @@
 
 
                  const Writers = res.writers.map((item,index) => {
+                     if(item.name != null) {
                            return `<div class="custom-control custom-checkbox custom-control-inline">
                                      <input type="checkbox" id="writer-${index}" name="writers[]" value="${item.name}"
                                         class="custom-control-input" checked>
@@ -378,7 +379,9 @@
                                         ${item.name}</label>
                                 </div>`
 
-                        });
+                        }
+                 }
+                        );
                 joinWriters = Writers.join('');
                 $('.writers-list').html(joinWriters)
 

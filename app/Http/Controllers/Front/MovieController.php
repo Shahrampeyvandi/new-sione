@@ -15,6 +15,7 @@ class MovieController extends Controller
 {
     public function Show($slug)
     {
+    
         
         $data['post'] = Post::whereSlug($slug)->first();
         if (is_null($data['post'])) {
@@ -41,6 +42,7 @@ class MovieController extends Controller
             $data['guard'] = 'admin';
         }
        
+        dd($data);
 
         return view('Front.ShowMovie', $data);
     }

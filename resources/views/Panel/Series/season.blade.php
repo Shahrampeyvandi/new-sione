@@ -43,7 +43,7 @@
                 <hr />
             </div>
             <form id="upload-file" method="post" @isset($season) action="{{route('Panel.EditSeason',$season)}}" @else
-                action="{{route('Panel.AddSeason',$id)}}" @endisset enctype="multipart/form-data">
+                action="{{route('Panel.AddSeason',$post_id)}}" @endisset enctype="multipart/form-data">
                 @csrf
 
                 <div class="row">
@@ -116,7 +116,7 @@
                                     <th>ردیف</th>
                                     <th style="max-width: 100px;"> نام </th>
                                     <th> شماره </th>
-                                    <th>نام سریال</th>
+                                    <th>نام {{$type == 'series' ? 'سریال' : 'مستند'}}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -134,9 +134,9 @@
                                         {{$season->serie->title}}
                                     </td>
                                     <td style="text-align: center">
-                                        <a href="{{route('Panel.EditSeason',$season)}}" title="ویرایش"
+                                        <a href="{{route('Panel.EditSeason',$season)}}?type={{$type == 'documentary' ? 'documentary' : 'series'}}" title="ویرایش"
                                             class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
-                                        <a href="{{route('Panel.AddSection',$season->serie->id)}}?season={{$season->id}}"
+                                        <a href="{{route('Panel.AddSection',$season->serie->id)}}?season={{$season->id}}&type={{$type == 'documentary' ? 'documentary' : 'series'}}"
                                             title="قسمت ها" class="btn btn-sm btn-primary"> <i
                                                 class="fas fa-plus"></i></a>
                                         <a href="#" data-id="{{$season->id}}" data-toggle="modal" title="حذف"

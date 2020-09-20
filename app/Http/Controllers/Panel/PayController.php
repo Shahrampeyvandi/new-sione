@@ -172,11 +172,7 @@ class PayController extends Controller
                 $payment->update();
 
 
-                // برای ارسال پیامک ثبت خرید اشتراک
-                $patterncode = "97b8c9m9a5";
-                $data = array("name" => auth()->user()->first_name, "number" => Plan::find($payment->plan_id)->name);
-                $this->sendSMS($patterncode, auth()->user()->mobile, $data);
-
+               
                 // به اعتبارش اضافه کن
                 // تراکنش موفق بود هر جا می خوای ریدایرکتش کن
                 $plan = Plan::find($payment->plan_id);
@@ -191,6 +187,14 @@ class PayController extends Controller
 
                 $user->expire_date = $expire_date;
                 $user->update();
+
+                 // برای ارسال پیامک ثبت خرید اشتراک
+                $patterncode = "w2z4s4pd1e";
+                $data = array("name" => auth()->user()->first_name, "day" => $plan->days);
+                $this->sendSMS($patterncode, auth()->user()->mobile, $data);
+
+
+
                 if (session()->has('discount_id' . $user->id)) {
                     $discount = Discount::find(session()->get('discount_id' . $user->id));
                     $discount->decrement('count', 1);

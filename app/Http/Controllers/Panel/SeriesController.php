@@ -36,6 +36,7 @@ class SeriesController extends Controller
             $data['title'] = 'سریال';
             $data['type'] = 'series';
         }
+       
 
         return view('Panel.Series.List', $data);
     }
@@ -47,17 +48,16 @@ class SeriesController extends Controller
         } else {
             $data['type'] = 'series';
         }
-
         $data['actors'] = Actor::all();
         $data['writers'] = Writer::all();
         $data['directors'] = Director::all();
         $data['languages'] = Language::all();
-
         return view('Panel.Series.add', $data);
     }
 
     public function Save(Request $request)
     {
+
 
         $slug = Str::slug($request->name);
         if (isset($request->t) && $request->t == 'documentary') {
@@ -110,19 +110,30 @@ class SeriesController extends Controller
         }
 
         toastr()->success($message);
-        return Redirect::route('Panel.SeriesList') .'?id='.$post->id . $q;
+        if (isset($request->t) && $request->t == 'documentary') {
+            return redirect()->to('panel/series/list?type=documentary');
+        } else {
+            return redirect()->to('panel/series/list');
+        }
     }
 
 
     public function Edit(Post $post)
     {
-        return view('Panel.Series.add', compact(['post']));
+        
+          if (isset(request()->type) && request()->type == 'documentary') {
+            $data['type'] = 'documentary';
+        } else {
+            $data['type'] = 'series';
+        }
+        $data['post'] = $post;
+       
+        return view('Panel.Series.add', $data);
     }
-
     public function EditSerie(Request $request, Post $post)
     {
 
-        // dd($request->all());
+       
 
         $slug = Str::slug($post->name);
 
@@ -177,15 +188,23 @@ class SeriesController extends Controller
 
         toastr()->success($message);
 
-       return Redirect::route('Panel.SeriesList') . $q;
+        if (isset($request->t) && $request->t == 'documentary') {
+            return redirect()->to('panel/series/list?type=documentary');
+        } else {
+            return redirect()->to('panel/series/list');
+        }
     }
 
-    public function InsertSeason(Request $request, $id)
+    public function InsertSeason(Request $request, $post_id)
     {
 
-        $post = Post::find($id);
+        $post = Post::find($post_id);
         $slug = Str::slug($post->name);
-        $destinationPath = "files/series/$slug";
+        if ($post->type == 'series') {
+            $destinationPath = "files/series/$slug";
+        } else {
+            $destinationPath = "files/documentaries/$slug";
+        }
         $Poster = $this->savePoster($request->file('poster'), 'season_' . $request->number . '_', $destinationPath);
 
 
@@ -208,21 +227,24 @@ class SeriesController extends Controller
         if (!$season) abort(404);
 
 
-        $series = Post::where('type', 'series')->latest()->get();
-        $seasons = $season->serie->seasons;
+        $data['series'] = Post::where('type', 'series')->latest()->get();
+        $data['seasons'] = $season->serie->seasons;
+        $data['type'] = request()->type;
+        $data['season'] = $season;
 
-        return view('Panel.Series.season', compact(['series', 'seasons', 'season']));
+        return view('Panel.Series.season', $data);
     }
 
 
     public function EditSection(Episode $section)
     {
-       
 
 
-        $sections = Episode::where('post_id',$section->post_id)->OrderBy('section', 'ASC')->get();
+        $data['type'] = request()->type;
 
-        return view('Panel.Series.section', compact(['sections', 'section']));
+        $data['sections'] = Episode::where('post_id', $section->post_id)->OrderBy('section', 'ASC')->get();
+        $data['section'] =$section;
+        return view('Panel.Series.section',$data);
     }
 
     public function SaveEditSeason(Request $request, Season $season)
@@ -232,7 +254,11 @@ class SeriesController extends Controller
 
         $serie = $season->serie;
         $slug = Str::slug($serie->name);
-        $destinationPath = "files/series/$slug";
+        if ($serie->type == 'series') {
+            $destinationPath = "files/series/$slug";
+        } else {
+            $destinationPath = "files/documentaries/$slug";
+        }
         if ($request->hasFile('poster')) {
             File::delete(public_path() . '/' . $season->poster);
             $Poster = $this->savePoster($request->file('poster'), 'season_' . $request->number . '_', $destinationPath);
@@ -251,14 +277,20 @@ class SeriesController extends Controller
     public function SaveEditSection(Request $request, Episode $section)
     {
 
+        // dd($request->all());
+
         $serie = $section->serie;
         // dd($section);
         $slug = Str::slug($serie->name);
-        $destinationPath = "files/series/$slug";
+        if ($serie->type == 'series') {
+            $destinationPath = "files/series/$slug";
+        } else {
+            $destinationPath = "files/documentaries/$slug";
+        }
         if ($request->hasFile('poster')) {
             File::delete(public_path() . '/' . $section->poster);
             $slug = Str::slug($serie->name);
-            $destinationPath = "files/series/$slug";
+
             if (!File::exists($destinationPath)) {
                 File::makeDirectory($destinationPath, 0777, true);
             }
@@ -320,10 +352,10 @@ class SeriesController extends Controller
         $data['serie'] = Post::find($id);
         if (isset(request()->season)) {
             $data['season'] = Season::find(request()->season);
-            $data['sections'] = $data['season']->sections()->orderBy('section','asc')->get();
+            $data['sections'] = $data['season']->sections()->orderBy('section', 'asc')->get();
         } else {
-           
-            $data['sections'] = $data['serie']->episodes()->orderBy('section','asc')->get();
+
+            $data['sections'] = $data['serie']->episodes()->orderBy('section', 'asc')->get();
         }
 
         if ($data['serie']->imdbID && isset(request()->season)) {
@@ -343,6 +375,8 @@ class SeriesController extends Controller
             $data['episodes'] = [];
             $data['title'] = null;
         }
+
+        $data['type'] = request()->type;
         // dd($episodes);
 
 
@@ -351,8 +385,8 @@ class SeriesController extends Controller
 
     public function InsertSection(Request $request)
     {
-        // dd($request->all());
-      
+
+
 
         $post = Post::find($request->serie);
         $slug = Str::slug($post->name);
@@ -467,23 +501,31 @@ class SeriesController extends Controller
         return back();
     }
 
-    public function AddSeason($id)
+    public function AddSeason($post_id)
     {
-        // dd($id);
-        $post = Post::find($id);
+
+        $post = Post::find($post_id);
         if ($post->imdbID) {
             $dd = \L5Imdb::title($post->imdbID)->all();
-           
-            $totalSeasons = $dd['seasons'];
-            $title = $dd['title'];
+            
+            if ($dd['seasons'] == 0) {
+                $data['totalSeasons'] = null;
+            } else {
+
+                $data['totalSeasons'] = $dd['seasons'];
+            }
+            $data['title'] = $dd['title'];
         } else {
-            $totalSeasons = null;
-            $title = null;
+            $data['totalSeasons'] = null;
+            $data['title'] = null;
         }
+        $data['post_id'] = $post_id;
 
-        $seasons = $post->seasons;
+        $data['seasons'] = $post->seasons()->orderBy('number','asc')->get();
+        $data['type'] = request()->type;
+        
 
-        return view('Panel.Series.season', compact(['seasons', 'id', 'totalSeasons', 'title']));
+        return view('Panel.Series.season', $data);
     }
 
 
@@ -495,7 +537,7 @@ class SeriesController extends Controller
         $serie = Post::find($request->serieId);
 
         $url = 'http://www.omdbapi.com/?i=' . $serie->imdbID . '&Season=' . $request->seasonNumber . '&Episode=' . $request->episode . '&apikey=72a95dff';
-      
+
         $url = str_replace(' ', '%20', $url);
 
         $ch = curl_init();
@@ -504,7 +546,7 @@ class SeriesController extends Controller
         $response = curl_exec($ch);
         $result = json_decode($response);
         curl_close($ch); // Close the connection
-       
+
         $array['title'] = $result->Title;
 
         $array['released'] = \Carbon\Carbon::parse($result->Released)->format('d F Y');

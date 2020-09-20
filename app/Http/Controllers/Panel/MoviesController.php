@@ -66,12 +66,6 @@ class MoviesController extends Controller
             File::makeDirectory($destinationPath, 0777, true);
         }
 
-      
-
-
-
-
-
         $post = new Post;
         $post->post_author = Auth::guard('admin')->user()->id;
         $post->title = $request->title;

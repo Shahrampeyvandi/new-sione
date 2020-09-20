@@ -15,32 +15,23 @@ Route::get('/testapi/{id}', 'Panel\ImdbController@testApi')->name('Test.Api');
 Route::post('/pay', 'Panel\PayController@pay')->name('S.BuyPlan');
 Route::get('/pay/cb', 'Panel\PayController@callback')->name('Pay.CallBack');
 
-Route::get('/account', 'Front\UserController@Account')->name('S.Account');
-Route::get('/orders', 'Front\UserController@Orders')->name('S.OrderLists');
 
-Route::get('blog/', 'Blog\BlogController@index')->name('Blog.index');
-Route::get('blog/{category}/{slug}', 'Blog\BlogController@show')->name('Blog.show');
-Route::get('blog/video/{id}', 'Blog\BlogController@showvideo')->name('Blog.show.video');
-Route::get('blog/{category}', 'Blog\BlogController@Category')->name('Blog.Category');
-Route::post('blog/comment/{blog}', 'Blog\BlogController@Comment')->name('Blog.SaveComment');
-
-Route::post('blog/search', 'Front\AjaxController@SearchBlog')->name('Blog.Ajax.Search');
 
 
 Route::group(['middleware' => ['userauth']], function () {
-Route::post('ajax/checktakhfif', 'Front\AjaxController@checkTakhfif')->name('checkTakhfif');
-Route::get('/sitesharing', 'Front\PlanController@All')->name('S.SiteSharing');
-
+    Route::post('ajax/checktakhfif', 'Front\AjaxController@checkTakhfif')->name('checkTakhfif');
+    Route::get('/sitesharing', 'Front\PlanController@All')->name('S.SiteSharing');
 });
 
 
 Route::group(['middleware' => ['userauth', 'userplan']], function () {
     Route::get('/', 'Front\MainController@index')->name('MainUrl');
-    
+
     Route::post('/getdownloadlinks', 'Front\MainController@getDownLoadLinks');
-    
+
     Route::get('/movies', 'Front\MovieController@All')->name('AllMovies');
     Route::get('/series', 'Front\SerieController@All')->name('AllSeries');
+    Route::get('/documentaries', 'Front\SerieController@All')->name('AllDocumentaries');
     Route::get('/childs', 'Front\ChildController@Show')->name('Childrens');
     Route::get('/categories', 'Front\CategoryController@All')->name('Categories');
     Route::get('/category/{name}', 'Front\CategoryController@Show')->name('Category.Show');
@@ -57,16 +48,19 @@ Route::group(['middleware' => ['userauth', 'userplan']], function () {
     Route::get('/trailer/{slug}', 'Front\MainController@Trailer')->name('S.Trailer');
     Route::get('/play', 'Front\MainController@Play')->name('S.Series.Play');
     Route::post('/likepost', 'Front\AjaxController@Like')->name('S.Like');
-
-
-
-
     Route::get('/comming-soon', 'Front\MainController@CommingSoon')->name('CommingSoon');
     Route::get('/cast/{name}', 'Front\MainController@ShowCast')->name('ShowCast');
-
-
     Route::post('ajax/search', 'Front\AjaxController@Search')->name('S.Search');
     Route::post('ajax/favorite', 'Front\AjaxController@addToFavorite')->name('S.addToFavorite');
+    Route::get('/account', 'Front\UserController@Account')->name('S.Account');
+    Route::get('/orders', 'Front\UserController@Orders')->name('S.OrderLists');
+    Route::get('blog/', 'Blog\BlogController@index')->name('Blog.index');
+    Route::get('blog/{category}/{slug}', 'Blog\BlogController@show')->name('Blog.show');
+    Route::get('blog/video/{id}', 'Blog\BlogController@showvideo')->name('Blog.show.video');
+    Route::get('blog/{category}', 'Blog\BlogController@Category')->name('Blog.Category');
+    Route::post('blog/comment/{blog}', 'Blog\BlogController@Comment')->name('Blog.SaveComment');
+    Route::post('blog/search', 'Front\AjaxController@SearchBlog')->name('Blog.Ajax.Search');
+
 });
 
 
@@ -154,6 +148,12 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::post('categories/edit/{category}', 'Panel\CategoryController@SaveEdit')->name('Panel.EditCat');
     Route::delete('category/delete', 'Panel\CategoryController@Delete')->name('Panel.DeleteCat');
 
+   Route::get('collections/add', 'Panel\CollectionController@Add')->name('Panel.AddCollection');
+    Route::post('collections/add', 'Panel\CollectionController@Save')->name('Panel.AddCollection');
+    Route::get('collections/list', 'Panel\CollectionController@List')->name('Panel.CollectionList');
+    Route::get('collections/edit/{collection}', 'Panel\CollectionController@Edit')->name('Panel.EditCollection');
+    Route::post('collections/edit/{collection}', 'Panel\CollectionController@SaveEdit')->name('Panel.EditCollection');
+    Route::delete('collection/delete', 'Panel\CollectionController@Delete')->name('Panel.DeleteCollection');
 
     Route::get('advert/add', 'Panel\AdvertController@Add')->name('Panel.AddAdvert');
     Route::post('advert/add', 'Panel\AdvertController@Save')->name('Panel.AddAdvert');

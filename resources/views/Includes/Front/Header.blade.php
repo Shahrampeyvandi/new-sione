@@ -24,14 +24,21 @@
                     <a href="{{route('AllMovies')}}" class="
                     @if(\Request::route()->getName() == "AllMovies") {{'active-nav'}} @endif">
                         <i class="far fa-camera-movie"></i>
-                        فیلم ها
+                        فیلم
                     </a>
                 </li>
                 <li class="navItem">
                     <a href="{{route('AllSeries')}}" class="
                     @if(\Request::route()->getName() == "AllSeries") {{'active-nav'}} @endif">
                         <i class="fa fa-tv"></i>
-                        سریال ها
+                        سریال
+                    </a>
+                </li>
+                 <li class="navItem">
+                    <a href="{{route('AllDocumentaries')}}" class="
+                    @if(\Request::route()->getName() == "AllDocumentaries") {{'active-nav'}} @endif">
+                        <i class="fa fa-tv"></i>
+                        مستند
                     </a>
                 </li>
                 <li class="navItem">

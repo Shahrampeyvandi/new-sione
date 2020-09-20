@@ -318,14 +318,17 @@
                 $('.directors-list').html(joinDirectors)
 
                   const Writers = res.writers.map((item,index) => {
+                       if(item.name !== null){
                            return `<div class="custom-control custom-checkbox custom-control-inline">
                                      <input type="checkbox" id="writer-${index}" name="writers[]" value="${item.name}"
                                         class="custom-control-input" checked>
                                     <label class="custom-control-label" for="writer-${index}">
                                         ${item.name}</label>
                                 </div>`
+                       }
 
                         });
+
                 joinWriters = Writers.join('');
                 $('.writers-list').html(joinWriters)
 
@@ -373,7 +376,8 @@
                
           });
             request.fail(function(xhr, status, error) {
-            alert('خطا در دریافت اطلاعات')
+            // alert('خطا در دریافت اطلاعات')
+            console.log(xhr,status,error)
             parentHtml.html(`
                         <a href="#" onclick="getCode(event)" class="btn btn-primary my-2">جست و جو &nbsp;<i
                                                     class="fas fa-search"></i></a>

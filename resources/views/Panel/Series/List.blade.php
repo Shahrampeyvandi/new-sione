@@ -52,14 +52,14 @@
                         @endforeach
                     </td>
                     <td style="width: 200px">
-                        <a href="{{route('Panel.AddSeason',['id'=>$post->id])}}" class="btn btn-sm btn-primary">فصل
+                    <a href="{{route('Panel.AddSeason',['id'=>$post->id])}}{{$type == 'documentary' ? '?type=documentary' : '?type=series'}}" class="btn btn-sm btn-primary">فصل
                             ها</a>
                         @if ($type == 'documentary')
-                        <a href="{{route('Panel.AddSection',['id'=>$post->id])}}" class="btn btn-sm btn-primary">قسمت
+                        <a href="{{route('Panel.AddSection',['id'=>$post->id])}}{{$type == 'documentary' ? '?type=documentary' : '?type=series'}}" class="btn btn-sm btn-primary">قسمت
                             ها</a>
 
                         @endif
-                        <a href="{{route('Panel.EditSerie',$post)}}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
+                        <a href="{{route('Panel.EditSerie',$post)}}{{$type == 'documentary' ? '?type=documentary' : '?type=series'}}" class="btn btn-sm btn-info"><i class="fa fa-edit"></i></a>
 
                         <a href="#" data-id="{{$post->id}}" title="حذف " data-toggle="modal" data-target="#deletePost"
                             class="btn btn-sm btn-danger   m-2">

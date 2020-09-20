@@ -109,11 +109,12 @@ class MainController extends Controller
             abort(404);
         }
 
-        $post = $model;
-        $trailer_url = $trailer->url;
+        $data['post'] = $model;
+        $data['trailer_url'] = $trailer->url;
+        $data['title'] = $data['post']->title;
 
 
-        return view('Front.play', compact(['trailer_url', 'post']));
+        return view('Front.play',$data);
     }
     public function getDownLoadLinks(Request $request)
     {
@@ -189,7 +190,7 @@ class MainController extends Controller
 
     public function ShowMore()
     {
-        $year = Carbon::now()->year();
+        $year = Carbon::now()->year;
         $c = request()->c;
         $type = request()->type;
 
@@ -347,6 +348,7 @@ class MainController extends Controller
                 $data['title'] = 'تازه های سیوان';
             }
         }
+
 
 
 

@@ -257,11 +257,13 @@ class AjaxController extends Controller
                     })->latest()->take(6)->get();
                 } elseif (count($year) > 0) {
                     $posts = Post::whereBetween('year', [explode(';', $year[0])[0], explode(';', $year[0])[1]])->latest()->take(6)->get();
+                }else{
+                    $posts = [];
                 }
 
 
 
-                if ($order !==  'default') {
+                if (isset($order) &&$order !==  'default') {
                     if ($order == 'new') {
 
                         $posts = $posts->sortBy('created_at');

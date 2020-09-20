@@ -136,7 +136,7 @@
                                     <th>ردیف</th>
                                     <th style="max-width: 100px"> عنوان </th>
                                     <th> فصل </th>
-                                    <th style="max-width: 70px">نام سریال</th>
+                                <th style="max-width: 70px">نام {{$type == 'series' ? 'سریال' : 'مستند'}}</th>
                                     <th></th>
                                 </tr>
                             </thead>

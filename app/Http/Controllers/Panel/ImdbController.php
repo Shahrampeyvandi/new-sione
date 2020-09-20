@@ -15,6 +15,7 @@ use Morilog\Jalali\Jalalian;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Image as ImageInvention;
 
 class ImdbController extends Controller
 {
@@ -34,6 +35,15 @@ class ImdbController extends Controller
 
     public function testApi($id)
     {
+          $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://www.omdbapi.com/?i=' . $id . '&apikey=72a95dff');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        $result = json_decode($response);
+        curl_close($ch); // Close the connection
+
+         $dd = \L5Imdb::title($id)->all();
+        dd($result,$dd);
 
         // $url = 'http://www.omdbapi.com/?i=tt0944947&Season=1&apikey=72a95dff';
         // $url = str_replace(' ', '%20', $url);
@@ -45,8 +55,8 @@ class ImdbController extends Controller
         // curl_close($ch); // Close the connection
         // dd($result);
 
-        // $dd = \L5Imdb::person('1125275')->all();
-        // dd($dd);
+        $dd = \L5Imdb::person('1125275')->all();
+        dd($dd);
         // $actor = \L5Imdb::searchPerson('daniel Radcliffe')->all()[0];
         // dd($actor);
     }
@@ -68,7 +78,7 @@ class ImdbController extends Controller
         $result = json_decode($response);
         curl_close($ch); // Close the connection
 
-        if ($result->Writer) {
+        if ($result->Writer && $result->Writer !== 'N/A') {
             $writers = \explode(',', $result->Writer);
             foreach ($writers as $key => $item) {
                 $item = trim(preg_replace('/\s*\([^)]*\)/', '', $item));
@@ -80,7 +90,7 @@ class ImdbController extends Controller
                 }
             }
         } else {
-            $array['writers'][] = '';
+            $array['writers'][] = ['name' => null];
         }
 
         $array['released'] = $result->Released;
@@ -92,18 +102,21 @@ class ImdbController extends Controller
         $array['Released'] = $result->Released;
 
         $dd = \L5Imdb::title($request->code)->all();
-        // dd($dd,$result);
-        if (isset($request->type)) {
-            if ($request->type == 'documentary') {
-                if ($dd['genre'] !== 'Documentary') {
-                    return response()->json(['error' => 'کد مربوط به مستند نمیباشد']);
-                }
-            } else {
-                if ($dd['genre'] == 'Documentary') {
-                    return response()->json(['error' => 'کد مربوط به مستند میباشد']);
-                }
-            }
-        }
+        
+        // if (isset($request->type)) {
+        //     if ($request->type == 'documentary') {
+        //         if ($dd['genre'] !== 'Documentary') {
+        //             return response()->json(['error' => 'کد مربوط به مستند نمیباشد']);
+        //         }
+        //     } else {
+        //         if ($dd['genre'] == 'Documentary') {
+        //             return response()->json(['error' => 'کد مربوط به مستند میباشد']);
+        //         }
+        //     }
+        // }
+
+       
+        if($result['Director'] !== 'N/A')
 
         if (isset($dd['creator'][0]['imdb'])) {
             $creator =   \L5Imdb::person($dd['creator'][0]['imdb'])->all();
@@ -141,19 +154,23 @@ class ImdbController extends Controller
         } else {
             $array['seasons'] = null;
         }
-
-
+        
         if (isset($dd['cast'])) {
-            foreach ($dd['cast'] as $key => $actor) {
-
+            foreach (array_slice($dd['cast'],0,10) as $key => $actor) {
                 $id = Actor::check($actor['name']);
                 if (!$id) {
                     if (array_key_exists('photo', $actor) && $actor['photo']) {
-
                         $img = "actors/" . basename($actor['photo']);
                         file_put_contents($img, $this->url_get_contents($actor['photo']));
+                         list($width, $height) = getimagesize(public_path($img));
+                    if ($width > $height) {
+                        // Landscape
+                        $resize = $this->image_resize(250, 300, $img, "actors");
+                    } else {
+                        // Portrait or Square
+                        $resize = $this->image_resize(300, 250, $img, "actors");
+                    }
 
-                        $resize = $this->image_resize(200, 300, $img, "actors");
                         File::delete(public_path() . '/' . $img);
                     } else {
                         $resize = null;

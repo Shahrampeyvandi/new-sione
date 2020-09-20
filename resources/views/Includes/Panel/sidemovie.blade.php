@@ -22,24 +22,7 @@
             @endforeach
         </div>
     </div>
-    <div class="writers-wrapper mt-3">
-        <h6 class="">نویسنده</h6>
-        <input type="text" class="form-control mb-2" name="" id="" placeholder="جدید">
-        <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addWriter(event)">افزودن</a>
-        <div class="writers-list card pr-2" style="min-height:50px;max-height: 200px;overflow-y: scroll;">
-           @isset($post)
-                @foreach ($post->writers as $key => $item)
-             <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" id="writer-{{$key+1}}" name="writers[]" value="{{$item->name}}"
-                    class="custom-control-input" checked>
-                <label class="custom-control-label" for="writer-{{$key+1}}">
-                    {{$item->name}}</label>
-            </div>
-            @endforeach
-           @endisset
-        </div>
-
-    </div>
+   
     <div class="cast-wrapper mt-3">
         <h6 class="">بازیگران</h6>
         <input type="text" class="form-control mb-2" name="" id="" placeholder="جدید" oninput="showActor(event)">
@@ -49,7 +32,7 @@
         <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addActor(event)">افزودن</a>
         <div class="actors-list card pr-2" style="min-height:50px;max-height: 200px;overflow-y: scroll;">
             @isset($post)
-            @foreach ($post->actors as $key=>$item)
+            @foreach ($post->actors()->orderBy('name','asc')->get() as $key=>$item)
             <div class="custom-control custom-checkbox custom-control-inline">
                 <input type="checkbox" id="actor-{{$key+1}}" name="actors[]" value="{{$item->name}}"
                     class="custom-control-input" checked>
@@ -70,7 +53,7 @@
         <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addDirector(event)">افزودن</a>
         <div class="directors-list card pr-2" style="min-height:50px;max-height: 200px;overflow-y: scroll;">
             @isset($post)
-            @foreach ($post->directors as $key=>$item)
+            @foreach ($post->directors()->orderBy('name','asc')->get() as $key=>$item)
             <div class="custom-control custom-checkbox custom-control-inline">
                 <input type="checkbox" id="director-{{$key+1}}" name="directors[]" value="{{$item->name}}"
                     class="custom-control-input" checked>
@@ -81,6 +64,24 @@
 
             @endisset
         </div>
+    </div>
+     <div class="writers-wrapper mt-3">
+        <h6 class="">نویسنده</h6>
+        <input type="text" class="form-control mb-2" name="" id="" placeholder="جدید">
+        <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addWriter(event)">افزودن</a>
+        <div class="writers-list card pr-2" style="min-height:50px;max-height: 200px;overflow-y: scroll;">
+           @isset($post)
+                @foreach ($post->writers()->orderBy('name','asc')->get() as $key => $item)
+             <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" id="writer-{{$key+1}}" name="writers[]" value="{{$item->name}}"
+                    class="custom-control-input" checked>
+                <label class="custom-control-label" for="writer-{{$key+1}}">
+                    {{$item->name}}</label>
+            </div>
+            @endforeach
+           @endisset
+        </div>
+
     </div>
     <div class="languages-wrapper mt-3">
         <h6 class="">زبان</h6>

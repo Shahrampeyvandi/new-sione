@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-md-12">
          <section class="main_login_register" @if ($setting && isset($setting->login_background))
-            style="background-image:url({{asset($setting->login_background)}});background-repeat: no-repeat;background-size: cover;"
+            style="background-image:-webkit-gradient(linear, left top, left bottom, from(#ffffff00), to(black)),url({{asset($setting->login_background)}});background-repeat: no-repeat;background-size: cover;"
             @else
             style="background-image:radial-gradient(at bottom, #1993ff, #121212 70%);"
             @endif

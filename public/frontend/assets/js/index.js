@@ -329,9 +329,9 @@ $(document).ready(function() {
     var delay = 1000; // 2 seconds
 
     $("#search-input").on("keyup", function() {
-        setTimeout(() => {
-            if (timeout) {
+        if (timeout) {
                 timeout = false;
+            setTimeout(() => {
                 arr = [];
                 let val = $(this).val();
                 let url = $(this).data("url");
@@ -340,8 +340,8 @@ $(document).ready(function() {
                 var token = $('meta[name="_token"]').attr("content");
 
                 PostData({ data: arr, _token: token }, url);
+            }, 1000);
             }
-        }, 1000);
     });
 
     $(".checkbox-place input").on("click", function() {

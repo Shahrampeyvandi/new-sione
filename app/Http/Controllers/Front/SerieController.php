@@ -12,6 +12,7 @@ class SerieController extends Controller
 {
     public function Show($slug, $season = 1)
     {
+        
         $post = Post::whereSlug($slug)->first();
         if (is_null($post)) {
             abort(404);
@@ -19,11 +20,11 @@ class SerieController extends Controller
         $relatedPosts = $post->relatedPosts();
         // dd($relatedPosts);
         if (count($post->episodes)) {
-            $seasons = $post->episodes()->where('season', $season)->orderBy('section','asc')->get();
+            $seasons = $post->episodes()->where('season', $season)->orderBy('section', 'asc')->get();
         } else {
             $seasons = [];
         }
-       
+
         $title = $post->title;
 
         return view(
@@ -34,28 +35,22 @@ class SerieController extends Controller
 
     public function All()
     {
-        $year = Carbon::now()->year();
-        $data['newsione'] = Post::where(['type'=>'series','comming_soon' => 0])->latest()->take(10)->get();
-        $newseries = Post::where(['type'=>'series','comming_soon'=>0])->latest()->take(10)->get();
-        $newyear = Post::where(['year' => $year, 'type' => 'series','comming_soon'=>0])->latest()->take(10)->get();
-        $latestdoble = Post::whereHas('categories', function ($q) {
-            $q->where('name', 'دوبله فارسی');
-        })->where(['type'=>'series','comming_soon'=>0])->latest()->take(10)->get();
-
-        $sliders = Slider::whereHas('post', function ($q) {
-            $q->where(['type'=>'series']);
-        })->latest()->take(5)->get();
-
-        if (count($sliders)) {
-            $data['sliders'] = $sliders;
-        } else {
-            $data['sliders'] = Slider::latest()->take(5)->get();
+        if (\Request::route()->getName() == 'AllSeries') {
+            $type = 'series';
+            $data['title'] = 'سریال';
         }
+        if (\Request::route()->getName() == 'AllDocumentaries') {
+            $type = 'documentary';
+            $data['title'] = 'مستند';
+        }
+        $data['updated_series'] = Post::where(['type' => $type, 'comming_soon' => 0])->whereHas('episodes', function ($q) {
+            $q->where('created_at', '>', Carbon::now()->subDays(15));
+        })->latest()->take(10)->get();
 
-        $data['newseries'] = $newseries;
-        $data['latestdoble'] = $latestdoble;
-        $data['newyear'] = $newyear;
-        $data['year'] = $year;
+        $data['newseries'] = Post::where(['type' => $type, 'comming_soon' => 0])->latest()->take(10)->get();
+
+        $data['sliders'] = Slider::LastSliders($type);
+       
 
         return view('Front.AllSeries', $data);
     }
