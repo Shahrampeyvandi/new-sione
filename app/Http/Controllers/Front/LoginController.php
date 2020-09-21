@@ -52,7 +52,7 @@ class LoginController extends Controller
         $member = User::where('mobile', $request->mobile)->first();
         if ($member) {
             if (Hash::check($request->password, $member->password)) {
-                Auth::Login($member);
+                Auth::Login($member,true);
                 $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
                 $now = Carbon::now()->timestamp;
                 if ($expire > $now) {

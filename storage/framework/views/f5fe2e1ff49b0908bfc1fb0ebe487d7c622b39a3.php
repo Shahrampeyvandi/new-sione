@@ -4,7 +4,7 @@
 <div class="row h-100">
     <div class="col-md-12">
         <section class="main_login_register" <?php if($setting && isset($setting->login_background)): ?>
-            style="background-image:url(<?php echo e(asset($setting->login_background)); ?>);background-repeat: no-repeat;background-size: cover;"
+            style="background-image:-webkit-gradient(linear, left top, left bottom, from(#ffffff00), to(black)),url(<?php echo e(asset($setting->login_background)); ?>);background-repeat: no-repeat;background-size: cover;"
             <?php else: ?>
             style="background-image:radial-gradient(at bottom, #1993ff, #121212 70%);"
             <?php endif; ?>

@@ -180,7 +180,7 @@
 <section class="movie-sections">
     <h3>
         ابر قهرمانی
-    <a href="<?php echo e(route('S.ShowMore')); ?>?c=animation&type=all">
+    <a href="<?php echo e(route('S.ShowMore')); ?>?c=sci-fi&type=all">
             مشاهده همه
             <i class="fa fa-angle-left"></i>
         </a>
