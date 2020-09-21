@@ -34,11 +34,11 @@ class CollectionController extends Controller
             mkdir($destinationPath, 0755, true);
         }
         if ($request->hasFile('poster')) {
-            
 
-            
+
+
             $Poster = $this->savePoster($request->file('poster'), 'collection_', $destinationPath);
-            $resize = $this->image_resize(340,191, $Poster, $destinationPath);
+            $resize = $this->image_resize(340, 191, $Poster, $destinationPath);
             File::delete(public_path() . '/' . $Poster);
         } else {
             $resize = '';
@@ -97,10 +97,7 @@ class CollectionController extends Controller
         $Collection = Collection::find($request->collection_id);
 
         File::delete(public_path() . '/' . $Collection->poster);
-        foreach (Post::all() as $key => $post) {
-            $post->collections()->detach($Collection->id);
-        }
-
+        $Collection->posts()->detach();
         $Collection->delete();
 
         toastr()->success('مجموعه با موفقیت حذف شد');

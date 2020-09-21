@@ -251,6 +251,12 @@ class Controller extends BaseController
             }
         }
 
+        if (isset($request->collections)) {
+            foreach ($request->collections as $key => $collection) {
+                $post->collections()->attach($collection);
+            }
+        }
+
 
         if (isset($request->actors)) {
             foreach ($request->actors as $key => $actor) {
@@ -365,13 +371,25 @@ class Controller extends BaseController
             }
         }
 
-        foreach ($request->categories as $key => $category) {
-            if ($post->categories()->pluck('latin')->contains($category)) {
-                continue;
-            }
 
-            if ($id = Category::check($category)) {
-                $post->categories()->attach($id);
+
+        $post->categories()->detach();
+        if (isset($request->categories)) {
+            foreach ($request->categories as $key => $category) {
+                if ($post->categories()->pluck('latin')->contains($category)) {
+                    continue;
+                }
+
+                if ($id = Category::check($category)) {
+                    $post->categories()->attach($id);
+                }
+            }
+        }
+
+        $post->collections()->detach();
+        if (isset($request->collections)) {
+            foreach ($request->collections as $key => $collection) {
+                $post->collections()->attach($collection);
             }
         }
 

@@ -793,7 +793,7 @@ function showDetails(event, id, url) {
             
                 <a href="${res.path}" class="more-detail-movie btn--ripple mr-0">
                         <i class="fa fa-exclamation"></i>
-                        توضیحات بیشتر و مشاهده فصل ها
+                     مشاهده و توضیحات بیشتر
                     </a>
                      ${favoriteHtml}
                 `);

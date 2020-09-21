@@ -22,6 +22,26 @@
             @endforeach
         </div>
     </div>
+
+    <!-- collections -->
+     <div class="collection">
+        <div class="">
+            <h6 class="">افزودن به مجموعه:</h6>
+        
+        </div>
+        <div class="collection-wrapper card pr-2" style=" min-height:50px;max-height: 200px;overflow-y: scroll;">
+            @foreach (\App\Collection::latest()->get() as $key=>$item)
+            <div class="custom-control custom-checkbox custom-control-inline ">
+                <input type="checkbox" id="colle-{{$key+1}}" name="collections[]" value="{{$item->id}}"
+                    class="custom-control-input scat" @if (isset($post))
+                    {{$post->collections->pluck('id')->contains($item->id) ? 'checked' : ''}} @endif>
+                <label class="custom-control-label" for="colle-{{$key+1}}">{{$item->name}}</label>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- end collections -->
    
     <div class="cast-wrapper mt-3">
         <h6 class="">بازیگران</h6>

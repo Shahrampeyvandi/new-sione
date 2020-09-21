@@ -18,6 +18,7 @@ class LoginController extends Controller
 {
     public function Login()
     {
+        // dd(auth()->user());
                
 
         $data['title'] = 'ورود';
@@ -44,7 +45,8 @@ class LoginController extends Controller
         $admin = Admin::where('mobile', $request->mobile)->first();
         if ($admin) {
             if (Hash::check($request->password, $admin->password)) {
-                Auth::guard('admin')->Login($admin, true);
+                Auth::guard('admin')->attempt(['mobile' => $request->mobile, 'password' => $request->password], true);
+                auth()->guard('admin')->logoutOtherDevices($request->password);
                 return redirect()->route('MainUrl');
             }
         }
@@ -52,7 +54,8 @@ class LoginController extends Controller
         $member = User::where('mobile', $request->mobile)->first();
         if ($member) {
             if (Hash::check($request->password, $member->password)) {
-                Auth::Login($member,true);
+                auth()->attempt(['mobile' => $request->mobile, 'password' => $request->password], true);
+                auth()->logoutOtherDevices($request->password);
                 $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
                 $now = Carbon::now()->timestamp;
                 if ($expire > $now) {

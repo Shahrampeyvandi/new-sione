@@ -30,6 +30,10 @@
                         <th>ردیف</th>
                         <th> عنوان </th>
                         <th>تصویر</th>
+                        <th>نوع</th>
+                        <th>
+                            محتوا
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -46,6 +50,21 @@
                             <?php else: ?>
                             --
                             <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if($collection->for == 'movies'): ?>
+                            <span>فیلم</span>
+                                
+                            <?php elseif($collection->for == 'series'): ?>
+                            <span>سریال</span>
+                            <?php else: ?>
+                            <span>مستند</span>
+                            <?php endif; ?>
+                        </td>
+                          <td>
+                            <?php $__currentLoopData = $collection->posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                             <a href="#"><?php echo e(str_limit($post->title,20,'..')); ?></a> <br>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </td>
                         <td>
                             <a href="<?php echo e(route('Panel.EditCollection',$collection)); ?>" class="btn btn-sm btn-info"><i

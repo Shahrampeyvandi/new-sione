@@ -32,6 +32,10 @@
                         <th>ردیف</th>
                         <th> عنوان </th>
                         <th>تصویر</th>
+                        <th>نوع</th>
+                        <th>
+                            محتوا
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -48,6 +52,21 @@
                             @else
                             --
                             @endif
+                        </td>
+                        <td>
+                            @if ($collection->for == 'movies')
+                            <span>فیلم</span>
+                                
+                            @elseif($collection->for == 'series')
+                            <span>سریال</span>
+                            @else
+                            <span>مستند</span>
+                            @endif
+                        </td>
+                          <td>
+                            @foreach ($collection->posts as $post)
+                             <a href="#">{{str_limit($post->title,20,'..')}}</a> <br>
+                            @endforeach
                         </td>
                         <td>
                             <a href="{{route('Panel.EditCollection',$collection)}}" class="btn btn-sm btn-info"><i

@@ -22,24 +22,27 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
     </div>
-    <div class="writers-wrapper mt-3">
-        <h6 class="">نویسنده</h6>
-        <input type="text" class="form-control mb-2" name="" id="" placeholder="جدید">
-        <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addWriter(event)">افزودن</a>
-        <div class="writers-list card pr-2" style="min-height:50px;max-height: 200px;overflow-y: scroll;">
-           <?php if(isset($post)): ?>
-                <?php $__currentLoopData = $post->writers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-             <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" id="writer-<?php echo e($key+1); ?>" name="writers[]" value="<?php echo e($item->name); ?>"
-                    class="custom-control-input" checked>
-                <label class="custom-control-label" for="writer-<?php echo e($key+1); ?>">
-                    <?php echo e($item->name); ?></label>
+
+    <!-- collections -->
+     <div class="collection">
+        <div class="">
+            <h6 class="">افزودن به مجموعه:</h6>
+        
+        </div>
+        <div class="collection-wrapper card pr-2" style=" min-height:50px;max-height: 200px;overflow-y: scroll;">
+            <?php $__currentLoopData = \App\Collection::latest()->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <div class="custom-control custom-checkbox custom-control-inline ">
+                <input type="checkbox" id="colle-<?php echo e($key+1); ?>" name="collections[]" value="<?php echo e($item->id); ?>"
+                    class="custom-control-input scat" <?php if(isset($post)): ?>
+                    <?php echo e($post->collections->pluck('id')->contains($item->id) ? 'checked' : ''); ?> <?php endif; ?>>
+                <label class="custom-control-label" for="colle-<?php echo e($key+1); ?>"><?php echo e($item->name); ?></label>
             </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-           <?php endif; ?>
         </div>
-
     </div>
+
+    <!-- end collections -->
+   
     <div class="cast-wrapper mt-3">
         <h6 class="">بازیگران</h6>
         <input type="text" class="form-control mb-2" name="" id="" placeholder="جدید" oninput="showActor(event)">
@@ -49,7 +52,7 @@
         <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addActor(event)">افزودن</a>
         <div class="actors-list card pr-2" style="min-height:50px;max-height: 200px;overflow-y: scroll;">
             <?php if(isset($post)): ?>
-            <?php $__currentLoopData = $post->actors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php $__currentLoopData = $post->actors()->orderBy('name','asc')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="custom-control custom-checkbox custom-control-inline">
                 <input type="checkbox" id="actor-<?php echo e($key+1); ?>" name="actors[]" value="<?php echo e($item->name); ?>"
                     class="custom-control-input" checked>
@@ -70,7 +73,7 @@
         <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addDirector(event)">افزودن</a>
         <div class="directors-list card pr-2" style="min-height:50px;max-height: 200px;overflow-y: scroll;">
             <?php if(isset($post)): ?>
-            <?php $__currentLoopData = $post->directors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php $__currentLoopData = $post->directors()->orderBy('name','asc')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="custom-control custom-checkbox custom-control-inline">
                 <input type="checkbox" id="director-<?php echo e($key+1); ?>" name="directors[]" value="<?php echo e($item->name); ?>"
                     class="custom-control-input" checked>
@@ -81,6 +84,24 @@
 
             <?php endif; ?>
         </div>
+    </div>
+     <div class="writers-wrapper mt-3">
+        <h6 class="">نویسنده</h6>
+        <input type="text" class="form-control mb-2" name="" id="" placeholder="جدید">
+        <a href="#" class="btn btn-sm btn-primary mb-3" onclick="addWriter(event)">افزودن</a>
+        <div class="writers-list card pr-2" style="min-height:50px;max-height: 200px;overflow-y: scroll;">
+           <?php if(isset($post)): ?>
+                <?php $__currentLoopData = $post->writers()->orderBy('name','asc')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+             <div class="custom-control custom-checkbox custom-control-inline">
+                <input type="checkbox" id="writer-<?php echo e($key+1); ?>" name="writers[]" value="<?php echo e($item->name); ?>"
+                    class="custom-control-input" checked>
+                <label class="custom-control-label" for="writer-<?php echo e($key+1); ?>">
+                    <?php echo e($item->name); ?></label>
+            </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+           <?php endif; ?>
+        </div>
+
     </div>
     <div class="languages-wrapper mt-3">
         <h6 class="">زبان</h6>
