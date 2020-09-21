@@ -110,13 +110,13 @@
                     <label for="password">
                         رمز عبور
                     </label>
-                    <input type="text" id="mainpassword" name="password" autocomplete="off" placeholder="رمز عبور">
+                    <input type="password" id="mainpassword" name="password" autocomplete="off" placeholder="رمز عبور">
                 </div>
                 <div class="input-place">
                     <label for="cpassword">
                         تایید پسورد
                     </label>
-                    <input type="text" id="cpassword" name="cpassword" autocomplete="off" placeholder="تایید پسورد">
+                    <input type="password" id="cpassword" name="cpassword" autocomplete="off" placeholder="تایید پسورد">
                 </div>
                 <button class="submit_register btn--ripple" type="submit">
                     ثبت نام

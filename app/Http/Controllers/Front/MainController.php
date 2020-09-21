@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Actor;
 use App\AdvertImage;
 use App\Blog;
+use App\Collection;
 use App\Director;
 use App\Episode;
 use Illuminate\Http\Request;
@@ -53,6 +54,8 @@ class MainController extends Controller
             $q->where('latin', 'Comedy');
         })->latest()->take(10)->get();
         $data['blogs'] = Blog::latest()->take(10)->get();
+
+        $data['collections'] = Collection::has('posts')->latest()->take(12)->get();
         $data['title'] = 'صفحه اصلی';
         // dd($data);
         return view('Front.index', $data);
@@ -395,5 +398,16 @@ class MainController extends Controller
         })->latest()->get();
 
         return view('Front.Cast', $data);
+    }
+
+    public function ShowCollection($id)
+    {
+        if(!$id) abort(404);
+        $collection = Collection::find($id);
+        if(!$collection) abort(404);
+        $data['posts'] = $collection->posts;
+        $data['title'] = $collection->name;
+        
+        return view('Front.ShowMore', $data);
     }
 }

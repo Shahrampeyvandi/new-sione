@@ -41,9 +41,7 @@ class ImdbController extends Controller
         $response = curl_exec($ch);
         $result = json_decode($response);
         curl_close($ch); // Close the connection
-
-         $dd = \L5Imdb::title($id)->all();
-        dd($result,$dd);
+        dd($result);
 
         // $url = 'http://www.omdbapi.com/?i=tt0944947&Season=1&apikey=72a95dff';
         // $url = str_replace(' ', '%20', $url);
@@ -116,7 +114,6 @@ class ImdbController extends Controller
         // }
 
        
-        if($result['Director'] !== 'N/A')
 
         if (isset($dd['creator'][0]['imdb'])) {
             $creator =   \L5Imdb::person($dd['creator'][0]['imdb'])->all();

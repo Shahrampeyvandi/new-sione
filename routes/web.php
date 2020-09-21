@@ -61,6 +61,7 @@ Route::group(['middleware' => ['userauth', 'userplan']], function () {
     Route::post('blog/comment/{blog}', 'Blog\BlogController@Comment')->name('Blog.SaveComment');
     Route::post('blog/search', 'Front\AjaxController@SearchBlog')->name('Blog.Ajax.Search');
 
+    Route::get('collection/{id}', 'Front\MainController@ShowCollection')->name('Show-Collection');
 });
 
 
@@ -148,7 +149,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::post('categories/edit/{category}', 'Panel\CategoryController@SaveEdit')->name('Panel.EditCat');
     Route::delete('category/delete', 'Panel\CategoryController@Delete')->name('Panel.DeleteCat');
 
-   Route::get('collections/add', 'Panel\CollectionController@Add')->name('Panel.AddCollection');
+    Route::get('collections/add', 'Panel\CollectionController@Add')->name('Panel.AddCollection');
     Route::post('collections/add', 'Panel\CollectionController@Save')->name('Panel.AddCollection');
     Route::get('collections/list', 'Panel\CollectionController@List')->name('Panel.CollectionList');
     Route::get('collections/edit/{collection}', 'Panel\CollectionController@Edit')->name('Panel.EditCollection');

@@ -42,7 +42,7 @@ class MovieController extends Controller
             $data['guard'] = 'admin';
         }
        
-        dd($data);
+      
 
         return view('Front.ShowMovie', $data);
     }

@@ -370,6 +370,35 @@
 @endif
 
 
+@if (isset($collections) &&  count($collections))
+<section class="movie-sections">
+    <h3>
+         مجموعه فیلم ها
+    {{-- <a href="{{route('S.ShowMore')}}?c=blogs&type=all">
+            مشاهده همه
+            <i class="fa fa-angle-left"></i>
+        </a> --}}
+    </h3>
+    <div class="swiper-container BlogSlider">
+        <div class="swiper-wrapper">
+          @foreach ($collections as $collection)
+               <div class="swiper-slide">
+            @component('components.collection',['collection'=>$collection , 'ajax'=>1])
+            @endcomponent
+            </div>
+          @endforeach
+
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+    @component('components.showDetail')
+    @endcomponent
+</section>
+@endif
+
+
+
 
 @endsection
 

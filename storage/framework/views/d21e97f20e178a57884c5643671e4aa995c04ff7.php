@@ -1,23 +1,26 @@
 <section class="head-film-cover">
     <div class="cover-img-movies_movie-Page"></div>
-    <img src="{{asset(unserialize($post->poster)['banner'])}}" alt="{{$post->title}}">
+    <img src="<?php echo e(asset(unserialize($post->poster)['banner'])); ?>" alt="<?php echo e($post->title); ?>">
     <div class="movie-details-header">
 
         <h1>
-            {{$post->title}}
+            <?php echo e($post->title); ?>
+
         </h1>
         <h2 class="mt-2">
-            {{$post->name}}
+            <?php echo e($post->name); ?>
+
         </h2>
         <div class="details_details">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-3">
                         <div class="movie-year">
-                            {{$post->year}}
+                            <?php echo e($post->year); ?>
+
                         </div>
                     </div>
-                    @if ($post->imdbRating)
+                    <?php if($post->imdbRating): ?>
                     <div class="col-4">
                         <div class="IMDb_rank">
                             <div class="container-fluid">
@@ -25,12 +28,12 @@
                                     <div class="col-6">
                                         <b><strong>IMDb</strong></b>
                                     </div>
-                                    <div class="col-6">{{$post->imdbRating}}</div>
+                                    <div class="col-6"><?php echo e($post->imdbRating); ?></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @endif
+                    <?php endif; ?>
                     <div class="col-4">
                         <div class="movie-like">
                             <i class="fa fa-heart"></i>
@@ -39,41 +42,40 @@
                     </div>
                     <div class="col-4">
                         <div class="site-dubbing">
-                            @if ($post->checkDubleFarsi())
+                            <?php if($post->checkDubleFarsi()): ?>
                             <i class="fa fa-microphone"></i>
                             دوبله فارسی
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="movie-description">
-            {!! html_entity_decode(str_limit($post->description,800), ENT_QUOTES, 'UTF-8') !!}
+            <?php echo html_entity_decode(str_limit($post->description,800), ENT_QUOTES, 'UTF-8'); ?>
+
         </div>
         <div class="list_like">
-            <a href="#" onclick="addToFavorite(event,'{{$post->id}}','{{$post->favoritepath()}}')"
+            <a href="#" onclick="addToFavorite(event,'<?php echo e($post->id); ?>','<?php echo e($post->favoritepath()); ?>')"
                 class="addMovie_list text-white">
                 <i class="fa fa-plus"></i>
                 افزودن به لیست
             </a>
 
-            @if ($post->type == 'movies')
-            <a href="{{$post->play()}}" class="addMovie_list text-white">
+            <?php if($post->type == 'movies'): ?>
+            <a href="<?php echo e($post->play()); ?>" class="addMovie_list text-white">
                 <i class="fa fa-play"></i>
                 پخش فیلم
             </a>
-            <a href="#" data-id="{{$post->id}}" onclick="call(event)" class="addMovie_list text-white">
+            <a href="#" data-id="<?php echo e($post->id); ?>" onclick="call(event)" class="addMovie_list text-white">
                 دانلود
             </a>
-            {{-- <a href="{{$post->downloadpath()}}" target="_blank" class="addMovie_list text-white">
-            تست دانلود
-            </a> --}}
-            @endif
-            @if ($user)
-            <a class="dislike-icon" onclick="likepost(event,'{{$post->id}}',0)">
+            
+            <?php endif; ?>
+            <?php if($user): ?>
+            <a class="dislike-icon" onclick="likepost(event,'<?php echo e($post->id); ?>',0)">
              
-                @if ($post->votes()->where('user_id',$user->id)->where('status',0)->where('user_guard',$guard)->first())
+                <?php if($post->votes()->where('user_id',$user->id)->where('status',0)->where('user_guard',$guard)->first()): ?>
                 <div title="" role="button" aria-label="animation" tabindex="0"
                     style="width: 100%; height: 100%; overflow: hidden; margin: 0px auto; outline: none;"><svg
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40"
@@ -101,7 +103,7 @@
                         </g>
                     </svg>
                 </div>
-                @else
+                <?php else: ?>
                 <div title="" role="button" aria-label="animation" tabindex="0"
                     style="width: 100%; height: 100%; overflow: hidden; margin: 0px auto; outline: none;"><svg
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40"
@@ -128,12 +130,12 @@
                         </g>
                     </svg>
                 </div>
-                @endif
+                <?php endif; ?>
 
 
             </a>
-            <a class="like-icon" onclick="likepost(event,'{{$post->id}}',1)">
-                @if ($post->votes()->where('user_id',$user->id)->where('status',1)->where('user_guard',$guard)->first())
+            <a class="like-icon" onclick="likepost(event,'<?php echo e($post->id); ?>',1)">
+                <?php if($post->votes()->where('user_id',$user->id)->where('status',1)->where('user_guard',$guard)->first()): ?>
                 <div title="" role="button" aria-label="animation" tabindex="0"
                     style="width: 100%; height: 100%; overflow: hidden; margin: 0px auto; outline: none;"><svg
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40"
@@ -161,7 +163,7 @@
                     </svg>
                 </div>
 
-                @else
+                <?php else: ?>
                 <div title="" role="button" aria-label="animation" tabindex="0"
                     style="width: 100%; height: 100%; overflow: hidden; margin: 0px auto; outline: none;"><svg
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40"
@@ -189,61 +191,64 @@
                         </g>
                     </svg>
                 </div>
-                @endif
+                <?php endif; ?>
             </a>
-            @endif
+            <?php endif; ?>
 
 
 
 
         </div>
 
-        @if (count($post->actors))
+        <?php if(count($post->actors)): ?>
         <div class="movie-stars">
             ستارگان:
-            @foreach ($post->actors()->take(10)->get() as $key=> $actor)
+            <?php $__currentLoopData = $post->actors()->take(10)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $actor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
             <a href="#">
-                {{$actor->name}}
+                <?php echo e($actor->name); ?>
+
             </a>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-        @endif
+        <?php endif; ?>
 
-        @if ($post->type == 'series')
+        <?php if($post->type == 'series'): ?>
         <div class="publish-date mb-2">
-            @if ($post->first_publish_date)
+            <?php if($post->first_publish_date): ?>
             <span>تاریخ اولین انتشار: </span><span
-                class="ml-1">{{\Carbon\Carbon::parse($post->first_publish_date)->format('d-m-Y')}}</span>
+                class="ml-1"><?php echo e(\Carbon\Carbon::parse($post->first_publish_date)->format('d-m-Y')); ?></span>
 
-            @endif
-            @if ($post->last_publish_date)
+            <?php endif; ?>
+            <?php if($post->last_publish_date): ?>
             <span>تاریخ آخرین انتشار:
-            </span><span>{{\Carbon\Carbon::parse($post->last_publish_date)->format('d-m-Y')}}</span>
+            </span><span><?php echo e(\Carbon\Carbon::parse($post->last_publish_date)->format('d-m-Y')); ?></span>
 
-            @endif
+            <?php endif; ?>
         </div>
-        @else
-        @if ($post->released)
+        <?php else: ?>
+        <?php if($post->released): ?>
         <div class="publish-date mb-2">
             <span>تاریخ انتشار: </span><span
-                class="ml-1">{{\Carbon\Carbon::parse($post->released)->format('d-m-Y')}}</span>
+                class="ml-1"><?php echo e(\Carbon\Carbon::parse($post->released)->format('d-m-Y')); ?></span>
 
         </div>
-        @endif
-        @endif
+        <?php endif; ?>
+        <?php endif; ?>
 
         <div class="movie-age_rank">
-            @if ($post->age_rate)
+            <?php if($post->age_rate): ?>
             <span>
-                {{$post->get_age_rate()}}
+                <?php echo e($post->get_age_rate()); ?>
+
             </span>
-            @endif
-            @if ($post->post_status)
+            <?php endif; ?>
+            <?php if($post->post_status): ?>
             <span>
-                {{$post->post_status}}
+                <?php echo e($post->post_status); ?>
+
             </span>
-            @endif
+            <?php endif; ?>
 
         </div>
 
@@ -252,7 +257,7 @@
 
 
     <!-- scroll down -->
-    <div class="mouse_scroll d-none d-md-block">
+    <div class="mouse_scroll">
 
 		<div class="mouse">
 			<div class="wheel"></div>
@@ -263,4 +268,4 @@
 			<span class="m_scroll_arrows trei"></span>
 		</div>
 </div>
-</section>
+</section><?php /**PATH C:\xampp1\htdocs\sione\resources\views/Includes/Front/TopPoster.blade.php ENDPATH**/ ?>

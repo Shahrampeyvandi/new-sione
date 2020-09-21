@@ -92,7 +92,7 @@ class MoviesController extends Controller
             return back();
         }
         toastr()->success('پست با موفقیت ثبت شد');
-        return Redirect::route('Panel.MoviesList') .'?id='.$post->id;
+        return Redirect::route('Panel.MoviesList');
     }
 
     public function Edit(Post $post)
