@@ -24,7 +24,7 @@ class MainController extends Controller
         $data['newsione'] = Post::where(['comming_soon' => 0])->latest()->take(10)->get();
         $data['newseries'] = Post::where(['type' => 'series', 'comming_soon' => 0])->latest()->take(10)->get();
         $data['newyear'] = Post::where(['year' => $data['year'], 'comming_soon' => 0])->latest()->take(10)->get();
-      
+
         $data['latestdoble'] = Post::whereHas('categories', function ($q) {
             $q->where('name', 'دوبله فارسی');
         })->where(['comming_soon' => 0])->latest()->take(10)->get();
@@ -43,7 +43,7 @@ class MainController extends Controller
         $data['actions'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Action');
         })->latest()->take(10)->get();
-          $data['scifis'] = Post::whereHas('categories', function ($q) {
+        $data['scifis'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Sci-Fi');
         })->latest()->take(10)->get();
         $data['horrors'] = Post::whereHas('categories', function ($q) {
@@ -114,7 +114,7 @@ class MainController extends Controller
         $data['title'] = $data['post']->title;
 
 
-        return view('Front.play',$data);
+        return view('Front.play', $data);
     }
     public function getDownLoadLinks(Request $request)
     {
@@ -155,6 +155,14 @@ class MainController extends Controller
 
             $url = asset(request()->subtitle);
         }
+
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=\"" . basename($url) . "\"");
+
+        readfile($url);
+        exit();
+
         $path      = parse_url($url, PHP_URL_PATH);
         $extension = pathinfo($path, PATHINFO_EXTENSION);
         $filename  = pathinfo($path, PATHINFO_FILENAME);
@@ -246,14 +254,14 @@ class MainController extends Controller
                 $data['title'] = 'اکشن';
             }
 
-             if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0,'type'=>'movies'])->whereHas('categories', function ($q) {
+            if ($type == 'movie') {
+                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
                     $q->where('latin', 'Action');
                 })->latest()->get();
                 $data['title'] = 'اکشن';
             }
         }
-          if ($c == 'animation') {
+        if ($c == 'animation') {
             if ($type == 'all') {
                 $data['posts'] =  Post::where(['comming_soon' => 0])->whereHas('categories', function ($q) {
                     $q->where('latin', 'Animation');
@@ -262,7 +270,7 @@ class MainController extends Controller
             }
 
             if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0,'type'=>'movies'])->whereHas('categories', function ($q) {
+                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
                     $q->where('latin', 'Animation');
                 })->latest()->get();
                 $data['title'] = 'انیمیشن';
@@ -276,13 +284,12 @@ class MainController extends Controller
                 $data['title'] = 'ابر قهرمانی';
             }
 
-             if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0,'type'=>'movies'])->whereHas('categories', function ($q) {
+            if ($type == 'movie') {
+                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
                     $q->where('latin', 'Sci-Fi');
                 })->latest()->get();
                 $data['title'] = 'ابر قهرمانی';
             }
-
         }
         if ($c == 'horror') {
             if ($type == 'all') {
@@ -292,8 +299,8 @@ class MainController extends Controller
                 $data['title'] = 'ترسناک';
             }
 
-              if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0,'type'=>'movies'])->whereHas('categories', function ($q) {
+            if ($type == 'movie') {
+                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
                     $q->where('latin', 'Horror');
                 })->latest()->get();
                 $data['title'] = 'ترسناک';
@@ -308,8 +315,8 @@ class MainController extends Controller
                 $data['title'] = 'کمدی';
             }
 
-              if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0,'type'=>'movies'])->whereHas('categories', function ($q) {
+            if ($type == 'movie') {
+                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
                     $q->where('latin', 'Comedy');
                 })->latest()->get();
                 $data['title'] = 'کمدی';

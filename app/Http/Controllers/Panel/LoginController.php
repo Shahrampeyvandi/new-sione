@@ -13,6 +13,11 @@ class LoginController extends Controller
 {
     public function Login()
     {
+        if (Auth::guard('admin')->check()) {
+        
+
+            return redirect()->route('BaseUrl');
+    }
         return view('Panel.Login');
     }
 

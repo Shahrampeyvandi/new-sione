@@ -19,6 +19,22 @@ class LoginController extends Controller
     public function Login()
     {
                
+        if (Auth::guard('admin')->check()) {
+        
+
+            return redirect()->route('BaseUrl');
+    }
+     if (Auth::check()) {
+        
+ $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
+                $now = Carbon::now()->timestamp;
+                if ($expire > $now) {
+                    return redirect()->route('MainUrl');
+                } else {
+                    return redirect()->route('S.SiteSharing');
+                }
+    }
+               
 
         $data['title'] = 'ورود';
         return view('Front.login', $data);
