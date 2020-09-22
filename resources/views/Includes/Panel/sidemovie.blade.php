@@ -30,7 +30,7 @@
         
         </div>
         <div class="collection-wrapper card pr-2" style=" min-height:50px;max-height: 200px;overflow-y: scroll;">
-            @foreach (\App\Collection::latest()->get() as $key=>$item)
+            @foreach (\App\Collection::all() as $key=>$item)
             <div class="custom-control custom-checkbox custom-control-inline ">
                 <input type="checkbox" id="colle-{{$key+1}}" name="collections[]" value="{{$item->id}}"
                     class="custom-control-input scat" @if (isset($post))

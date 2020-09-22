@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{asset('assets/css/toastr.css')}}">
     <script src="{{asset('frontend/assets/js/swiper.min.js')}}"></script>
     <script src="{{asset('frontend/assets/js/all.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/index.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
 <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
     @yield('css')
@@ -22,7 +23,6 @@
         var mainUrl = "{{route('MainUrl')}}";
     </script>
 
-    <script src="{{asset('frontend/assets/js/index.js')}}"></script>
     <meta charset="UTF-8">
     <meta name="_token" content="{{ csrf_token() }}">
     
@@ -37,8 +37,8 @@
     \Request::route()->getName() == "S.OrderLists" )
     class="site-sharing"
     @endif>
-    <div class="overlay"></div>
-    <div class="lds-ripple center-screen" style="display: none">
+    <div class="overlay" style="display: block"></div>
+    <div class="lds-ripple center-screen" style="display: block">
         <div></div>
         <div></div>
     </div>

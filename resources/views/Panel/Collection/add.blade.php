@@ -1,7 +1,21 @@
 @extends('Layout.Panel')
 
 @section('content')
-@include('Includes.Panel.categoriesmenu')
+<div class="card">
+    <div class=" card-body ">
+        <ul class="nav nav-pills ">
+            <li class="nav-item">
+                <a href="{{route('Panel.CollectionList')}}" class="nav-link 
+            @if(\Request::route()->getName() == "Panel.CollectionList") {{'active'}} @endif">لیست</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{route('Panel.AddCollection')}}" class="nav-link
+            @if(\Request::route()->getName() == "Panel.AddCollection") {{'active'}} @endif">جدید <i class="fas fa-plus"></i></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 <div class="container-fluid">
     <div class="card">
         <div class="card-body">
@@ -54,7 +68,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label for="desc">توضیحات : </label>
-                            <textarea class="form-control" name="desc" id="desc" cols="30" rows="8">{{$collection->description}}</textarea>
+                            <textarea class="form-control" name="desc" id="desc" cols="30" rows="8">{{$collection->description ?? ''}}</textarea>
                             </div>
                         </div>
                     </div>

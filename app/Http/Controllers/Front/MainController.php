@@ -57,6 +57,7 @@ class MainController extends Controller
 
         $data['collections'] = Collection::has('posts')->latest()->take(12)->get();
         $data['title'] = 'صفحه اصلی';
+        
         // dd($data);
         return view('Front.index', $data);
     }
@@ -205,6 +206,15 @@ class MainController extends Controller
         $c = request()->c;
         $type = request()->type;
 
+        if($c == 'collections') {
+           if ($type == 'all') {
+                $data['posts'] = Collection::latest()->get();
+                $data['title'] = 'مجموعه فیلم ها';
+                $data['type'] = 'collection';
+            }
+            
+   
+        }
         if ($c == $year) {
             if ($type == 'all') {
                 $data['posts'] = Post::where('year', $year)->latest()->get();
@@ -405,7 +415,13 @@ class MainController extends Controller
         if(!$id) abort(404);
         $collection = Collection::find($id);
         if(!$collection) abort(404);
-        $data['posts'] = $collection->posts;
+        $data['collection'] = $collection;
+        if($collection->for == 'movies') {
+
+            $data['posts'] = $collection->posts()->orderBy('released','asc')->get();
+        }else{
+            $data['posts'] = $collection->posts()->orderBy('year','asc')->latest()->get();
+        }
         $data['title'] = $collection->name;
         
         return view('Front.ShowMore', $data);

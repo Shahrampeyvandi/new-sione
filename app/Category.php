@@ -9,6 +9,7 @@ class Category extends Model
 
 
     protected $guarded = ['id'];
+    
     public $timestamps = false;
 
    public static function check($name)

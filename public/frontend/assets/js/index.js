@@ -1,4 +1,18 @@
 $(document).ready(function() {
+
+
+     $(".overlay").fadeIn();
+     $(".lds-ripple").fadeIn();
+
+        $(window).on("load", function() {
+            $(".overlay").fadeOut(300)
+            $(".lds-ripple").fadeOut(300);
+
+        });
+
+
+
+
     $.validator.addMethod(
         "regex",
         function(value, element, regexp) {

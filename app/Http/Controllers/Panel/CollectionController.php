@@ -28,7 +28,6 @@ class CollectionController extends Controller
     public function Save(Request $request, Collection $Collection)
     {
 
-
         $destinationPath = "files/collections";
         if (!file_exists($destinationPath)) {
             mkdir($destinationPath, 0755, true);
