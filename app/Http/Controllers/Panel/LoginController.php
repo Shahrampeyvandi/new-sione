@@ -8,16 +8,20 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
     public function Login()
     {
+
         if (Auth::guard('admin')->check()) {
         
 
             return redirect()->route('BaseUrl');
     }
+
+  
         return view('Panel.Login');
     }
 
@@ -31,6 +35,8 @@ class LoginController extends Controller
                
                 if ($request->has('rememberme')) {Auth::guard('admin')->Login($admin, true);} else {Auth::guard('admin')->Login($admin);}
                 
+               
+
                 return redirect()->route('BaseUrl');
             } else {
                 $request->session()->flash('Error', 'رمز عبور وارد شده صحیح نمیباشد');

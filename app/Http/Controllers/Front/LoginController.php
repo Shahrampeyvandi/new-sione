@@ -13,31 +13,37 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
     public function Login()
     {
         // dd(auth()->user());
-               
+
         if (Auth::guard('admin')->check()) {
-        
+
 
             return redirect()->route('BaseUrl');
-    }
-     if (Auth::check()) {
-        
- $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
-                $now = Carbon::now()->timestamp;
-                if ($expire > $now) {
-                    return redirect()->route('MainUrl');
-                } else {
-                    return redirect()->route('S.SiteSharing');
-                }
-    }
-               
+        }
+        if (Auth::check()) {
 
+            $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
+            $now = Carbon::now()->timestamp;
+            if ($expire > $now) {
+                return redirect()->route('MainUrl');
+            } else {
+                return redirect()->route('S.SiteSharing');
+            }
+        }
+
+        $logindata = [];
+        $logindata = json_decode(Cookie::get('login'));
         $data['title'] = 'ورود';
+        $data['phone'] = $logindata->phone;
+        $data['password'] = $logindata->password;
+
+
         return view('Front.login', $data);
     }
 
@@ -74,6 +80,17 @@ class LoginController extends Controller
                 auth()->logoutOtherDevices($request->password);
                 $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
                 $now = Carbon::now()->timestamp;
+
+                $data = array(
+                    "phone" => $request->mobile,
+                    "password" => $request->password
+                );
+                $cookieTime = 10000;
+                Cookie::queue('login', json_encode($data), $cookieTime);
+
+
+
+
                 if ($expire > $now) {
                     return redirect()->route('MainUrl');
                 } else {
@@ -145,7 +162,7 @@ class LoginController extends Controller
 
     public function ForgetPassword(Request $request)
     {
-        
+
 
         $rules = array(
             'mobile'             => 'required',
@@ -171,7 +188,7 @@ class LoginController extends Controller
             //------ ارسال پیامک ثبت نام کاربر جدید
             $patterncode = "i0hm6b2p4v";
             $data = array("name" => $user->first_name, "code" => $code->v_code);
-            $this->sendSMS($patterncode,$user->mobile,$data);
+            $this->sendSMS($patterncode, $user->mobile, $data);
         } else {
             return Redirect::back()->withErrors(['کاربری با این شماره یافت نشد!']);
         }
@@ -205,8 +222,8 @@ class LoginController extends Controller
 
     public function ForgetPasswordSubmitnewPass(Request $request)
     {
-      
-        
+
+
         $rules = array(
             'password'         => 'required | min:8',
         );
@@ -238,7 +255,7 @@ class LoginController extends Controller
         $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
         $now = Carbon::now()->timestamp;
         if ($expire > $now) {
-             toastr()->success('رمز عبور شما با موفقیت تغییر کرد');
+            toastr()->success('رمز عبور شما با موفقیت تغییر کرد');
             return redirect()->route('MainUrl');
         } else {
             toastr()->success('رمز عبور شما با موفقیت تغییر کرد');
