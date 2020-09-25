@@ -37,11 +37,15 @@ class LoginController extends Controller
             }
         }
 
-        $logindata = [];
         $logindata = json_decode(Cookie::get('login'));
+        if($logindata){
+            $data['phone'] = $logindata->phone;
+            $data['password'] = $logindata->password;    
+        }else{
+            $data['phone'] = null;
+            $data['password'] = null;    
+        }
         $data['title'] = 'ورود';
-        $data['phone'] = $logindata->phone;
-        $data['password'] = $logindata->password;
 
 
         return view('Front.login', $data);
@@ -88,6 +92,8 @@ class LoginController extends Controller
                 $cookieTime = 10000;
                 Cookie::queue('login', json_encode($data), $cookieTime);
 
+                $member->lastloginip=$request->ip();
+                $member->update();
 
 
 
