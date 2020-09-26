@@ -18,8 +18,11 @@ class UserPlan
     public function handle($request, Closure $next)
     {
         if(Auth::guard('admin')->check() || auth()->user()->planStatus()){
-            
-            return $next($request);
+            if(auth()->user()->lastloginip && auth()->user()->lastloginip==$request->ip()){
+                return $next($request);
+            }else{
+                Auth::logout();
+            }
         }
 
             return redirect()->route('login');

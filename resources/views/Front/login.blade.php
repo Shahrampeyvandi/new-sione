@@ -38,14 +38,13 @@
                     <label for="Mobile">
                         شماره تلفن همراه
                     </label>
-                    <input type="tex" id="mobile" name="mobile" autocomplete="off" dir="rtl"
-                        placeholder="+98**********">
+                    <input type="tex" id="mobile" name="mobile" autocomplete="off" dir="rtl" @if($phone) value="{{$phone}}" @endif placeholder="+98**********">
                 </div>
                 <div class="input-place">
                     <label for="password">
                         رمز عبور
                     </label>
-                    <input type="password" id="password" name="password" autocomplete="off" dir="rtl">
+                    <input type="password" id="password" @if($password) value="{{$password}}" @endif name="password" autocomplete="off" dir="rtl">
                 </div>
                 <button class="submit_login btn--ripple" type="submit">
                     ورود
@@ -54,8 +53,7 @@
                     رمز عبور خود را فراموش کرده ام
                 </a>
             </form>
-            <form action="{{route('forgetpass')}}" method="post" id="loginForm" class=" forget-pas"
-                style="display: none">
+            <form action="{{route('forgetpass')}}" method="post" id="loginForm" class=" forget-pas" style="display: none">
                 @csrf
                 @if (count($errors))
                 <h1>
@@ -70,8 +68,7 @@
                     <label for="Mobile">
                         شماره تلفن همراه
                     </label>
-                    <input type="tex" id="mobile" name="mobile" autocomplete="off" dir="rtl"
-                        placeholder="+98**********">
+                    <input type="tex" id="mobile" name="mobile" autocomplete="off" dir="rtl" placeholder="+98**********">
                 </div>
                 <button class="submit_login btn--ripple" type="submit">
                     تایید
@@ -91,8 +88,7 @@
                     <label for="Mobile-register">
                         شماره تلفن همراه
                     </label>
-                    <input type="text" id="Mobile-register" name="mobile" autocomplete="off"
-                        placeholder="+98**********">
+                    <input type="text" id="Mobile-register" name="mobile" autocomplete="off" placeholder="+98**********">
                 </div>
                 <div class="input-place">
                     <label for="fName">

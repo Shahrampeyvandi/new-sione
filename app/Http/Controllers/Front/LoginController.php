@@ -13,13 +13,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
     public function Login()
     {
-        
+        // dd(auth()->user());
 
+   
         if (Auth::guard('admin')->check()) {
             return redirect()->route('BaseUrl');
         }
@@ -33,8 +35,17 @@ class LoginController extends Controller
             }
         }
 
-
+        $logindata = json_decode(Cookie::get('login'));
+        if($logindata){
+            $data['phone'] = $logindata->phone;
+            $data['password'] = $logindata->password;    
+        }else{
+            $data['phone'] = null;
+            $data['password'] = null;    
+        }
         $data['title'] = 'ورود';
+
+
         return view('Front.login', $data);
     }
 
@@ -71,6 +82,19 @@ class LoginController extends Controller
                 auth()->logoutOtherDevices($request->password);
                 $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
                 $now = Carbon::now()->timestamp;
+
+                $data = array(
+                    "phone" => $request->mobile,
+                    "password" => $request->password
+                );
+                $cookieTime = 10000;
+                Cookie::queue('login', json_encode($data), $cookieTime);
+
+                $member->lastloginip=$request->ip();
+                $member->update();
+
+
+
                 if ($expire > $now) {
                     return redirect()->route('MainUrl');
                 } else {
