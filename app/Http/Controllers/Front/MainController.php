@@ -2,25 +2,28 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Actor;
-use App\AdvertImage;
 use App\Blog;
-use App\Collection;
-use App\Director;
+use App\Post;
+use App\Actor;
+use App\Slider;
+use ZipArchive;
 use App\Episode;
+use App\Director;
+use Carbon\Carbon;
+use App\Collection;
+use App\AdvertImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Post;
-use App\Slider;
-use Carbon\Carbon;
-use ZipArchive;
-
+use App\Writer;
+use Illuminate\Support\Facades\Route;
 use function GuzzleHttp\Psr7\try_fopen;
 
 class MainController extends Controller
 {
     public function index()
     {
+
+
         $data['year'] = Carbon::now()->year;
         $data['newsione'] = Post::where(['comming_soon' => 0])->latest()->take(10)->get();
         $data['newseries'] = Post::where(['type' => 'series', 'comming_soon' => 0])->latest()->take(10)->get();
@@ -32,32 +35,32 @@ class MainController extends Controller
         $data['newmovies'] = Post::where(['type' => 'movies', 'comming_soon' => 0])->latest()->take(10)->get();
         $data['sliders'] = Slider::latest()->get();
         $data['adverts'] = AdvertImage::orderBy('created_at', 'DESC')->take(12)->get();
-        $data['updated_series'] = Post::where(['type' => 'series', 'comming_soon' => 0])->whereHas('episodes', function ($q) {
-            $q->where('created_at', '>', Carbon::now()->subDays(7));
-        })->latest()->take(10)->get();
-        $data['animations'] = Post::whereHas('categories', function ($q) {
-            $q->where('latin', 'Animation');
+        $data['updated_series'] = Post::where('comming_soon', 0)->where('type', '!=', 'movies')->whereHas('episodes', function ($q) {
+            $q->where('created_at', '>', Carbon::now()->subDays(30));
         })->latest()->take(10)->get();
         $data['top250'] = Post::where('comming_soon', 0)->where('top_250', '!=', null)->orderBy("top_250", "desc")->take(10)->get();
+        $data['animations'] = Post::whereHas('categories', function ($q) {
+            $q->where('latin', 'Animation');
+        })->inRandomOrder()->take(10)->get();
 
-        $data['documentaries'] =  Post::where(['type' => 'documentary', 'comming_soon' => 0])->latest()->take(10)->get();
+        $data['documentaries'] =  Post::where(['type' => 'documentary', 'comming_soon' => 0])->inRandomOrder()->take(10)->get();
         $data['actions'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Action');
-        })->latest()->take(10)->get();
+        })->inRandomOrder()->take(10)->get();
         $data['scifis'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Sci-Fi');
-        })->latest()->take(10)->get();
+        })->inRandomOrder()->take(10)->get();
         $data['horrors'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Horror');
-        })->latest()->take(10)->get();
+        })->inRandomOrder()->take(10)->get();
         $data['comedies'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Comedy');
-        })->latest()->take(10)->get();
+        })->inRandomOrder()->take(10)->get();
         $data['blogs'] = Blog::latest()->take(10)->get();
 
-        $data['collections'] = Collection::has('posts')->latest()->take(12)->get();
+        $data['collections'] = Collection::has('posts')->inRandomOrder()->take(12)->get();
         $data['title'] = 'صفحه اصلی';
-        
+
         // dd($data);
         return view('Front.index', $data);
     }
@@ -202,18 +205,17 @@ class MainController extends Controller
 
     public function ShowMore()
     {
+
         $year = Carbon::now()->year;
         $c = request()->c;
         $type = request()->type;
 
-        if($c == 'collections') {
-           if ($type == 'all') {
+        if ($c == 'collections') {
+            if ($type == 'all') {
                 $data['posts'] = Collection::latest()->get();
                 $data['title'] = 'مجموعه فیلم ها';
                 $data['type'] = 'collection';
             }
-            
-   
         }
         if ($c == $year) {
             if ($type == 'all') {
@@ -389,41 +391,45 @@ class MainController extends Controller
             if ($cast) {
                 $data['cast'] = $cast;
                 $data['title'] = $name;
+                $data['posts'] = Post::whereHas('actors', function ($q) use ($name) {
+                    $q->where('name', $name);
+                })->orderBy('year', 'desc')->get();
             } else {
                 abort(404);
             }
         }
-        if (request()->type == 'director') {
+        if (request()->type == 'director' || request()->type == 'writer') {
             $cast = Director::whereName($name)->first();
             if ($cast) {
                 $data['cast'] = $cast;
                 $data['title'] = $name;
-            } else {
-                abort(404);
+                $data['posts'] = Post::whereHas('directors', function ($q) use ($name) {
+                    $q->where('name', $name);
+                })->orWhereHas('writers', function ($q) use ($name) {
+                    $q->where('name', $name);
+                })->orderBy('year', 'desc')->get();
             }
-        }
+        } 
 
-        $data['posts'] = Post::whereHas('actors', function ($q) use ($name) {
-            $q->where('name', $name);
-        })->latest()->get();
+
 
         return view('Front.Cast', $data);
     }
 
     public function ShowCollection($id)
     {
-        if(!$id) abort(404);
+        if (!$id) abort(404);
         $collection = Collection::find($id);
-        if(!$collection) abort(404);
+        if (!$collection) abort(404);
         $data['collection'] = $collection;
-        if($collection->for == 'movies') {
+        if ($collection->for == 'movies') {
 
-            $data['posts'] = $collection->posts()->orderBy('released','asc')->get();
-        }else{
-            $data['posts'] = $collection->posts()->orderBy('year','asc')->latest()->get();
+            $data['posts'] = $collection->posts()->orderBy('released', 'asc')->get();
+        } else {
+            $data['posts'] = $collection->posts()->orderBy('year', 'asc')->latest()->get();
         }
         $data['title'] = $collection->name;
-        
+
         return view('Front.ShowMore', $data);
     }
 }

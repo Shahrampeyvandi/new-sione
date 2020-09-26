@@ -5,10 +5,16 @@ namespace App\Http\Controllers\Panel;
 use App\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\MovieRequest;
 
 class CommentController extends Controller
 {
 
+    public function MovieRequests()
+    {
+        $data['movie_requests'] = MovieRequest::latest()->get();
+        return view('Panel.MovieRequests.list',$data);
+    }
 
     public function UnconfirmedComments()
     {

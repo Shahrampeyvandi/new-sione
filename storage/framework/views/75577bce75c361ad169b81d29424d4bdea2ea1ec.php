@@ -38,7 +38,7 @@
 <?php if(isset($updated_series) && count($updated_series)): ?>
 <section class="movie-sections">
     <h3>
-        سریال های بروز شده
+        سریال ها و مستندهای به روز شده
     <a href="<?php echo e(route('S.ShowMore')); ?>?c=updated&type=serie">
             مشاهده همه
             <i class="fa fa-angle-left"></i>
@@ -231,6 +231,34 @@
 </section>
 <?php endif; ?>
 
+<?php if(isset($collections) &&  count($collections)): ?>
+<section class="movie-sections">
+    <h3>
+         مجموعه فیلم ها
+    <a href="<?php echo e(route('S.ShowMore')); ?>?c=collections&type=all">
+            مشاهده همه
+            <i class="fa fa-angle-left"></i>
+        </a>
+    </h3>
+    <div class="swiper-container BlogSlider">
+        <div class="swiper-wrapper">
+          <?php $__currentLoopData = $collections; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $collection): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+               <div class="swiper-slide">
+            <?php $__env->startComponent('components.collection',['collection'=>$collection , 'ajax'=>1]); ?>
+            <?php echo $__env->renderComponent(); ?>
+            </div>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+    <?php $__env->startComponent('components.showDetail'); ?>
+    <?php echo $__env->renderComponent(); ?>
+</section>
+<?php endif; ?>
+
+
 <?php if(isset($actions) && count($actions)): ?>
 <section class="movie-sections">
     <h3>
@@ -367,29 +395,6 @@
 <?php endif; ?>
 
 
-<?php if(isset($collections) &&  count($collections)): ?>
-<section class="movie-sections">
-    <h3>
-         مجموعه فیلم ها
-    
-    </h3>
-    <div class="swiper-container BlogSlider">
-        <div class="swiper-wrapper">
-          <?php $__currentLoopData = $collections; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $collection): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-               <div class="swiper-slide">
-            <?php $__env->startComponent('components.collection',['collection'=>$collection , 'ajax'=>1]); ?>
-            <?php echo $__env->renderComponent(); ?>
-            </div>
-          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-        </div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-    </div>
-    <?php $__env->startComponent('components.showDetail'); ?>
-    <?php echo $__env->renderComponent(); ?>
-</section>
-<?php endif; ?>
 
 
 

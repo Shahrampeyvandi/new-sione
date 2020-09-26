@@ -726,8 +726,17 @@ body{
     margin: 1rem 0 1.5rem 0;
     font-size: 1.2rem;
     width: max-content;
-    cursor: pointer;
+    
 }
+
+.movie-sections h2{
+    color: #ffffff;
+    margin: 1rem 0 1.5rem 0;
+    font-size: 1.4rem;
+    width: max-content;
+    
+}
+
 .movie-sections h3 a{
     color: #ffffff;
     font-size: 0.8rem;
@@ -1477,7 +1486,7 @@ footer{
 }
 .details_details{
     width: 40%;
-    margin: 1rem 0;
+    margin: 1rem 0 0 1rem;
 }
 .details_details .container-fluid .row div[class*="col-"]{
     padding: 0;
@@ -3329,6 +3338,7 @@ a.download-link:hover {
     right: 50%;
     position: absolute;
     z-index: 1;
+    opacity: 0.3;
 }
 
 
@@ -3490,4 +3500,50 @@ a.download-link:hover {
   0%   { opacity: 0; }
   50%  { opacity: .5; }
   100% { opacity: 1; }
+}
+
+
+.pagination {
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    justify-content: center;
+    border-radius: .25rem;
+    margin-bottom: 2rem;
+}
+.page-item.disabled .page-link {
+    color: #9fa3a6;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #ffffff0d;
+    border-color: #00000000;
+}
+.page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #000000;
+    background-color: #aeaeae;
+    border: 1px solid #171717;
+}
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #5959597d;
+    border-color: #000000;
+}
+
+.movie-req{
+        display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    text-align: right;
+}
+
+.movie-req form{
+    width: 50%;
 }

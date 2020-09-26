@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Actor;
 use App\Writer;
 use App\Director;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -13,14 +14,15 @@ class ActorsController extends Controller
 {
     public function List()
     {
-        $actors = Actor::orderBy('name','asc')->get();
-        $directors = Director::orderBy('name','asc')->get();
-        $writers = Writer::orderBy('name','asc')->get();
-        $all = $actors->merge($directors)->merge($writers);
-       
+        $actors = Actor::orderBy('name', 'asc')->get();
+        $directors = Director::orderBy('name', 'asc')->get();
+        $writers = Writer::orderBy('name', 'asc')->get();
+        $all = $actors->concat($directors);
+        $alll = $all->concat($writers);
 
 
-        return view('Panel.Actors.Lists', ['users' => $all]);
+
+        return view('Panel.Actors.Lists', ['users' => $alll]);
     }
     public function Edit($id)
     {
@@ -43,52 +45,60 @@ class ActorsController extends Controller
 
         if (request()->type == 'actor') {
             $model = Actor::find($id);
+            $destinationPath = 'actors';
         }
-        
+
         if (request()->type == 'director') {
             $model = Director::find($id);
+            $destinationPath = 'directors';
         }
         if (request()->type == 'writer') {
             $model = Writer::find($id);
+            $destinationPath = 'writers';
         }
 
         if ($request->hasFile('poster')) {
 
-            $poster = $this->SavePoster($request->file('poster'), 'actor-', 'actors');
-            $resize = $this->image_resize(200, 300, $poster, "actors");
+            $poster = $this->SavePoster($request->file('poster'), Str::slug($model->name), $destinationPath);
+            $resize = $this->image_resize(250, 300, $poster, $destinationPath);
             File::delete(public_path() . '/' . $poster);
             File::delete(public_path() . '/' . $model->image);
             $model->image = $resize;
         }
         $model->name = $request->name;
+        $model->fa_name = $request->fa_name;
         $model->bio = $request->bio;
         $model->update();
 
 
         toastr()->success('هنرمند با موفقیت ویرایش شد');
-        return back();
+        return redirect()->route('Panel.ActorsList');
     }
 
     public function Save(Request $request)
     {
         if (request()->type == 'actor') {
             $model = new Actor;
+            $destinationPath = 'actors';
         }
         if (request()->type == 'director') {
             $model = new Director;
+            $destinationPath = 'directors';
         }
         if (request()->type == 'writer') {
             $model = new Writer;
+            $destinationPath = 'writers';
         }
         if ($request->hasFile('poster')) {
-            $poster = $this->SavePoster($request->file('poster'), 'actor-', 'actors');
-            $resize = $this->image_resize(200, 300, $poster, "actors");
+            $poster = $this->SavePoster($request->file('poster'), Str::slug($request->name), $destinationPath);
+            $resize = $this->image_resize(250, 300, $poster,$destinationPath);
             File::delete(public_path() . '/' . $poster);
         } else {
             $resize = '';
         }
 
         $model->name = $request->name;
+        $model->fa_name = $request->fa_name;
         $model->bio = $request->bio;
         $model->image = $resize;
         $model->save();
@@ -115,7 +125,7 @@ class ActorsController extends Controller
     public function Insert(Request $request)
     {
         if ($request->type == "actor") {
-            $destinationPath = "files/actors";
+            $destinationPath = "actors";
 
             $image = $this->upload($destinationPath);
 
@@ -127,7 +137,7 @@ class ActorsController extends Controller
         }
 
         if ($request->type == "writer") {
-            $destinationPath = "files/writers";
+            $destinationPath = "writers";
 
             $image = $this->upload($destinationPath);
             Writer::create([
@@ -137,7 +147,7 @@ class ActorsController extends Controller
             ]);
         }
         if ($request->type == "creator") {
-            $destinationPath = "files/directors";
+            $destinationPath = "directors";
 
             $image = $this->upload($destinationPath);
             Director::create([
@@ -171,5 +181,25 @@ class ActorsController extends Controller
         }
 
         return $list;
+    }
+
+    public function Delete(Request $request)
+    {
+        if ($request->type == "actor") {
+            $destinationPath = "actors";
+            $model = Actor::find($request->id);
+        }
+        if ($request->type == "writer") {
+            $destinationPath = "writers";
+            $model = Writer::find($request->id);
+        }
+        if ($request->type == "director") {
+            $destinationPath = "directors";
+            $model = Director::find($request->id);
+        }
+        File::delete(public_path() . '/' . $model->image);
+
+        $model->delete();
+        return back();
     }
 }

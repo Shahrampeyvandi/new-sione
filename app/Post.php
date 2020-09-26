@@ -25,11 +25,22 @@ class Post extends Model
 
     public function relatedPosts()
     {
-        $categories = $this->categories;
-        $pluck = $categories->pluck('id');
-        return  static::whereHas('categories', function ($q) use ($pluck) {
-            $q->whereIn('id', $pluck);
-        })->where('id', '!=', $this->id)->where(['type' => $this->type, 'comming_soon' => 0])->take(6)->get();
+
+        $collections = $this->collections;
+        $coll_pluck = $collections->pluck('id');
+        $collection_posts = static::whereHas('collections', function ($q) use ($coll_pluck) {
+            $q->whereIn('id', $coll_pluck);
+        })->where('id', '!=', $this->id)->where(['type' => $this->type, 'comming_soon' => 0])->orderBy('year','asc')->take(6)->get();
+
+        if (count($collection_posts)) {
+            return $collection_posts;
+        } else {
+            $categories = $this->categories;
+            $cat_pluck = $categories->pluck('id');
+            return  static::whereHas('categories', function ($q) use ($cat_pluck) {
+                $q->whereIn('id', $cat_pluck);
+            })->where('id', '!=', $this->id)->where(['type' => $this->type, 'comming_soon' => 0])->orderBy('year','asc')->take(6)->get();
+        }
     }
 
 
@@ -128,9 +139,9 @@ class Post extends Model
 
     public function has_season()
     {
-        if(count($this->seasons)) {
+        if (count($this->seasons)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

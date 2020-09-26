@@ -48,6 +48,9 @@
                     <li><a href="{{route('Panel.SendMessage')}}">ارسال پیام</a></li>
                 </ul>
             </li>
+             <li><a href="{{route('Panel.MovieRequests')}}"><i class="fas fa-file-medical"></i> <span
+                        class="pr-4">درخواست فیلم</span> </a>
+            </li>
             <li><a href="{{route('Panel.UnconfirmedComments')}}"><i class="fas fa-comment"></i> <span
                         class="pr-4">دیدگاه ها</span> </a>
             </li>

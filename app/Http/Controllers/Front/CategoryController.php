@@ -24,7 +24,8 @@ class CategoryController extends Controller
             $sliders = Slider::withCategory($name);
             $data['sliders'] = $sliders;
             $data['title'] = $name ;
-           $data['posts'] = $category->posts;
+            $data['category_name'] = $category->name;
+           $data['posts'] = $category->posts()->paginate(30);
          
             return view('Front.showCategory', $data);
         } else {

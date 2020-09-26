@@ -6,7 +6,7 @@
             <div class="cover-img-movies-details">
                 <span>
                     {{$model->name}} -
-                    @if ($model->type == 'series')
+                    @if ($model->type == 'series' || $model->type == 'documentary')
                     {{\Carbon\Carbon::parse($model->first_publish_date)->format('Y')}}
                     @else
                     {{\Carbon\Carbon::parse($model->released)->format('Y')}}

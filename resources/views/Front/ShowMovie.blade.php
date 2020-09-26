@@ -53,12 +53,13 @@
                                     </a>
                                 </h3>
                                 <h4>
-                                    {{$post->duration}}  دقیقه
+                                    {{$post->duration}} دقیقه
                                 </h4>
                             </div>
                             <div class="col-12">
                                 <h5>
-                                    {{str_limit($section->description,100,'....')}}
+                                    {!! html_entity_decode(str_limit($section->description,100), ENT_QUOTES, 'UTF-8')!!}
+
                                 </h5>
                             </div>
                         </div>

@@ -79,15 +79,15 @@ class AjaxController extends Controller
 
     public function Like(Request $request)
     {
-        if(auth()->check()) {
+        if (auth()->check()) {
             $user = auth()->user();
             $guard = 'default';
-        }else{
+        } else {
             $user = auth()->guard('admin')->user();
             $guard = 'admin';
         }
         $post = Post::find($request->post_id);
-        if ($vote = $post->votes()->where(['user_id'=>$user->id,'user_guard'=>$guard])->first()) {
+        if ($vote = $post->votes()->where(['user_id' => $user->id, 'user_guard' => $guard])->first()) {
             $vote->status = $request->status;
             $vote->update();
         } else {
@@ -98,7 +98,7 @@ class AjaxController extends Controller
             ]);
         }
 
-         return response()->json(['status'=>$request->status], 200);
+        return response()->json(['status' => $request->status], 200);
     }
 
     public function checkTakhfif(Request $request)
@@ -187,8 +187,6 @@ class AjaxController extends Controller
 
         // dd($request->data);
         if ($request->data) {
-
-
             foreach ($request->data as $key => $data) {
                 if ($data['type'] == 'word') {
 
@@ -197,7 +195,6 @@ class AjaxController extends Controller
                     $word = null;
                 }
             }
-
 
             foreach ($request->data as $key => $data) {
                 if ($data['type'] == 'genre') {
@@ -220,22 +217,20 @@ class AjaxController extends Controller
                 }
             }
 
-            // dd($order);
-            // dd([explode(';',$year[0])[0],explode(';',$year[0])[1]]);
-            // dd([$cat, $caption, $year]);
             if ($word !== null) {
                 $posts = Post::where('name', 'like', '%' . $word . '%')
                     ->orWhere('title', 'like', '%' . $word . '%')
                     ->orWhereHas('actors', function ($q) use ($word) {
-                        $q->where('name', 'like', '%' . $word . '%');
+                        $q->where('name', 'like', '%' . $word . '%')->orWhere('fa_name', 'like', '%' . $word . '%');
                     })->orWhereHas('directors', function ($q) use ($word) {
-                        $q->where('name', 'like', '%' . $word . '%');
-                    })->latest()->take(6)->get();
+                        $q->where('name', 'like', '%' . $word . '%')->orWhere('fa_name', 'like', '%' . $word . '%');
+                    })->orWhereHas('writers', function ($q) use ($word) {
+                        $q->where('name', 'like', '%' . $word . '%')->orWhere('fa_name', 'like', '%' . $word . '%');
+                    })->orderBy('year','asc')->take(6)->get();
             } else {
 
 
                 if (count($cat) > 0 && count($caption) > 0 && count($year) > 0) {
-
                     $posts = Post::whereHas('categories', function ($q) use ($cat) {
                         $q->whereIn('id', $cat);
                     })->whereHas('categories', function ($q) use ($cat) {
@@ -257,13 +252,13 @@ class AjaxController extends Controller
                     })->latest()->take(6)->get();
                 } elseif (count($year) > 0) {
                     $posts = Post::whereBetween('year', [explode(';', $year[0])[0], explode(';', $year[0])[1]])->latest()->take(6)->get();
-                }else{
+                } else {
                     $posts = [];
                 }
 
 
 
-                if (isset($order) &&$order !==  'default') {
+                if (isset($order) && $order !==  'default') {
                     if ($order == 'new') {
 
                         $posts = $posts->sortBy('created_at');
@@ -305,13 +300,11 @@ class AjaxController extends Controller
                 <div class="cover-img-movies-details">
                     <span>
                         ' . $post->name . ' -';
-            if ($post->type == 'series') {
-
-                $article .= \Morilog\Jalali\Jalalian::forge($post->first_publish_date)->format('%Y');
-            } else {
-
-                $article .= \Morilog\Jalali\Jalalian::forge($post->released)->format('%Y');
-            }
+            if ($post->type == 'series'){
+                   $article .= \Carbon\Carbon::parse($post->first_publish_date)->format('Y');
+            }else{
+                   $article .= \Carbon\Carbon::parse($post->released)->format('Y');
+              }
 
             $article .= '</span>
                     <span>

@@ -39,7 +39,7 @@
 @if (isset($updated_series) && count($updated_series))
 <section class="movie-sections">
     <h3>
-        سریال های بروز شده
+        سریال ها و مستندهای به روز شده
     <a href="{{route('S.ShowMore')}}?c=updated&type=serie">
             مشاهده همه
             <i class="fa fa-angle-left"></i>

@@ -34,20 +34,17 @@
 
 
 <body @if (\Request::route()->getName() == "S.SiteSharing" || \Request::route()->getName() == "S.Account" ||
-    \Request::route()->getName() == "S.OrderLists" )
+    \Request::route()->getName() == "S.OrderLists" || \Request::route()->getName() == "MovieRequest")
     class="site-sharing"
     @endif>
-    <div class="overlay" style="display: block"></div>
-    <div class="lds-ripple center-screen" style="display: block">
-        <div></div>
-        <div></div>
-    </div>
+  
+   
 
 
     @if(\Request::route()->getName() !== "login" && \Request::route()->getName() !== "S.SiteSharing" &&
     \Request::route()->getName() !== "S.OrderLists" && \Request::route()->getName() !== "forgetpass" &&
      \Request::route()->getName() !== "forgetpass.submitCode" && \Request::route()->getName() !== "forgetpass.submitNewPass"
-    
+   
     )
     @include('Includes.Front.Header')
     @endif
@@ -57,7 +54,7 @@
     @if(\Request::route()->getName() !== "login" && \Request::route()->getName() !== "S.SiteSharing" &&
     \Request::route()->getName() !== "S.OrderLists" && \Request::route()->getName() !== "forgetpass" &&
      \Request::route()->getName() !== "forgetpass.submitCode" && \Request::route()->getName() !== "forgetpass.submitNewPass"
-   && \Request::route()->getName() !==  "S.Account"
+   && \Request::route()->getName() !==  "S.Account" && \Request::route()->getName() !== "MovieRequest"
   )
     @include('Includes.Front.Footer')
     @endif

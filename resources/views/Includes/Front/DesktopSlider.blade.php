@@ -1,5 +1,5 @@
 @if (count($sliders))
-    <section class="slider d-none d-md-block">
+<section class="slider d-none d-md-block">
     <div class="swiper-container header-slider">
         <div class="swiper-wrapper">
             @foreach ($sliders as $slider)
@@ -17,43 +17,38 @@
                         <h5>
                             {!! str_limit($slider->post->description,250) !!}
                         </h5>
-                   @if ($slider->post->type == 'movies')
+                        @if ($slider->post->type == 'movies')
                         <a href="{{$slider->post->play()}}" class="page-movie-play btn--ripple">
                             <i class="fa fa-play"></i>
                             پخش فیلم
                         </a>
-                   @endif
-                        
-                    <a href="{{route('S.SiteSharing')}}" class="more-detail-movie btn--ripple">
-                            <i class="fa fa-star"></i>
-                            خرید اشتراک
-                        </a>
-                    <a href="{{$slider->post->path()}}" class="more-detail-movie btn--ripple">
+                        @endif
+                        <a href="{{$slider->post->path()}}" class="more-detail-movie btn--ripple">
                             <i class="fa fa-exclamation"></i>
                             جزئیات بیشتر
                         </a>
                         @if (count($slider->post->actors))
-                            <h6>
+                        <h6>
                             ستارگان: </h6>
-                            @php
-                            $countactors = count($slider->post->actors);
-                            @endphp
-                           <h5>
-                                @foreach ($slider->post->actors->take(10) as $key =>$item)
+                        @php
+                        $countactors = count($slider->post->actors);
+                        @endphp
+                        <h5>
+                            @foreach ($slider->post->actors->take(10) as $key =>$item)
                             <span href="#">
                                 {{$item->name }}
                                 {{ $key == ($countactors -1)  ? ' ' : ' - '}}
                             </span>
                             @endforeach
-                           </h5>
+                        </h5>
 
-                       
+
                         @endif
                         @if ($slider->post->directors)
-                            <h6>
+                        <h6>
                             کارگران:
                             @php
-                          
+
                             $countdirectors = count($slider->post->directors);
                             @endphp
                             @foreach ($slider->post->directors as $key=> $item)

@@ -62,6 +62,10 @@ Route::group(['middleware' => ['userauth', 'userplan']], function () {
     Route::post('blog/search', 'Front\AjaxController@SearchBlog')->name('Blog.Ajax.Search');
 
     Route::get('collection/{id}', 'Front\MainController@ShowCollection')->name('Show-Collection');
+    Route::get('movie-request', 'Front\UserController@MovieRequest')->name('MovieRequest');
+    Route::post('movie-request', 'Front\UserController@SaveRequest')->name('MovieRequest');
+
+
 });
 
 
@@ -104,6 +108,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::get('serie/{post}', 'Panel\SeriesController@Edit')->name('Panel.EditSerie');
     Route::post('serie/{post}', 'Panel\SeriesController@EditSerie')->name('Panel.EditSerie');
     Route::post('actor/insert', 'Panel\ActorsController@Insert')->name('Panel.Actor.Insert');
+    Route::delete('actor/delete', 'Panel\ActorsController@Delete')->name('Panel.DeleteActor');
     Route::get('upload/video', 'Panel\MoviesController@UploadVideo')->name('Panel.UploadVideo');
     Route::post('upload/video', 'Panel\MoviesController@SaveVideo')->name('Panel.UploadVideo');
     Route::get('upload/episode', 'Panel\MoviesController@AddEpisode')->name('Panel.UploadEpisode');
@@ -170,6 +175,9 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
 
     Route::post('sitesharing/edit', 'Panel\ContentController@SiteSharing')->name('EditSiteSharing');
 
+    Route::get('movie-requests', 'Panel\CommentController@MovieRequests')->name('Panel.MovieRequests');
+
+    
     Route::post('ajax/caption/delete', 'Panel\MoviesController@DeleteCaption')->name('Ajax.DeleteCaption');
 
     Route::post('ajax/actor/get', 'Panel\ActorsController@GetActorAjax')->name('Panel.Ajax.GetActor');

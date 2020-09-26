@@ -20,6 +20,13 @@
                     </div>
 
                 </div>
+                <div class="row">
+            <div class="form-group col-md-6">
+              <label for=""> نام فارسی</label>
+              <input type="text" class="form-control" name="fa_name" id="name" value="{{$artist->fa_name ?? ''}}" placeholder="نام ">
+            </div>
+
+          </div>
 
 
                 <div class="row">

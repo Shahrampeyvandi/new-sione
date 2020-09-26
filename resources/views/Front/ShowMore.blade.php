@@ -6,9 +6,9 @@
 <div class="showmore-wrapper">
     @if (count($posts))
     <section class="movie-sections">
-        <h3>
+        <h2>
             {{$title}}
-        </h3>
+        </h2>
         @isset($collection)
         <p class="text-white mb-5">{{$collection->description}}</p>
         @endisset

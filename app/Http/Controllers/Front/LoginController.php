@@ -18,24 +18,21 @@ class LoginController extends Controller
 {
     public function Login()
     {
-        // dd(auth()->user());
-               
-        if (Auth::guard('admin')->check()) {
         
 
+        if (Auth::guard('admin')->check()) {
             return redirect()->route('BaseUrl');
-    }
-     if (Auth::check()) {
-        
- $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
-                $now = Carbon::now()->timestamp;
-                if ($expire > $now) {
-                    return redirect()->route('MainUrl');
-                } else {
-                    return redirect()->route('S.SiteSharing');
-                }
-    }
-               
+        }
+        if (Auth::check()) {
+            $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
+            $now = Carbon::now()->timestamp;
+            if ($expire > $now) {
+                return redirect()->route('MainUrl');
+            } else {
+                return redirect()->route('S.SiteSharing');
+            }
+        }
+
 
         $data['title'] = 'ورود';
         return view('Front.login', $data);
@@ -145,7 +142,7 @@ class LoginController extends Controller
 
     public function ForgetPassword(Request $request)
     {
-        
+
 
         $rules = array(
             'mobile'             => 'required',
@@ -171,7 +168,7 @@ class LoginController extends Controller
             //------ ارسال پیامک ثبت نام کاربر جدید
             $patterncode = "i0hm6b2p4v";
             $data = array("name" => $user->first_name, "code" => $code->v_code);
-            $this->sendSMS($patterncode,$user->mobile,$data);
+            $this->sendSMS($patterncode, $user->mobile, $data);
         } else {
             return Redirect::back()->withErrors(['کاربری با این شماره یافت نشد!']);
         }
@@ -205,8 +202,8 @@ class LoginController extends Controller
 
     public function ForgetPasswordSubmitnewPass(Request $request)
     {
-      
-        
+
+
         $rules = array(
             'password'         => 'required | min:8',
         );
@@ -238,7 +235,7 @@ class LoginController extends Controller
         $expire = Carbon::parse(Auth::user()->expire_date)->timestamp;
         $now = Carbon::now()->timestamp;
         if ($expire > $now) {
-             toastr()->success('رمز عبور شما با موفقیت تغییر کرد');
+            toastr()->success('رمز عبور شما با موفقیت تغییر کرد');
             return redirect()->route('MainUrl');
         } else {
             toastr()->success('رمز عبور شما با موفقیت تغییر کرد');

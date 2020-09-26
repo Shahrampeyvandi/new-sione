@@ -22,18 +22,21 @@
                 <option value="writer">writer</option>
               </select>
             </div>
-
           </div>
-
           <div class="row">
             <div class="form-group col-md-6">
-              <label for=""><span class="text-danger">*</span> نام </label>
-              <input type="text" class="form-control" name="name" id="name" value="" placeholder="نام ">
+              <label for=""><span class="text-danger">*</span> نام لاتین</label>
+              <input type="text" class="form-control" name="name" id="name" value="" placeholder="نام " required>
             </div>
 
           </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for=""> نام فارسی</label>
+              <input type="text" class="form-control" name="fa_name" id="name" value="" placeholder="نام ">
+            </div>
 
-
+          </div>
           <div class="row">
             <div class="form-group col-md-12">
               <label for="bio">بیوگرافی: </label>
@@ -48,9 +51,7 @@
                   <label for=""> تصویر: </label>
                 </div>
                 <div class="col-md-3">
-
                   <input type="file" name="poster" id="poster" />
-
                 </div>
               </div>
             </div>
@@ -66,25 +67,26 @@
   </div>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="deleteActor" tabindex="-1" role="dialog" aria-labelledby="deleteActorLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">اخطار</h5>
+        <h5 class="modal-title" id="deleteActorLabel">اخطار</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        موارد علامت زده شده حذف شوند؟
+        آیا میخواهید هنرمند حذف شود؟
       </div>
       <div class="modal-footer">
-        <form action="" method="post">
+        <form action="{{route('Panel.DeleteActor')}}" method="post">
           @csrf
           @method('delete')
-          <input type="hidden" name="video_id" id="video_id" value="">
-          <a href="#" class="deleteposts btn btn-danger text-white">حذف! </a>
+          <input type="hidden" name="id" id="id" value="">
+          <input type="hidden" name="type" id="type_" value="">
+          <button type="submit" href="#" class=" btn btn-danger text-white">حذف! </button>
         </form>
       </div>
     </div>
@@ -127,8 +129,11 @@
             <tr>
 
               <th>ردیف</th>
-              <th>
+              <th style="width: 100px">
                 نام
+              </th>
+              <th>
+                نام فارسی
               </th>
               <th>
                 نقش
@@ -141,17 +146,24 @@
           </thead>
           <tbody class="tbody">
             @foreach ($users as $key=>$user)
+            @php
+            if ($user instanceof \App\Actor){
+            $name = 'بازیگر';
+            $type = 'actor';
+            }elseif($user instanceof \App\Director){
+            $name = 'کارگردان';
+            $type = 'director';
+            }else{
+            $name = ' نویسنده';
+            $type = 'writer';
+            }
+            @endphp
             <tr>
 
               <td>{{$key+1}}</td>
               <td>{{$user->name}}</td>
-              <td>@if ($user instanceof \App\Actor)
-                بازیگر
-                @elseif($user instanceof \App\Director)
-                کارگردان
-                @else
-                نویسنده
-                @endif</td>
+              <td>{{$user->fa_name}}</td>
+              <td>{{$name}}</td>
 
               <td>{{str_limit($user->bio,50,' ... ')}}</td>
               <td>
@@ -161,14 +173,12 @@
                       {{asset("assets/images/avatar.png")}} " /> @endif
               </td>
               <td>
-                <a href="{{route('Panel.EditActor',$user->id)}}?type=@if ($user instanceof \App\Actor)
-actor
-@elseif($user instanceof \App\Director)
-director
-@else
-writer
-@endif" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
-
+                <a href="{{route('Panel.EditActor',$user->id)}}?type={{$type}}" class="btn btn-sm btn-info"><i
+                    class="fas fa-edit"></i></a>
+                <a href="#" data-id="{{$user->id}}" data-type="{{$type}}" title="حذف " data-toggle="modal"
+                  data-target="#deleteActor" class="btn btn-sm btn-danger   m-2">
+                  <i class="fa fa-trash"></i>
+                </a>
               </td>
             </tr>
             @endforeach
@@ -182,38 +192,16 @@ writer
 
 @section('js')
 <script>
-  $('table input[type="checkbox"]').change(function(){
-            if( $(this).is(':checked')){
-            $(this).parents('tr').css('background-color','#41f5e07d');
-            }else{
-                $(this).parents('tr').css('background-color','');
-            }
-            array=[]
-            $('table input[type="checkbox"]').each(function(){
-                if($(this).is(':checked')){
-                array.push($(this).attr('data-id'))
-               }
-               if(array.length !== 0){
-                $('.delete-edit').show()
-                if (array.length !== 1) {
-                    $('.container_icon').removeClass('justify-content-end')
-                    $('.container_icon').addClass('justify-content-between')
-                    $('.edit-personal').hide()
-                }else{
-                    $('.container_icon').removeClass('justify-content-end')
-                    $('.container_icon').addClass('justify-content-between')
-                    $('.edit-personal').show()
-                }
-            }
-            else{
-                $('.container_icon').removeClass('justify-content-between')
-                $('.container_icon').addClass('justify-content-end')
-                $('.delete-edit').hide()
-            }
-        })
-            
+  $('#deleteActor').on('shown.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var recipient = button.data('id')
+            $('#id').val(recipient)
+             var type = button.data('type')
+            $('#type_').val(type)
+
     })
-    
+  
+ 
      $('.deleteposts').click(function(e){
             e.preventDefault()
             data = { array:array, _method: 'delete',_token: "{{ csrf_token() }}" };

@@ -48,14 +48,15 @@
                         دسته بندی
                     </a>
                 </li>
-
-                <li class="navItem">
-                    <a href="<?php echo e(route('Childrens')); ?>" class="
-                    <?php if(\Request::route()->getName() == "Childrens"): ?> <?php echo e('active-nav'); ?> <?php endif; ?>">
-                        <i class="fa fa-child"></i>
-                        کودکان
+                  <li class="navItem">
+                    <a href="<?php echo e(route('S.ShowMore')); ?>?c=collections&type=all" class="
+                    <?php if(request()->has('c') && request()->c == 'collections'): ?> <?php echo e('active-nav'); ?> <?php endif; ?>">
+                        <i class="fa fa-cloud"></i>
+                        کالکشن
                     </a>
                 </li>
+
+               
                 <li class="navItem">
                     <a href="<?php echo e(route('CommingSoon')); ?>" class="
                     <?php if(\Request::route()->getName() == "CommingSoon"): ?> <?php echo e('active-nav'); ?> <?php endif; ?>">
@@ -107,6 +108,15 @@
                                 <i class="fa fa-list"></i>
                                 <span>
                                     لیست من
+                                </span>
+                            </a>
+                        </li>
+
+                         <li>
+                        <a href="<?php echo e(route('MovieRequest')); ?>">
+                                <i class="fa fa-film"></i>
+                                <span>
+                                    درخواست فیلم
                                 </span>
                             </a>
                         </li>

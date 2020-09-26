@@ -48,14 +48,15 @@
                         دسته بندی
                     </a>
                 </li>
-
-                <li class="navItem">
-                    <a href="{{route('Childrens')}}" class="
-                    @if(\Request::route()->getName() == "Childrens") {{'active-nav'}} @endif">
-                        <i class="fa fa-child"></i>
-                        کودکان
+                  <li class="navItem">
+                    <a href="{{route('S.ShowMore')}}?c=collections&type=all" class="
+                    @if(request()->has('c') && request()->c == 'collections') {{'active-nav'}} @endif">
+                        <i class="fa fa-cloud"></i>
+                        کالکشن
                     </a>
                 </li>
+
+               
                 <li class="navItem">
                     <a href="{{route('CommingSoon')}}" class="
                     @if(\Request::route()->getName() == "CommingSoon") {{'active-nav'}} @endif">
@@ -106,6 +107,15 @@
                                 <i class="fa fa-list"></i>
                                 <span>
                                     لیست من
+                                </span>
+                            </a>
+                        </li>
+
+                         <li>
+                        <a href="{{route('MovieRequest')}}">
+                                <i class="fa fa-film"></i>
+                                <span>
+                                    درخواست فیلم
                                 </span>
                             </a>
                         </li>

@@ -38,6 +38,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'reciver_id');
     }
+     public function movie_requests()
+    {
+        return $this->hasMany(MovieRequest::class, 'user_id');
+    }
+
 
     public function newNoty()
     {

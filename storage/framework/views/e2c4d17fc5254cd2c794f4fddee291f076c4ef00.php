@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/toastr.css')); ?>">
     <script src="<?php echo e(asset('frontend/assets/js/swiper.min.js')); ?>"></script>
     <script src="<?php echo e(asset('frontend/assets/js/all.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/index.js')); ?>"></script>
     <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
 <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
     <?php echo $__env->yieldContent('css'); ?>
@@ -22,7 +23,6 @@
         var mainUrl = "<?php echo e(route('MainUrl')); ?>";
     </script>
 
-    <script src="<?php echo e(asset('frontend/assets/js/index.js')); ?>"></script>
     <meta charset="UTF-8">
     <meta name="_token" content="<?php echo e(csrf_token()); ?>">
     
@@ -34,20 +34,17 @@
 
 
 <body <?php if(\Request::route()->getName() == "S.SiteSharing" || \Request::route()->getName() == "S.Account" ||
-    \Request::route()->getName() == "S.OrderLists" ): ?>
+    \Request::route()->getName() == "S.OrderLists" || \Request::route()->getName() == "MovieRequest"): ?>
     class="site-sharing"
     <?php endif; ?>>
-    <div class="overlay"></div>
-    <div class="lds-ripple center-screen" style="display: none">
-        <div></div>
-        <div></div>
-    </div>
+  
+   
 
 
     <?php if(\Request::route()->getName() !== "login" && \Request::route()->getName() !== "S.SiteSharing" &&
     \Request::route()->getName() !== "S.OrderLists" && \Request::route()->getName() !== "forgetpass" &&
      \Request::route()->getName() !== "forgetpass.submitCode" && \Request::route()->getName() !== "forgetpass.submitNewPass"
-    
+   
     ): ?>
     <?php echo $__env->make('Includes.Front.Header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php endif; ?>
@@ -57,7 +54,7 @@
     <?php if(\Request::route()->getName() !== "login" && \Request::route()->getName() !== "S.SiteSharing" &&
     \Request::route()->getName() !== "S.OrderLists" && \Request::route()->getName() !== "forgetpass" &&
      \Request::route()->getName() !== "forgetpass.submitCode" && \Request::route()->getName() !== "forgetpass.submitNewPass"
-   && \Request::route()->getName() !==  "S.Account"
+   && \Request::route()->getName() !==  "S.Account" && \Request::route()->getName() !== "MovieRequest"
   ): ?>
     <?php echo $__env->make('Includes.Front.Footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php endif; ?>

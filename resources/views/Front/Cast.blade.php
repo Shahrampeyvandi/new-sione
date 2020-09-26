@@ -17,7 +17,11 @@
         </div>
         <div class="col-md-9">
             <div class="Person-description">
-                <div class="Person-title fs-1-5 mb-2 mt-0 mt-md-5">{{$cast->name}}</div>
+            <div class="Person-title fs-1-5 mb-2 mt-0 mt-md-5"><span>{{$cast->name}}</span>
+            @if ($cast->fa_name)
+                 - <span>{{$cast->fa_name}}</span>
+            @endif
+            </div>
                 <div class="fs-1">
                     {!! html_entity_decode($cast->bio, ENT_QUOTES, 'UTF-8') !!}
                 </div>

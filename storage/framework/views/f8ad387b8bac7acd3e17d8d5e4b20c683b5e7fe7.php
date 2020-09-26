@@ -1,5 +1,5 @@
 <?php if(count($sliders)): ?>
-    <section class="slider d-none d-md-block">
+<section class="slider d-none d-md-block">
     <div class="swiper-container header-slider">
         <div class="swiper-wrapper">
             <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slider): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -19,29 +19,24 @@
                             <?php echo str_limit($slider->post->description,250); ?>
 
                         </h5>
-                   <?php if($slider->post->type == 'movies'): ?>
+                        <?php if($slider->post->type == 'movies'): ?>
                         <a href="<?php echo e($slider->post->play()); ?>" class="page-movie-play btn--ripple">
                             <i class="fa fa-play"></i>
                             پخش فیلم
                         </a>
-                   <?php endif; ?>
-                        
-                    <a href="<?php echo e(route('S.SiteSharing')); ?>" class="more-detail-movie btn--ripple">
-                            <i class="fa fa-star"></i>
-                            خرید اشتراک
-                        </a>
-                    <a href="<?php echo e($slider->post->path()); ?>" class="more-detail-movie btn--ripple">
+                        <?php endif; ?>
+                        <a href="<?php echo e($slider->post->path()); ?>" class="more-detail-movie btn--ripple">
                             <i class="fa fa-exclamation"></i>
                             جزئیات بیشتر
                         </a>
                         <?php if(count($slider->post->actors)): ?>
-                            <h6>
+                        <h6>
                             ستارگان: </h6>
-                            <?php
-                            $countactors = count($slider->post->actors);
-                            ?>
-                           <h5>
-                                <?php $__currentLoopData = $slider->post->actors->take(10); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key =>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
+                        $countactors = count($slider->post->actors);
+                        ?>
+                        <h5>
+                            <?php $__currentLoopData = $slider->post->actors->take(10); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key =>$item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <span href="#">
                                 <?php echo e($item->name); ?>
 
@@ -49,15 +44,15 @@
 
                             </span>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                           </h5>
+                        </h5>
 
-                       
+
                         <?php endif; ?>
                         <?php if($slider->post->directors): ?>
-                            <h6>
+                        <h6>
                             کارگران:
                             <?php
-                          
+
                             $countdirectors = count($slider->post->directors);
                             ?>
                             <?php $__currentLoopData = $slider->post->directors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
