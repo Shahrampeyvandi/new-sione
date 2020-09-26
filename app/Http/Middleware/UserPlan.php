@@ -17,15 +17,20 @@ class UserPlan
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::guard('admin')->check() || auth()->user()->planStatus()){
-            if(auth()->user()->lastloginip && auth()->user()->lastloginip==$request->ip()){
+        if (Auth::guard('admin')->check() || auth()->user()->planStatus()) {
+            if (!Auth::guard('admin')->check()) {
+                if (auth()->check() && auth()->user()->lastloginip && auth()->user()->lastloginip == $request->ip()) {
+                    return $next($request);
+                } elseif (Auth::guard('admin')->check()) {
+                    return $next($request);
+                } else {
+                    Auth::logout();
+                }
+            } else {
                 return $next($request);
-            }else{
-                Auth::logout();
             }
         }
 
-            return redirect()->route('login');
-        
+        return redirect()->route('login');
     }
 }
