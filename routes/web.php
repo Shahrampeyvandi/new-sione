@@ -65,6 +65,9 @@ Route::group(['middleware' => ['userauth', 'userplan']], function () {
     Route::get('movie-request', 'Front\UserController@MovieRequest')->name('MovieRequest');
     Route::post('movie-request', 'Front\UserController@SaveRequest')->name('MovieRequest');
 
+    Route::post('send-bug', 'Front\UserController@send_bug');
+    
+
 
 });
 

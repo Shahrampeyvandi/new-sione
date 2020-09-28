@@ -32,20 +32,16 @@ class PayController extends Controller
         
         $plan = Plan::whereId($request->plan_name)->first();
         
+       
         if (!$plan) return back();
+        
         $expire_date = Carbon::now()->addDays($plan->days);
-        $user = auth()->user();
-        //  dd([session()->get('discount_id' . $user->id),session()->get('amount' . auth()->user()->id)]);
-
+  
         //برای تست کردن مقدار دیباگ مد رو روی یک قررا بده وگرنه صفر
         $debugmode = 0;
         $user = auth()->user();
 
-        // check if plan is free , prevent to add expire_date user
-        if ($user->payments()->where('plan_id', $plan->id)->where('amount', 0)->first()) {
-            return back();
-        }
-
+     
 
         $payment = new Payment;
         $payment->user_id = $user->id;
@@ -57,6 +53,7 @@ class PayController extends Controller
         }
         $payment->amount =  $amount;
         $payment->save();
+       
 
 
 
@@ -69,19 +66,23 @@ class PayController extends Controller
             } else {
                 $expire_date = Carbon::parse(auth()->user()->expire_date)->addDays($plan->days);
             }
-            $user = auth()->user();
+        
             $user->expire_date = $expire_date;
             $user->update();
-
+            $user->fresh();
+           
             if (session()->has('discount_id' . $user->id)) {
                 $discount = Discount::find(session()->get('discount_id' . $user->id));
+               if($discount->count !== null) {
                 $discount->decrement('count', 1);
+               }
                 $user->discounts()->attach(session()->get('discount_id' . $user->id));
             }
             session()->forget('discount_id' . $user->id);
             session()->forget('amount' . auth()->user()->id);
 
             $this->sendNoty(auth()->user(), $plan);
+         
             return redirect()->route('MainUrl');
         }
 
@@ -197,7 +198,9 @@ class PayController extends Controller
 
                 if (session()->has('discount_id' . $user->id)) {
                     $discount = Discount::find(session()->get('discount_id' . $user->id));
+                     if($discount->count !== null) {
                     $discount->decrement('count', 1);
+                     }
                     $user->discounts()->attach(session()->get('discount_id' . $user->id));
                 }
                 session()->forget('discount_id' . $user->id);

@@ -535,22 +535,14 @@ $(document).ready(function() {
         let plan_choose_price = $(this)
             .parent()
             .parent()
-            .find(".plan-price")
-            .text();
-        let plan_choose_off = $(this)
-            .parent()
-            .parent()
             .find(".after-off")
             .text();
+      
         $(".buy-sharing-plan").css("display", "block");
         $(".buy-sharing-plan-box h1").text(plan_choose_day);
         $(".price-plan_price").text(plan_choose_price);
-        let off_plan = parseInt(plan_choose_off);
-        $(".off-plan_price").text(off_plan + " تومان");
-        let VAT = (parseInt(plan_choose_off) * 9) / 100;
-        $(".VAT_price").text(Math.round(VAT));
-        let pay_price = parseInt(plan_choose_off) + VAT;
-        $("#pay_price").text(pay_price);
+        $("#pay_price").text(plan_choose_price);
+     
     });
     $("#close_buy-plan-box").on("click", function(e) {
         e.preventDefault();
@@ -1013,4 +1005,19 @@ function likepost(event, id, status) {
             );
         }
     });
+}
+
+
+function reportBug(event,id) {
+    event.preventDefault()
+
+      var myModal = new jBox("Modal", {
+         title: "<div class='text-right'>متن گزارش خطا را وارد نمایید</div>",
+         content: `<form action="${mainUrl}/send-bug" method="post">
+      <input type="hidden"  name="id" value="${id}"> 
+      <textarea name='content' class='form-control text-area'></textarea>
+      <button class="btn--gray">ارسال</button>
+      </form>`
+     });
+     myModal.open()
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\BugReport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\MovieRequest;
@@ -18,19 +19,20 @@ class UserController extends Controller
 
   public function Orders()
   {
+
     $payments = Payment::where('user_id', auth()->user()->id)->latest()->get();
     return view('Front.orders', ['payments' => $payments]);
   }
   public function MovieRequest()
   {
     $data['title'] = 'درخواست فیلم';
-    return view('Front.movie-request',$data);
+    return view('Front.movie-request', $data);
   }
 
   public function SaveRequest(Request $request)
   {
     if (auth()->guard('admin')->check()) {
-       toastr()->success('درخواست فیلم فقط برای کاربران سایت میباشد');
+      toastr()->success('درخواست فیلم فقط برای کاربران سایت میباشد');
       return back();
     } else {
 
@@ -41,5 +43,23 @@ class UserController extends Controller
       toastr()->success('درخواست شما با موفقیت ثبت شد');
       return back();
     }
+  }
+
+  public function send_bug(Request $request)
+  {
+    if(Auth::guard('admin')->check()) {
+      return back();
+    }
+    $user_id = Auth::user()->id;
+    $post_id = $request->id;
+    $content = $request->content;
+
+    BugReport::create([
+      'user_id' => $user_id,
+      'post_id' => $post_id,
+      'content' => $content
+    ]);
+    toastr()->info('گزارش شما با موفقیت ثبت شد');
+    return back();
   }
 }

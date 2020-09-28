@@ -460,6 +460,17 @@ body{
     float: left;
     transition: 0.3s ease-in-out;
 }
+.btn--gray{
+    margin-top: 1rem;
+    border: 1px solid;
+    border-radius: 4px;
+    background: #000000bd;
+    color: white;
+    padding: 4px 12px;
+}
+.text-area{
+    width:600px
+}
 .filter-body{
     width: 85%;
     /*overflow-y: scroll;*/
@@ -1213,6 +1224,7 @@ footer{
     margin: 2rem 0 0 0;
     text-align: right;
     direction: rtl;
+    color:black;
     box-shadow: none;
     background-color: rgb(242, 242, 242);
 }
@@ -1463,7 +1475,7 @@ footer{
 
 .head-film-cover > img{
      width: 40% !important;
-    height: 100vh !important;
+    height: 100% !important;
  }
 .movie-details-header{
     position: absolute;
@@ -1509,7 +1521,7 @@ footer{
     margin: 1rem 0;
     position: relative;
 }
-.list_like .addMovie_list{
+.list_like .addMovie_list , .add-report{
     display: inline-block;
     border: 1px solid #ffffff;
     border-radius: 0.5rem;
@@ -1520,6 +1532,11 @@ footer{
 .list_like .addMovie_list:hover{
     background-color: #1993ff;
     border-color: #1993ff;
+}
+.add-report:hover{
+    
+     background-color: #ff6464;
+    border-color: #ff6464;
 }
 .list_like .fa-thumbs-up,.list_like .fa-thumbs-down{
     position: absolute;
@@ -2068,6 +2085,10 @@ footer{
 @media screen and (max-width: 992px){
     .slider{
     height: auto;
+}
+
+.text-area{
+    width:300px
 }
 
 .img-box-movies img {

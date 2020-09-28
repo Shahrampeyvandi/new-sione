@@ -21,6 +21,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Morilog\Jalali\Jalalian;
 
 class Controller extends BaseController
 {
@@ -147,7 +148,7 @@ class Controller extends BaseController
     {
         //$query = DB::table('user_plan')->where('user_id', '=', $user->id)->where('plan_id', '=', $plan->id)->first();
         if (!is_null($plan)) {
-            $content = 'اشتراک ' . $plan->name . ' تا تاریخ ' . $user->expire_date . ' برای شما فعال میباشد';
+            $content = 'اشتراک ' . $plan->name . ' تا تاریخ ' . Jalalian::forge($user->expire_date)->format('%d/%m/%Y') . ' برای شما فعال میباشد';
             $noty = new Notification;
             $noty->content = $content;
             $noty->reciver_id = $user->id;

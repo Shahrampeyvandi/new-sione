@@ -143,7 +143,7 @@
                 <div class="inbox close">
                    <?php if(count($user->noty)): ?>
                         <ul>
-                       <?php $__currentLoopData = $user->noty()->latest()->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                       <?php $__currentLoopData = $user->noty()->latest()->take(6)->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <li>
                             <p>
                                <?php echo e($item->content); ?>

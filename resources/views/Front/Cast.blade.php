@@ -23,7 +23,7 @@
             @endif
             </div>
                 <div class="fs-1">
-                    {!! html_entity_decode($cast->bio, ENT_QUOTES, 'UTF-8') !!}
+                    {!! html_entity_decode(nl2br(e($cast->bio)), ENT_QUOTES, 'UTF-8') !!}
                 </div>
             </div>
         </div>

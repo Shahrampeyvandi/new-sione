@@ -4,20 +4,13 @@
 <head>
     <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/bootstrap.min.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('assets/vendors/range-slider/css/ion.rangeSlider.min.css')); ?>" type="text/css">
-
+    
     <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/swiper.min.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/all.min.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/index.css')); ?>">
-
-    <script src="<?php echo e(asset('frontend/assets/js/jquery-3.5.1.min.js')); ?>"></script>
-    <script src="<?php echo e(asset('assets/vendors/jquery-validate/jquery.validate.js')); ?>"></script>
-    <script src="<?php echo e(asset('frontend/assets/js/bootstrap.min.js')); ?>"></script>
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/toastr.css')); ?>">
-    <script src="<?php echo e(asset('frontend/assets/js/swiper.min.js')); ?>"></script>
-    <script src="<?php echo e(asset('frontend/assets/js/all.min.js')); ?>"></script>
-    <script src="<?php echo e(asset('frontend/assets/js/index.js')); ?>"></script>
-    <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
-<link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
+
     <?php echo $__env->yieldContent('css'); ?>
     <script>
         var mainUrl = "<?php echo e(route('MainUrl')); ?>";
@@ -58,6 +51,14 @@
   ): ?>
     <?php echo $__env->make('Includes.Front.Footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <?php endif; ?>
+    
+    <script src="<?php echo e(asset('frontend/assets/js/jquery-3.5.1.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/vendors/jquery-validate/jquery.validate.js')); ?>"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/bootstrap.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/swiper.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/all.min.js')); ?>"></script>
+    <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/index.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/toastr.min.js')); ?>"></script>
     <!-- begin::range slider -->
     <script src="<?php echo e(asset('assets/vendors/range-slider/js/ion.rangeSlider.min.js')); ?>"></script>

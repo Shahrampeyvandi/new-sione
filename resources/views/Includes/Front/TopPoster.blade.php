@@ -66,10 +66,11 @@
             <a href="#" data-id="{{$post->id}}" onclick="call(event)" class="addMovie_list text-white">
                 دانلود
             </a>
-            {{-- <a href="{{$post->downloadpath()}}" target="_blank" class="addMovie_list text-white">
-            تست دانلود
-            </a> --}}
+       
             @endif
+             <a href="#" data-id="{{$post->id}}" onclick="reportBug(event,'{{$post->id}}')" class="add-report text-white">
+            گزارش خطای محتوا
+            </a>
             @if ($user)
             <a class="dislike-icon" onclick="likepost(event,'{{$post->id}}',0)">
              

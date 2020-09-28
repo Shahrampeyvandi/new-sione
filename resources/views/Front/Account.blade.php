@@ -56,7 +56,7 @@
                         ویرایش
                     </a>
                 </div>
-            
+
                 <div class="col-12">
                     <div class="user-account-phone">
                         شماره تلفن همراه: {{$user->mobile}}
@@ -78,7 +78,7 @@
                         وضعیت اشتراک:
                         @if (auth()->guard('admin')->check())
                         فعال
-                        @else 
+                        @else
 
                         @if ($user->planStatus())
                         <span class="green-color">
@@ -93,16 +93,18 @@
                     </div>
                 </div>
                 <div class="col-5">
-                <a href="{{route('S.SiteSharing')}}" class="buy-sharing">
+                    <a href="{{route('S.SiteSharing')}}" class="buy-sharing">
                         خرید اشتراک
                     </a>
                 </div>
             </div>
         </div>
     </div>
-<a href="{{route('S.OrderLists')}}" class="order-lists">
+    @if (auth()->check())
+    <a href="{{route('S.OrderLists')}}" class="order-lists">
         لیست سفارشات
     </a>
 
+    @endif
 </section>
 @endsection

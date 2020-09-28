@@ -29,9 +29,7 @@ class MainController extends Controller
         $data['newseries'] = Post::where(['type' => 'series', 'comming_soon' => 0])->latest()->take(10)->get();
         $data['newyear'] = Post::where(['year' => $data['year'], 'comming_soon' => 0])->latest()->take(10)->get();
 
-        $data['latestdoble'] = Post::whereHas('categories', function ($q) {
-            $q->where('name', 'دوبله فارسی');
-        })->where(['comming_soon' => 0])->latest()->take(10)->get();
+   
         $data['newmovies'] = Post::where(['type' => 'movies', 'comming_soon' => 0])->latest()->take(10)->get();
         $data['sliders'] = Slider::latest()->get();
         $data['adverts'] = AdvertImage::orderBy('created_at', 'DESC')->take(12)->get();
@@ -41,21 +39,24 @@ class MainController extends Controller
         $data['top250'] = Post::where('comming_soon', 0)->where('top_250', '!=', null)->orderBy("top_250", "desc")->take(10)->get();
         $data['animations'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Animation');
-        })->inRandomOrder()->take(10)->get();
+        })->whereType('movies')->inRandomOrder()->take(10)->get();
 
         $data['documentaries'] =  Post::where(['type' => 'documentary', 'comming_soon' => 0])->inRandomOrder()->take(10)->get();
         $data['actions'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Action');
-        })->inRandomOrder()->take(10)->get();
+        })->whereType('movies')->inRandomOrder()->take(10)->get();
+          $data['latestdoble'] = Post::whereHas('categories', function ($q) {
+            $q->where('latin', 'Double');
+        })->whereType('movies')->inRandomOrder()->take(10)->get();
         $data['scifis'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Sci-Fi');
-        })->inRandomOrder()->take(10)->get();
+        })->whereType('movies')->inRandomOrder()->take(10)->get();
         $data['horrors'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Horror');
-        })->inRandomOrder()->take(10)->get();
+        })->whereType('movies')->inRandomOrder()->take(10)->get();
         $data['comedies'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Comedy');
-        })->inRandomOrder()->take(10)->get();
+        })->whereType('movies')->inRandomOrder()->take(10)->get();
         $data['blogs'] = Blog::latest()->take(10)->get();
 
         $data['collections'] = Collection::has('posts')->inRandomOrder()->take(12)->get();

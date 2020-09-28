@@ -15,6 +15,7 @@ class MovieController extends Controller
 {
     public function Show($slug)
     {
+
     
         
         $data['post'] = Post::whereSlug($slug)->first();
@@ -30,6 +31,7 @@ class MovieController extends Controller
         } else {
             if (count($data['post']->episodes)) {
                 $data['sections'] = $data['post']->episodes()->orderBy('section', 'asc')->get();
+                // dd($data['sections']);
             } else {
 
                 $data['sections'] = [];

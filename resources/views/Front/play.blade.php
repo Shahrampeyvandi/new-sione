@@ -43,7 +43,7 @@
 
         #player {
             width: 100%;
-            height: 100%;
+            height: 100vh;
         }
 
         .btn-white-color {
@@ -61,6 +61,10 @@
             color: #ffffff94;
         }
 
+        .object-fill {
+            object-fit: fill;
+        }
+
         .player-dimensions {
             width: 1250px;
             height: 521px;
@@ -69,6 +73,9 @@
 
     <body>
         <a href="{{ url()->previous() }}" class="btn-white-color bg-tt"> <i class="fa fa-chevron-left"></i> بازگشت</a>
+        <a href="#" onclick="fillMode(event)" class="btn-white-color bg-tt" style="left: 130px">
+            حالت کشیده </a>
+
         <section id="play" class=" position-relative">
             <video class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" id="player" controls>
                 @if (isset($videos))
@@ -94,6 +101,8 @@
          $(this).remove()
        })
      var video = videojs('player');
+     video.responsive(true);
+     
      video.videoJsResolutionSwitcher()
     video.currentTime(localStorage.getItem('videoTime' + '{{$post->id}}')); 
       video.watermark({
@@ -111,8 +120,19 @@
         video.on('play', function() {  
             setInterval(run_url_every_2seconds,2000);
         });
+
+        function fillMode(event) {
+            event.preventDefault()
+            el = $(event.target).next().find('video')
+            if(el.hasClass('object-fill')){
+            el.removeClass('object-fill')
+            }else{
+            el.addClass('object-fill')
+            }
+
+        }
     </script>
-   
+
 </body>
 
 </html>

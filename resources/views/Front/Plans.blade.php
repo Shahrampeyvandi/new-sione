@@ -28,22 +28,7 @@
                         <div class="col-4">
                             <div class="price-plan_price"></div>
                         </div>
-                        <div class="col-8">
-                            <div class="off-plan-title">
-                                جمع تخفیف:
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="off-plan_price"></div>
-                        </div>
-                        <div class="col-8">
-                            <div class="VAT-title">
-                                مالیات بر ارزش افزوده:
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="VAT_price"></div>
-                        </div>
+                     
                     </div>
                 </div>
             </div>
@@ -57,9 +42,7 @@
                 <div class="input-place">
 
                     <input id="off_code" name="offCode" autocomplete="off">
-                    <label for="off_code">
-                        کد تخفیف
-                    </label>
+                
                     <a id="submit-off_code" onclick="checkTakhfif(event,'{{route('checkTakhfif')}}')"
                         class="btn--ripple text-center">
                         ثبت کد تخفیف

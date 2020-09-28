@@ -26,46 +26,40 @@
     <div class="container-fluid">
         <div class="row">
             @foreach ($sections as $section)
-            <div class="col-12 col-md-4 col-lg-3">
-                <div class="Season-movie-box">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-6 col-md-12">
-                                <a href="{{$section->play()}}">
-                                    <div class="Season-movie-img-box">
-                                        <img src="{{$section->image()}}" alt="">
-                                        <i class="fa fa-play-circle"></i>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-6 col-md-12">
-                                <h3>
-                                    @if ($post->has_season())
-                                    {{$section->serie->title}} - فصل {{$season->number}} - قسمت {{$section->section}}
-                                    @else
-                                    {{$section->serie->title}} - قسمت {{$section->section}}
-                                    @endif
+            <div class="col-12 col-md-4 col-lg-3 Season-movie-box">
 
-
-                                    <a href="#" class="section-download" data-episode="{{$section->id}}"
-                                        data-id="{{$post->id}}" onclick="call(event)">
-                                        <i class="fa fa-cloud-download-alt"></i>
-                                    </a>
-                                </h3>
-                                <h4>
-                                    {{$post->duration}} دقیقه
-                                </h4>
-                            </div>
-                            <div class="col-12">
-                                <h5>
-                                    {!! html_entity_decode(str_limit($section->description,100), ENT_QUOTES, 'UTF-8')!!}
-
-                                </h5>
-                            </div>
-                        </div>
+                <a href="{{$section->play()}}">
+                    <div class="Season-movie-img-box">
+                        <img src="{{$section->image()}}" alt="">
+                        <i class="fa fa-play-circle"></i>
                     </div>
-                </div>
+                </a>
+
+                <h3>
+                    @if ($post->has_season())
+                    {{$section->serie->title}} - فصل {{$season->number}} - قسمت {{$section->section}}
+                    @else
+                    {{$section->serie->title}} - قسمت {{$section->section}}
+                    @endif
+
+
+                    <a href="#" class="section-download" data-episode="{{$section->id}}" data-id="{{$section->id}}"
+                        onclick="call(event)">
+                        <i class="fa fa-cloud-download-alt"></i>
+                    </a>
+                </h3>
+                @if ($section->duration)
+                <h4>
+                    {{$section->duration}} دقیقه
+                </h4>
+                @endif
+
+                <h5>
+                    {!! html_entity_decode(str_limit($section->description,100), ENT_QUOTES, 'UTF-8')!!}
+
+                </h5>
             </div>
+
             @endforeach
         </div>
     </div>

@@ -142,7 +142,7 @@
                 <div class="inbox close">
                    @if (count($user->noty))
                         <ul>
-                       @foreach ($user->noty()->latest()->get() as $item)
+                       @foreach ($user->noty()->latest()->take(6)->get() as $item)
                             <li>
                             <p>
                                {{$item->content}}

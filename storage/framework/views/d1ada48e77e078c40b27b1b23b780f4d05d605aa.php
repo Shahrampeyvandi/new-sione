@@ -6,7 +6,7 @@
             <div class="cover-img-movies-details">
                 <span>
                     <?php echo e($model->name); ?> -
-                    <?php if($model->type == 'series'): ?>
+                    <?php if($model->type == 'series' || $model->type == 'documentary'): ?>
                     <?php echo e(\Carbon\Carbon::parse($model->first_publish_date)->format('Y')); ?>
 
                     <?php else: ?>

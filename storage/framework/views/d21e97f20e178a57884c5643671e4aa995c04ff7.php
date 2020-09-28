@@ -70,7 +70,9 @@
             <a href="#" data-id="<?php echo e($post->id); ?>" onclick="call(event)" class="addMovie_list text-white">
                 دانلود
             </a>
-            
+        <a href="#" data-id="<?php echo e($post->id); ?>" onclick="reportBug(event,'<?php echo e($post->id); ?>')" class="add-report text-white">
+            گزارش خطای محتوا
+            </a>
             <?php endif; ?>
             <?php if($user): ?>
             <a class="dislike-icon" onclick="likepost(event,'<?php echo e($post->id); ?>',0)">
@@ -257,7 +259,7 @@
 
 
     <!-- scroll down -->
-    <div class="mouse_scroll">
+    <div class="mouse_scroll d-none d-md-block">
 
 		<div class="mouse">
 			<div class="wheel"></div>
