@@ -130,6 +130,9 @@ class LoginController extends Controller
         }
 
 
+        
+
+
         $user = User::create([
             'mobile' => $request->mobile,
             'first_name' => $request->fname,
