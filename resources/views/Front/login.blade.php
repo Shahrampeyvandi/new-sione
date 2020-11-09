@@ -164,11 +164,17 @@ if(browser_version[0] != 'Chrome' && browser_version[0] != 'Mozilla' && browser_
 </script>
 <script type="text/javascript">
 
+
+
 if (screen.width >= 1980) {
           window.location = "https://www.tv.sione.live/";
 }
-
-
+// if (confirm('آیا تمایل به ورود به نسخه تلویزیون را دارید؟')) {
+//       window.location = "https://www.tv.sione.live/";
+//   // Save it!
+// } else {
+//   // Do nothing!
+// }
 
 </script>
 @endsection
