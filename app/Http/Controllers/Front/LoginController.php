@@ -20,6 +20,7 @@ class LoginController extends Controller
     public function Login()
     {
         // dd(auth()->user());
+        // dd(Hash::make('hadi66873482'));
 
    
         if (Auth::guard('admin')->check()) {

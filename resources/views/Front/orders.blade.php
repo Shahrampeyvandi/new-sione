@@ -1,25 +1,34 @@
 @extends('Layout.Front')
+@section('Title',$title)
 
 @section('content')
-<style>
-    th,td{
-        padding: 10px;
-    }
-</style>
-  <a href="{{route('MainUrl')}}" class="logo-float-right">
-                            <img class="site-logo" src="{{asset('assets/images/aa-300x157.png')}}" alt="site-logo">
 
-</a>
 <section class="profile-section" style="width: 70%">
 
     <h1>
         لیست سفارشات
     </h1>
-    
-    <div class="plans">
-        <div >
+    <style>
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
 
-            <table class=" w-100 table-responsive">
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+</style>
+
+    <div class="card">
+
+        <div class="card-body" style="overflow-x:auto;">
+
+            <table id="example1" >
                 <thead>
                     <tr>
                         <th>ردیف</th>
@@ -37,8 +46,8 @@
                         <td>
                             @if ($item->success == '1')
                             <span class="text-success">موفق</span>
-                            @else    
-                             <span class="text-danger">ناموفق</span>
+                            @else
+                            <span class="text-danger">ناموفق</span>
                             @endif
                         </td>
                     </tr>
@@ -53,4 +62,13 @@
 
 
 </section>
+@endsection
+
+@section('js')
+    
+    <script src="{{asset('assets/vendors/dataTable/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('assets/vendors/dataTable/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('assets/vendors/dataTable/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('assets/js/examples/datatable.js')}}"></script>
+    
 @endsection

@@ -49,9 +49,14 @@
                 <button class="submit_login btn--ripple" type="submit">
                     ورود
                 </button>
-                <a class="forget-pass" href="#">
+               <div class="d-flex justify-content-between dd">
+                    <a class="forget-pass" href="#">
                     رمز عبور خود را فراموش کرده ام
                 </a>
+                
+               </div>
+    
+
             </form>
             <form action="<?php echo e(route('forgetpass')); ?>" method="post" id="loginForm" class=" forget-pas" style="display: none">
                 <?php echo csrf_field(); ?>
@@ -123,5 +128,49 @@
         </section>
     </div>
 </div>
+<span id="browser" style="color: #bababacf;
+    bottom: -152px;
+    position: absolute;
+    right: 26px;"></span>
+<script type="text/javascript">
+
+// Browser with version  Detection
+navigator.sayswho= (function(){
+    var N= navigator.appName, ua= navigator.userAgent, tem;
+    var M= ua.match(/(opera|chrome|safari|firefox|msie)\/?\s*(\.?\d+(\.\d+)*)/i);
+    if(M && (tem= ua.match(/version\/([\.\d]+)/i))!= null) M[2]= tem[1];
+    M= M? [M[1], M[2]]: [N, navigator.appVersion,'-?'];
+    return M;
+})();
+
+var browser_version          = navigator.sayswho;
+// alert(browser_version);
+if (
+/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+navigator.userAgent
+)
+) {
+
+}else{
+document.getElementById('browser').innerHTML = browser_version
+document.querySelector('.dd').innerHTML  += `<a class="goto-tvsione" href="https://tv.sione.live">
+    ورود به نسخه تلویزیون
+
+</a>`
+}
+if(browser_version[0] != 'Chrome' && browser_version[0] != 'Mozilla' && browser_version[0] != 'Netscape' && browser_version[0] != 'MSIE' && (browser_version[0] == 'Safari' && browser_version[1] =='4.0') && browser_version[0] != 'OP' && browser_version[0] != 'Firefox'){
+              window.location = "https://tv.sione.live/";
+}
+
+</script>
+<script type="text/javascript">
+
+if (screen.width >= 1980) {
+          window.location = "https://www.tv.sione.live/";
+}
+
+
+
+</script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('Layout.Front', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp1\htdocs\sione\resources\views/Front/login.blade.php ENDPATH**/ ?>

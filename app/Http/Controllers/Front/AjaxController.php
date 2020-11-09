@@ -31,11 +31,12 @@ class AjaxController extends Controller
                     'desc' => Str::limit($post->description, 300, '...'),
                     'path' => $post->path(),
                     'play' => $post->play(),
-                    'category' => $post->categories->pluck('name'),
+                    'category' => $post->categories->pluck('name','latin')->toArray(),
                     'stars' => $post->actors->take(10)->pluck('name'),
                     'download' => $post->downloadpath(),
                     'favoritepath' => $post->favoritepath(),
-                    'favoritestatus' => $post->checkFavorite($post->id)
+                    'favoritestatus' => $post->checkFavorite($post->id),
+                    'age_rate' => $post->get_age_rate()
                 ], 200);
             }
             if ($post->type == 'series' || $post->type == 'documentary') {
@@ -46,10 +47,11 @@ class AjaxController extends Controller
                     'title' => $post->title,
                     'desc' => Str::limit($post->description, 300, '...'),
                     'path' => $post->path(),
-                    'category' => $post->categories->pluck('name'),
+                    'category' => $post->categories->pluck('name','latin')->toArray(),
                     'stars' => $post->actors->take(10)->pluck('name'),
                     'favoritepath' => $post->favoritepath(),
-                    'favoritestatus' => $post->checkFavorite()
+                    'favoritestatus' => $post->checkFavorite(),
+                    'age_rate' => $post->get_age_rate()
                 ], 200);
             }
         }

@@ -38,6 +38,7 @@ class SerieController extends Controller
         if (\Request::route()->getName() == 'AllSeries') {
             $type = 'series';
             $data['title'] = 'سریال';
+           
         }
         if (\Request::route()->getName() == 'AllDocumentaries') {
             $type = 'documentary';
@@ -49,7 +50,21 @@ class SerieController extends Controller
 
         $data['newseries'] = Post::where(['type' => $type, 'comming_soon' => 0])->latest()->take(10)->get();
 
+        $data['allseries'] = Post::where('type', $type)->latest()->get();
         $data['sliders'] = Slider::LastSliders($type);
+        $data['type'] = $type;
+        $data['c'] = 'new';
+         $data['path'] = \Request::route()->getName();
+         if (isset(request()->order)) {
+            if (request()->order == 'asc') {
+                $data['allseries'] = $data['allseries']->sortBy('year');
+            }
+            if (request()->order == 'desc') {
+                $data['allseries'] = $data['allseries']->sortByDesc('year');
+            }
+            $data['order'] = request()->order;
+        }
+
        
 
         return view('Front.AllSeries', $data);

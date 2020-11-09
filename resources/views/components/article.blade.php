@@ -1,4 +1,4 @@
-<a href="{{$model->path()}}" data-id="1" @if (isset($ajax) && $ajax)
+<a href="{{isset($last) ? $last->path() : $model->path()}}" data-id="1" @if (isset($ajax) && $ajax)
     onclick="showDetails(event,'{{$model->id}}','{{route('GetMovieDetail')}}')" @endif>
     <div class="movie-sections-box">
         <div class="img-box-movies">
@@ -27,6 +27,9 @@
             {{$model->title}}
 
         </h5>
+        @if (isset($last))
+            <h6 class="show-updated">{{$model->getTimeLastPlayed($last->season_id,$last->section_id,$last->time)}}</h6>
+        @endif
         @isset($updated)
         <h6 class="show-updated">
             {{$model->last_updated()}}
@@ -38,5 +41,6 @@
             دوبله سیوان
         </h6>
         @endisset
+
     </div>
 </a>

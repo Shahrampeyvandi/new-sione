@@ -99,9 +99,10 @@
 @foreach ($cat as $key=>$category)
 @if (count($category))
 <section class="movie-sections">
+
     <h3>
         {{\App\Category::whereLatin($key)->first()->name}}
-        <a href="{{route('S.ShowMore')}}?c=animation&type=movie">
+        <a href="{{route('S.ShowMore')}}?c={{strtolower($key)}}&type=movie">
             مشاهده همه
             <i class="fa fa-angle-left"></i>
         </a>

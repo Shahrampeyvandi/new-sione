@@ -66,9 +66,10 @@ Route::group(['middleware' => ['userauth', 'userplan']], function () {
     Route::post('movie-request', 'Front\UserController@SaveRequest')->name('MovieRequest');
 
     Route::post('send-bug', 'Front\UserController@send_bug');
-    
 
 
+    Route::post('showall/changestatus', 'Front\MainController@ShowMore');
+    Route::post('lasplayed', 'Front\MainController@LastPlayed')->name('Ajax.LastPlayed');
 });
 
 
@@ -124,7 +125,7 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
     Route::put('plans/{id}/edit', 'Panel\PlanController@SaveEdit')->name('Panel.EditPlan');
     Route::get('plans/list', 'Panel\PlanController@List')->name('Panel.PlanList');
     Route::delete('plans/delete', 'Panel\PlanController@Delete')->name('Panel.DeletePlan');
-    Route::delete('post/image/delete', 'Panel\MoviesController@DeleteImage')->name('Panel.DeleteImage');
+    Route::post('post/image/delete', 'Panel\MoviesController@DeleteImage')->name('Panel.DeleteImage');
     Route::get('discounts', 'Panel\DiscountController@List')->name('Panel.DiscountList');
     Route::post('discount/save', 'Panel\DiscountController@Save')->name('Panel.Discount.Insert');
     Route::get('discount/{id}/edit', 'Panel\DiscountController@Edit')->name('Panel.Discount.Edit');
@@ -180,11 +181,15 @@ Route::group(['middleware' => ['admin'], 'prefix' => 'panel'], function () {
 
     Route::get('movie-requests', 'Panel\CommentController@MovieRequests')->name('Panel.MovieRequests');
 
-    
+
     Route::post('ajax/caption/delete', 'Panel\MoviesController@DeleteCaption')->name('Ajax.DeleteCaption');
 
     Route::post('ajax/actor/get', 'Panel\ActorsController@GetActorAjax')->name('Panel.Ajax.GetActor');
     Route::post('ajax/director/get', 'Panel\ActorsController@GetDirectorAjax')->name('Panel.Ajax.GetDirector');
     Route::post('ajax/category', 'Panel\MoviesController@AddCatAjax')->name('Panel.AddCatAjax');
     Route::post('ajax/checkname', 'Panel\MoviesController@checkNameAjax')->name('Panel.checkNameAjax');
+    Route::post('getcontentnoty', 'Panel\DashboardController@get_content_noty');
+    Route::post('readnoty', 'Panel\DashboardController@read_noty');
+
+    Route::post('deletenoty', 'Panel\DashboardController@delete_noty');
 });

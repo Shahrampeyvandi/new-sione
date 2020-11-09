@@ -2,10 +2,7 @@
 @section('Title',$title)
 
 @section('content')
-<a href="{{route('MainUrl')}}" class="logo-float-right">
-    <img class="site-logo" src="{{asset('assets/images/aa-300x157.png')}}" alt="site-logo">
 
-</a>
 <div class="buy-sharing-plan">
     <form action="{{route('S.BuyPlan')}}" method="post">
         @csrf
@@ -69,12 +66,7 @@
     </form>
 </div>
 <section class="site-sharing-body">
-    <h1 class="site-sharing-body-title">
-        خرید اشتراک سایت
-        {{-- <a href="login_register.html">
-            ورود
-        </a> --}}
-    </h1>
+  
     <a class="header-link-sharing" href="#">
         <img src="assets/images/sharing_page/p1.jpg" alt="">
     </a>

@@ -82,12 +82,20 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 <label for="">عنوان اصلی: </label>
                                 <input type="text" class="form-control" name="name"
                                     onblur="checkName(event,'{{route('Panel.checkNameAjax')}}')" id="original-title"
                                     value="{{$post->name ?? ''}}">
                             </div>
+                              @if (isset($post))
+                              <div class="form-group col-md-6">
+                                <label for="">آدرس : </label>
+                                <input type="text" class="form-control" name="slug" id="" required
+                            value="{{$post->slug ?? ''}}" >
+                            <span class="error-name text-danger"></span>
+                        </div>
+                         @endif
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -183,7 +191,7 @@
                             @isset($post)
                             @foreach ($post->images as $item)
                             <div class=" col-md-3">
-                                <a style="cursor:pointer;color:red" onclick="deleteImage(event)"><i
+                                <a style="cursor:pointer;color:red" onclick="deleteImage(event,'{{$item->id}}')"><i
                                         class="fas fa-trash"></i></a>
                                 <img width="100%" src="{{asset($item->url)}}" alt="">
                                 <input type="hidden" name="imdbImages[]" value="{{$item->url}}">
@@ -439,11 +447,7 @@
        }
     }
 
-    function deleteImage (event) {
-            event.preventDefault()
-            var target =$(event.target)
-            target.parents('.col-md-3').remove()
-            }
+ 
               
  $(".dropify").dropify();
            

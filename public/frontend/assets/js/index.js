@@ -1,21 +1,35 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
 
-     $(".overlay").fadeIn();
-     $(".lds-ripple").fadeIn();
+    $(".overlay").fadeIn();
+    $(".lds-ripple").fadeIn();
 
-        $(window).on("load", function() {
-            $(".overlay").fadeOut(300)
-            $(".lds-ripple").fadeOut(300);
+    $(window).on("load", function () {
+        $(".overlay").fadeOut(300)
+        $(".lds-ripple").fadeOut(300);
 
+    });
+
+
+    $('input[name="order_show"]').on('change', function () {
+        var token = $('meta[name="_token"]').attr("content");
+        var val = $(this).val()
+        var c = $(this).data('c')
+        var type = $(this).data('type')
+        var data = { type: type, val: val, c: c, _token: token }
+        var request = $.post(mainUrl + '/showall/changestatus', data);
+        request.done(function (res) {
+            $(".results").html(res);
+            timeout = true;
         });
+    })
 
 
 
 
     $.validator.addMethod(
         "regex",
-        function(value, element, regexp) {
+        function (value, element, regexp) {
             return this.optional(element) || regexp.test(value);
         },
         "Please check your input."
@@ -107,20 +121,20 @@ $(document).ready(function() {
         }
     });
 
-    var rangeSlider = function() {
+    var rangeSlider = function () {
         var slider = $(".range-slider"),
             range = $(".range-slider__range"),
             value = $(".range-slider__value");
 
-        slider.each(function() {
-            value.each(function() {
+        slider.each(function () {
+            value.each(function () {
                 var value = $(this)
                     .prev()
                     .attr("value");
                 $(this).html(value);
             });
 
-            range.on("input", function() {
+            range.on("input", function () {
                 $(this)
                     .next(value)
                     .html(this.value);
@@ -130,7 +144,7 @@ $(document).ready(function() {
 
     rangeSlider();
 
-    $(".inbox-icon").on("click", function(e) {
+    $(".inbox-icon").on("click", function (e) {
         e.preventDefault();
         var el = $(e.target);
         next = el.next(".inbox");
@@ -161,7 +175,7 @@ $(document).ready(function() {
         btnRippleH,
         btnRippleX,
         btnRippleY;
-    $btnRipple.on("mouseenter", function(e) {
+    $btnRipple.on("mouseenter", function (e) {
         let $t = $(this);
         if ($t.find(".btn--ripple-ink").length === 0) {
             $t.prepend("<span class='btn--ripple-ink'></span>");
@@ -181,7 +195,7 @@ $(document).ready(function() {
             .addClass("btn--ripple-animate");
     });
     // menu
-    $(".menu-button").on("click", function() {
+    $(".menu-button").on("click", function () {
         $(".cover-menu").css("display", "block");
         if ($(this).hasClass("cross")) {
             $(".navList").css("right", "-20rem");
@@ -204,7 +218,7 @@ $(document).ready(function() {
             $(".menu-button").css("position", "fixed");
         }
     });
-    $(".cover-menu").on("click", function() {
+    $(".cover-menu").on("click", function () {
         $(".navList").css("right", "-20rem");
         $(".navItem.logo")
             .css("transition", "none")
@@ -216,16 +230,28 @@ $(document).ready(function() {
             .css("position", "absolute");
         $("#search-box,.buy-subscribe").css("z-index", "90");
     });
-    $(window).scroll(function() {
+    $(window).scroll(function () {
         let currentScrollPos = window.pageYOffset;
-        $(window).scroll(function() {
-            let scroll_get_top = $(document).scrollTop();
-            if (currentScrollPos > scroll_get_top) {
-                $(".siteNav").css("top", "0");
-            } else {
-                $(".siteNav,.menu-items-left").css("top", "-20rem");
+        $(window).scroll(function () {
+            if (
+                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                    navigator.userAgent
+                )
+            ) {
+                 $(".siteNav").css("top", "0");
+            }else{
+
+                let scroll_get_top = $(document).scrollTop();
+                // console.log(currentScrollPos,scroll_get_top)
+                if (currentScrollPos > scroll_get_top) {
+    
+                    $(".siteNav").css("top", "0");
+                } else {
+                    $(".siteNav,.menu-items-left").css("top", "-20rem");
+                }
             }
         });
+
         let scroll_get = $(document).scrollTop();
         if (scroll_get > 0) {
             $(".siteNav").css({
@@ -233,8 +259,8 @@ $(document).ready(function() {
                 backgroundImage: "none"
             });
         } else {
-            $(".siteNav").css("background-color", "transparent");
 
+            $(".siteNav").css("background-color", "transparent");
             $(".siteNav").css(
                 "background-image",
                 "linear-gradient(to bottom, rgba(18,18,18,1), rgba(18,18,18,0))"
@@ -242,22 +268,20 @@ $(document).ready(function() {
         }
     });
     //profile dropdown
-    $(".user-login-show").on("click", function() {
-        let status = $(".profile-dropdown-box").css("display");
-        if (status === "none") {
-            $(".profile-dropdown-box").fadeIn(300);
-        } else {
-            $(".profile-dropdown-box").hide();
-        }
-    });
+    // $(".user-login-show").on("click", function() {
+    //     let status = $(".profile-dropdown-box").css("display");
+    //     if (status === "none") {
+    //         $(".profile-dropdown-box").fadeIn(300);
+    //     } else {
+    //         $(".profile-dropdown-box").hide();
+    //     }
+    // });
     // search box
-    $("#search-box .fa-search").on("click", function() {
-        $(".search-panel").css("display", "block");
-    });
-    $("#close_search").on("click", function() {
+
+    $("#close_search").on("click", function () {
         $(".search-panel").css("display", "none");
     });
-    $(".filter-search").on("click", function() {
+    $(".filter-search").on("click", function () {
         let status_filter_box = $(".filter-box").css("display");
         if (status_filter_box === "none") {
             $(".filter-box")
@@ -272,7 +296,7 @@ $(document).ready(function() {
             $(".filter-search .fa-angle-down").css("transform", "rotate(0)");
         }
     });
-    $(".menu-filters ul li").on("click", function() {
+    $(".menu-filters ul li").on("click", function () {
         let status_show = $(this).css("background-color");
         if (status_show === "rgb(34, 35, 39)") {
             $(this).css("background-color", "#37383e");
@@ -293,7 +317,7 @@ $(document).ready(function() {
     });
     $(".filter-body-box").css("display", "none");
     $(".genre-box").css("display", "block");
-    $("#genre").on("click", function() {
+    $("#genre").on("click", function () {
         let status_box_show = $(".genre-box").css("display");
         if (status_box_show === "none") {
             $(".filter-body-box").css("display", "none");
@@ -302,7 +326,7 @@ $(document).ready(function() {
             $(".genre-box").css("display", "none");
         }
     });
-    $("#Country").on("click", function() {
+    $("#Country").on("click", function () {
         let status_box_show = $(".ManufacturingCountry-box").css("display");
         if (status_box_show === "none") {
             $(".filter-body-box").css("display", "none");
@@ -311,7 +335,7 @@ $(document).ready(function() {
             $(".ManufacturingCountry-box").css("display", "none");
         }
     });
-    $("#Sound").on("click", function() {
+    $("#Sound").on("click", function () {
         let status_box_show = $(".SoundSubtitles-box").css("display");
         if (status_box_show === "none") {
             $(".filter-body-box").css("display", "none");
@@ -320,7 +344,7 @@ $(document).ready(function() {
             $(".SoundSubtitles-box").css("display", "none");
         }
     });
-    $("#Construction").on("click", function() {
+    $("#Construction").on("click", function () {
         let status_box_show = $(".YearConstruction-box").css("display");
         if (status_box_show === "none") {
             $(".filter-body-box").css("display", "none");
@@ -329,7 +353,7 @@ $(document).ready(function() {
             $(".YearConstruction-box").css("display", "none");
         }
     });
-    $("#Order").on("click", function() {
+    $("#Order").on("click", function () {
         let status_box_show = $(".OrderConstruction-box").css("display");
         if (status_box_show === "none") {
             $(".filter-body-box").css("display", "none");
@@ -342,9 +366,9 @@ $(document).ready(function() {
     var timeout = true;
     var delay = 1000; // 2 seconds
 
-    $("#search-input").on("keyup", function() {
+    $("#search-input").on("keyup", function () {
         if (timeout) {
-                timeout = false;
+            timeout = false;
             setTimeout(() => {
                 arr = [];
                 let val = $(this).val();
@@ -355,10 +379,10 @@ $(document).ready(function() {
 
                 PostData({ data: arr, _token: token }, url);
             }, 1000);
-            }
+        }
     });
 
-    $(".checkbox-place input").on("click", function() {
+    $(".checkbox-place input").on("click", function () {
         arr = [];
         let val_filter = $(this).val();
         let id_filter = $(this).attr("id");
@@ -367,7 +391,7 @@ $(document).ready(function() {
 
         var token = $('meta[name="_token"]').attr("content");
 
-        $("input.filter:checked").each(function() {
+        $("input.filter:checked").each(function () {
             let id = $(this).data("id");
             let type = $(this).data("type");
             arr.push({ type, id });
@@ -383,10 +407,10 @@ $(document).ready(function() {
             if ($(this).prop("checked") === true) {
                 $(".filter-place-elements").append(
                     "<span id=" +
-                        id_filter +
-                        " class='filter-place-box_new-filter'>" +
-                        val_filter +
-                        " <i class='fa fa-times'></i></span>"
+                    id_filter +
+                    " class='filter-place-box_new-filter'>" +
+                    val_filter +
+                    " <i class='fa fa-times'></i></span>"
                 );
             } else if ($(this).prop("checked") === false) {
                 $(".filter-place-elements span" + "#" + id_filter).remove();
@@ -404,14 +428,14 @@ $(document).ready(function() {
         }
     });
 
-    $(".range-slider__range").change(function() {
+    $(".range-slider__range").change(function () {
         arr = [];
         let year = $(this).val();
 
         arr.push({ type: "year", year: year });
         let url = $(this).data("url");
         var token = $('meta[name="_token"]').attr("content");
-        $("input.filter:checked").each(function() {
+        $("input.filter:checked").each(function () {
             let id = $(this).data("id");
             let type = $(this).data("type");
             arr.push({ type, id });
@@ -427,7 +451,7 @@ $(document).ready(function() {
     function PostData(data, url) {
         setTimeout(() => {
             var request = $.post(url, data);
-            request.done(function(res) {
+            request.done(function (res) {
                 $(".results").html(res);
                 timeout = true;
             });
@@ -436,7 +460,7 @@ $(document).ready(function() {
 
     function SendData() {
         arr = [];
-        $("input.filter:checked").each(function() {
+        $("input.filter:checked").each(function () {
             let id = $(this).data("id");
             let type = $(this).data("type");
             arr.push({ type, id });
@@ -451,8 +475,8 @@ $(document).ready(function() {
         PostData({ data: arr, _token: token }, url);
     }
 
-    $(".filter-place-box").on("mouseenter", function() {
-        $(".filter-place-box_new-filter svg").on("click", function() {
+    $(".filter-place-box").on("mouseenter", function () {
+        $(".filter-place-box_new-filter svg").on("click", function () {
             if ($(".filter-place-elements span").length) {
                 let get_id = $(this)
                     .parent()
@@ -468,7 +492,7 @@ $(document).ready(function() {
                 SendData();
             }
         });
-        $(".filter_all_delete").on("click", function() {
+        $(".filter_all_delete").on("click", function () {
             $(".filter-place-elements span").remove();
             $(this).remove();
             $(".checkbox-place input").prop("checked", false);
@@ -476,23 +500,23 @@ $(document).ready(function() {
         });
     });
     // login and register page
-    $(".login-form-load").on("click", function() {
+    $(".login-form-load").on("click", function () {
         $("#registerForm").css("display", "none");
         $(".forget-pas").css("display", "none");
         $("#loginForm").css("display", "block");
     });
-    $(".register-form-load").on("click", function() {
+    $(".register-form-load").on("click", function () {
         $("#loginForm").css("display", "none");
         $(".forget-pas").css("display", "none");
         $("#registerForm").css("display", "block");
     });
-    $(".forget-pass").on("click", function() {
+    $(".forget-pass").on("click", function () {
         $("#loginForm").css("display", "none");
         $("#registerForm").css("display", "none");
         $(".forget-pas").css("display", "block");
     });
 
-    $(".changeMood").on("click", function() {
+    $(".changeMood").on("click", function () {
         let status_text = $(this).text();
         if (status_text === "ورود از طریق ایمیل") {
             $(this).text("ورود از طریق شماره تلفن همراه");
@@ -514,7 +538,7 @@ $(document).ready(function() {
     });
     //
     // Season movie
-    $(".Season-select").on("click", function() {
+    $(".Season-select").on("click", function () {
         let status = $(".movie-Season-box").css("display");
         if (status === "none") {
             $(".movie-Season-box").fadeIn(200);
@@ -523,7 +547,7 @@ $(document).ready(function() {
         }
     });
     // site sharing
-    $(".choosePlane").on("click", function(e) {
+    $(".choosePlane").on("click", function (e) {
         e.preventDefault();
         let plan_choose_day = $(this)
             .parent()
@@ -537,29 +561,29 @@ $(document).ready(function() {
             .parent()
             .find(".after-off")
             .text();
-      
+
         $(".buy-sharing-plan").css("display", "block");
         $(".buy-sharing-plan-box h1").text(plan_choose_day);
         $(".price-plan_price").text(plan_choose_price);
         $("#pay_price").text(plan_choose_price);
-     
+
     });
-    $("#close_buy-plan-box").on("click", function(e) {
+    $("#close_buy-plan-box").on("click", function (e) {
         e.preventDefault();
         $(".buy-sharing-plan").css("display", "none");
     });
     //profile change
-    $(".edit-account-name").on("click", function() {
+    $(".edit-account-name").on("click", function () {
         $(".user-profile-change").css("display", "block");
         $(".user-detail-change-box").css("display", "block");
     });
-    $(".change_pass_user").on("click", function() {
+    $(".change_pass_user").on("click", function () {
         $(".user-profile-change").css("display", "block");
         $(".user-change-pass-box").css("display", "block");
     });
     $(".user-detail-change-box .fa-times,.user-change-pass-box .fa-times").on(
         "click",
-        function() {
+        function () {
             $(this)
                 .parent()
                 .css("display", "none");
@@ -585,7 +609,7 @@ $(document).ready(function() {
     });
     //top slider
     var swiper = new Swiper(".TopSlider", {
-        slidesPerGroup: 2,
+        slidesPerGroup: 1,
         navigation: {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev"
@@ -593,12 +617,12 @@ $(document).ready(function() {
         breakpoints: {
             // when window width is >= 0
             0: {
-                slidesPerGroup: 2,
-                slidesPerView: 1.4,
+                slidesPerGroup: 1,
+                slidesPerView: 1.1,
                 spaceBetween: 15
             },
             576: {
-                slidesPerView: 3.3,
+                slidesPerView: 2,
                 spaceBetween: 20
             },
             768: {
@@ -610,7 +634,7 @@ $(document).ready(function() {
                 spaceBetween: 30
             },
             1400: {
-                slidesPerView: 4.4,
+                slidesPerView: 3.4,
                 spaceBetween: 30
             }
         }
@@ -629,41 +653,77 @@ $(document).ready(function() {
         }
     });
 
-    
-     var swiper = new Swiper(".BlogSlider", {
-         slidesPerGroup: 1,
-         navigation: {
-             nextEl: ".swiper-button-next",
-             prevEl: ".swiper-button-prev"
-         },
-         breakpoints: {
-             // when window width is >= 0
-             0: {
-                 slidesPerGroup: 2,
-                 slidesPerView: 1,
-                 spaceBetween: 15
-             },
-             400: {
-                 slidesPerGroup: 2,
-                 slidesPerView: 1,
-                 spaceBetween: 15
-             },
-             576: {
-                 slidesPerView: 2.5,
-                 spaceBetween: 20
-             },
-             768: {
-                 slidesPerGroup: 4,
-                 slidesPerView: 4.4,
-                 spaceBetween: 20
-             },
-             1200: {
-                 slidesPerGroup: 5,
-                 slidesPerView: 5.4,
-                 spaceBetween: 20
-             }
-         }
-     });
+
+    var swiper = new Swiper(".BlogSlider", {
+        slidesPerGroup: 1,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+        },
+        breakpoints: {
+            // when window width is >= 0
+            0: {
+                slidesPerGroup: 2,
+                slidesPerView: 1,
+                spaceBetween: 15
+            },
+            400: {
+                slidesPerGroup: 2,
+                slidesPerView: 1,
+                spaceBetween: 15
+            },
+            576: {
+                slidesPerView: 2.5,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerGroup: 4,
+                slidesPerView: 4.4,
+                spaceBetween: 20
+            },
+            1200: {
+                slidesPerGroup: 5,
+                slidesPerView: 5,
+                spaceBetween: 20
+            }
+        }
+    });
+
+    var swiper = new Swiper(".CollectionSlider", {
+        slidesPerGroup: 1,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+        },
+        breakpoints: {
+            // when window width is >= 0
+            0: {
+                slidesPerGroup: 1,
+                slidesPerView: 1,
+                spaceBetween: 15
+            },
+            400: {
+                slidesPerGroup: 1,
+                slidesPerView: 1,
+                spaceBetween: 15
+            },
+            576: {
+                slidesPerView: 1,
+                spaceBetween: 20
+            },
+            768: {
+                slidesPerGroup: 4,
+                slidesPerView: 4.4,
+                spaceBetween: 20
+            },
+            1200: {
+                slidesPerGroup: 5,
+                slidesPerView: 5.4,
+                spaceBetween: 20
+            }
+        }
+    });
+
     //iran news
     var swiper = new Swiper(".IranNews", {
         slidesPerGroup: 2,
@@ -701,7 +761,7 @@ $(document).ready(function() {
     });
 });
 
-$(document).click(function(e) {
+$(document).click(function (e) {
     if (
         $(e.target).closest(".user-login-show").length == 0 &&
         $(e.target).closest(".profile-dropdown-box").length == 0
@@ -743,7 +803,7 @@ function showDetails(event, id, url) {
         // ajax call
         var token = $('meta[name="_token"]').attr("content");
         var request = $.post(url, { id: id, _token: token });
-        request.done(function(res) {
+        request.done(function (res) {
             // console.log(res);
             $(".lds-ripple").fadeOut();
             detailbox.css({
@@ -760,11 +820,24 @@ function showDetails(event, id, url) {
             joinStars = Stars.join("");
             detailbox.find(".stars").html(joinStars);
 
-            const Categories = res.category.map((item, index) => {
-                return `<span>${item} &nbsp;&nbsp;</span> `;
-            });
+            const Categories = Object.entries(res.category).map(
+                ([k, v]) =>
+                    `<a href="${mainUrl}/showall?c=${k.toLowerCase()}&type=all">${v} &nbsp;&nbsp;</a> `
+            );
+            //  console.log(Categories)
             joinCat = Categories.join("");
             detailbox.find(".categories").html(joinCat);
+
+            if (res.age_rate) {
+                detailbox.find(".age-rate")
+                    .html(`<span style="background: #ff7600cc;
+                            margin-top: 1rem;
+                            display: inline-block;
+                            padding: 3px;
+                            border-radius: 4px;">${res.age_rate}</span>`);
+            }
+
+
             if (res.favoritestatus) {
                 favoriteHtml = `<a href="#" style="background:#007bff" onclick="addToFavorite(event,'${res.id}','${res.favoritepath}')" title="افزودن به علاقه مندی" class="more-detail-movie btn--ripple">
                         <i class="fa fa-check"></i>
@@ -827,7 +900,7 @@ function getComments(event, url) {
     var token = $('meta[name="_token"]').attr("content");
     // data = ;
     var request = $.post(url, { data: data, _token: token });
-    request.done(function(res) {
+    request.done(function (res) {
         $("#comments").append(res.data);
         $(".lds-ripple").fadeOut();
         $(".overlay").fadeOut();
@@ -846,7 +919,7 @@ function checkTakhfif(event, url) {
             plan_id: plan_id,
             _token: token
         });
-        request.done(function(res) {
+        request.done(function (res) {
             if (res.error) {
                 alert(res.data);
             }
@@ -865,7 +938,7 @@ function downLoad(event, url) {
     var request = $.get(url, {
         _token: token
     });
-    request.done(function(res) {
+    request.done(function (res) {
         if (res.data == "error") {
             window.location.href = res.redirect;
         }
@@ -876,17 +949,17 @@ function addToFavorite(event, id, url) {
     event.preventDefault();
     var el = $(event.target);
     var token = $('meta[name="_token"]').attr("content");
-    // data = ;
+
     var request = $.post(url, {
         post_id: id,
         _token: token
     });
-    request.done(function(res) {
+    request.done(function (res) {
         if (res == "attach") {
             el.html('<i class="fa fa-check"></i>');
             el.css("background-color", "#007bff");
         } else {
-            el.html('<i class="fa fa-plus"></i>');
+            el.html('<i class="fa fa-plus"></i> افزودن به لیست');
             el.css("background-color", "transparent");
         }
     });
@@ -932,10 +1005,10 @@ function call(e) {
             },
             reload: "strict",
             setContent: false,
-            success: function(response) {
+            success: function (response) {
                 this.setContent(response);
             },
-            error: function() {
+            error: function () {
                 this.setContent(
                     '<b style="color: #d33">Error loading content.</b>'
                 );
@@ -954,7 +1027,7 @@ function likepost(event, id, status) {
         status: status,
         _token: token
     });
-    request.done(function(res) {
+    request.done(function (res) {
         if (res.status == 1) {
             $(".like-icon").html(`
         <div title="" role="button" aria-label="animation" tabindex="0" style="width: 100%; height: 100%; overflow: hidden; margin: 0px auto; outline: none;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40" preserveAspectRatio="xMidYMid slice" style="width: 100%; height: 100%; transform: translate3d(0px, 0px, 0px);"><defs><clipPath id="__lottie_element_7"><rect width="40" height="40" x="0" y="0"></rect></clipPath></defs><g clip-path="url(#__lottie_element_7)"><g transform="matrix(1,0,0,1,0,0)" opacity="1" style="display: block;"><g opacity="1" transform="matrix(1,0,0,1,19.910999298095703,19.000999450683594)"><path fill="rgb(255,255,255)" fill-opacity="1" d=" M-12.197999954223633,1.0759999752044678 C-12.197999954223633,1.0759999752044678 -9.713000297546387,9.647000312805176 -9.713000297546387,9.647000312805176 C-9.032999992370605,11.96500015258789 -6.910999774932861,13.560999870300293 -4.494999885559082,13.569999694824219 C-4.494999885559082,13.569999694824219 1.065000057220459,13.569999694824219 1.065000057220459,13.569999694824219 C2.3340001106262207,13.569000244140625 3.562000036239624,13.125 4.538000106811523,12.314000129699707 C4.538000106811523,12.314000129699707 5.752999782562256,11.303999900817871 5.752999782562256,11.303999900817871 C6.672999858856201,10.539999961853027 7.830999851226807,10.121000289916992 9.027000427246094,10.119999885559082 C9.027000427246094,10.119999885559082 9.982999801635742,10.119999885559082 9.982999801635742,10.119999885559082 C11.394000053405762,10.118000030517578 12.538000106811523,8.975000381469727 12.539999961853027,7.563000202178955 C12.539999961853027,7.563000202178955 12.539999961853027,-1.312999963760376 12.539999961853027,-1.312999963760376 C12.538000106811523,-2.7239999771118164 11.394000053405762,-3.868000030517578 9.982999801635742,-3.869999885559082 C7.447000026702881,-3.869999885559082 0.6610000133514404,-4.96999979019165 -0.26499998569488525,-9.98799991607666 C-0.8790000081062317,-13.312000274658203 -2.9649999141693115,-13.569999694824219 -3.5869998931884766,-13.569999694824219 C-3.750999927520752,-13.569999694824219 -3.9149999618530273,-13.555000305175781 -4.076000213623047,-13.527000427246094 C-5.8429999351501465,-13.173999786376953 -7,-11.470000267028809 -6.676000118255615,-9.697999954223633 C-6.676000118255615,-9.697999954223633 -5.644000053405762,-3.869999885559082 -5.644000053405762,-3.869999885559082 C-5.644000053405762,-3.869999885559082 -8.472999572753906,-3.869999885559082 -8.472999572753906,-3.869999885559082 C-9.694000244140625,-3.875999927520752 -10.843999862670898,-3.302000045776367 -11.572999954223633,-2.3239998817443848 C-12.307999610900879,-1.3539999723434448 -12.539999961853027,-0.09200000017881393 -12.197999954223633,1.0759999752044678z"></path></g><g opacity="1" transform="matrix(1,0,0,1,19.905000686645508,19.000999450683594)"><path fill="rgb(255,255,255)" fill-opacity="1" d=" M-9.713000297546387,9.64799976348877 C-9.034000396728516,11.965999603271484 -6.910999774932861,13.562000274658203 -4.494999885559082,13.569999694824219 C-4.494999885559082,13.569999694824219 1.065000057220459,13.569999694824219 1.065000057220459,13.569999694824219 C2.3329999446868896,13.569000244140625 3.562999963760376,13.125 4.538000106811523,12.314000129699707 C4.538000106811523,12.314000129699707 5.752999782562256,11.305000305175781 5.752999782562256,11.305000305175781 C6.672999858856201,10.541000366210938 7.830999851226807,10.121000289916992 9.026000022888184,10.119999885559082 C9.026000022888184,10.119999885559082 9.982999801635742,10.119999885559082 9.982999801635742,10.119999885559082 C11.395000457763672,10.118000030517578 12.538000106811523,8.97599983215332 12.539999961853027,7.564000129699707 C12.539999961853027,7.564000129699707 12.539999961853027,-1.312000036239624 12.539999961853027,-1.312000036239624 C12.538000106811523,-2.7239999771118164 11.395000457763672,-3.86899995803833 9.982999801635742,-3.869999885559082 C7.447000026702881,-3.869999885559082 0.6610000133514404,-4.96999979019165 -0.26499998569488525,-9.98799991607666 C-0.8790000081062317,-13.312000274658203 -2.9649999141693115,-13.569999694824219 -3.5869998931884766,-13.569999694824219 C-3.750999927520752,-13.569999694824219 -3.9140000343322754,-13.555999755859375 -4.076000213623047,-13.527000427246094 C-5.8429999351501465,-13.173999786376953 -7,-11.468999862670898 -6.676000118255615,-9.696999549865723 C-6.676000118255615,-9.696999549865723 -5.644000053405762,-3.869999885559082 -5.644000053405762,-3.869999885559082 C-5.644000053405762,-3.869999885559082 -8.472999572753906,-3.869999885559082 -8.472999572753906,-3.869999885559082 C-9.692999839782715,-3.875999927520752 -10.843999862670898,-3.302999973297119 -11.572999954223633,-2.3239998817443848 C-12.309000015258789,-1.3539999723434448 -12.539999961853027,-0.09099999815225601 -12.197999954223633,1.0770000219345093 C-12.197999954223633,1.0770000219345093 -9.713000297546387,9.64799976348877 -9.713000297546387,9.64799976348877z M-10.267000198364258,-1.3530000448226929 C-9.843999862670898,-1.9220000505447388 -9.175999641418457,-2.25600004196167 -8.467000007629395,-2.253000020980835 C-8.467000007629395,-2.253000020980835 -3.6989998817443848,-2.253000020980835 -3.6989998817443848,-2.253000020980835 C-3.6989998817443848,-2.253000020980835 -5.067999839782715,-9.982000350952148 -5.067999839782715,-9.982000350952148 C-5.248000144958496,-10.871999740600586 -4.679999828338623,-11.741999626159668 -3.7929999828338623,-11.934000015258789 C-2.881999969482422,-12.093000411987305 -2.1470000743865967,-11.234000205993652 -1.8619999885559082,-9.701000213623047 C-1.3619999885559082,-7.000999927520752 0.5109999775886536,-4.882999897003174 3.559999942779541,-3.5789999961853027 C5.60099983215332,-2.742000102996826 7.7779998779296875,-2.2899999618530273 9.982999801635742,-2.250999927520752 C10.498000144958496,-2.25 10.913999557495117,-1.8339999914169312 10.914999961853027,-1.3200000524520874 C10.914999961853027,-1.3200000524520874 10.914999961853027,7.557000160217285 10.914999961853027,7.557000160217285 C10.913999557495117,8.071000099182129 10.498000144958496,8.487000465393066 9.982999801635742,8.48799991607666 C9.982999801635742,8.48799991607666 9.027000427246094,8.48799991607666 9.027000427246094,8.48799991607666 C7.452000141143799,8.48900032043457 5.927000045776367,9.041000366210938 4.715000152587891,10.04800033569336 C4.715000152587891,10.04800033569336 3.5,11.059000015258789 3.5,11.059000015258789 C2.815999984741211,11.626999855041504 1.9550000429153442,11.939000129699707 1.065999984741211,11.939000129699707 C1.065999984741211,11.939000129699707 -4.489999771118164,11.939000129699707 -4.489999771118164,11.939000129699707 C-6.183000087738037,11.932999610900879 -7.670000076293945,10.814000129699707 -8.145999908447266,9.189000129699707 C-8.145999908447266,9.189000129699707 -10.625,0.6200000047683716 -10.625,0.6200000047683716 C-10.824000358581543,-0.0560000017285347 -10.690999984741211,-0.7850000262260437 -10.267999649047852,-1.3480000495910645 C-10.267999649047852,-1.3480000495910645 -10.267000198364258,-1.3530000448226929 -10.267000198364258,-1.3530000448226929z"></path></g></g></g></svg></div>
@@ -1008,16 +1081,16 @@ function likepost(event, id, status) {
 }
 
 
-function reportBug(event,id) {
+function reportBug(event, id) {
     event.preventDefault()
 
-      var myModal = new jBox("Modal", {
-         title: "<div class='text-right'>متن گزارش خطا را وارد نمایید</div>",
-         content: `<form action="${mainUrl}/send-bug" method="post">
+    var myModal = new jBox("Modal", {
+        title: "<div class='text-right'>متن گزارش خطا را وارد نمایید</div>",
+        content: `<form action="${mainUrl}/send-bug" method="post">
       <input type="hidden"  name="id" value="${id}"> 
       <textarea name='content' class='form-control text-area'></textarea>
       <button class="btn--gray">ارسال</button>
       </form>`
-     });
-     myModal.open()
+    });
+    myModal.open()
 }

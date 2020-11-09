@@ -1,10 +1,7 @@
 <?php $__env->startSection('Title',$title); ?>
 
 <?php $__env->startSection('content'); ?>
-<a href="<?php echo e(route('MainUrl')); ?>" class="logo-float-right">
-    <img class="site-logo" src="<?php echo e(asset('assets/images/aa-300x157.png')); ?>" alt="site-logo">
 
-</a>
 <div class="buy-sharing-plan">
     <form action="<?php echo e(route('S.BuyPlan')); ?>" method="post">
         <?php echo csrf_field(); ?>
@@ -68,10 +65,7 @@
     </form>
 </div>
 <section class="site-sharing-body">
-    <h1 class="site-sharing-body-title">
-        خرید اشتراک سایت
-        
-    </h1>
+  
     <a class="header-link-sharing" href="#">
         <img src="assets/images/sharing_page/p1.jpg" alt="">
     </a>

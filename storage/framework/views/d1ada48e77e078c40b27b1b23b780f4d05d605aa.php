@@ -1,4 +1,4 @@
-<a href="<?php echo e($model->path()); ?>" data-id="1" <?php if(isset($ajax) && $ajax): ?>
+<a href="<?php echo e(isset($last) ? $last->path() : $model->path()); ?>" data-id="1" <?php if(isset($ajax) && $ajax): ?>
     onclick="showDetails(event,'<?php echo e($model->id); ?>','<?php echo e(route('GetMovieDetail')); ?>')" <?php endif; ?>>
     <div class="movie-sections-box">
         <div class="img-box-movies">
@@ -30,6 +30,9 @@
 
 
         </h5>
+        <?php if(isset($last)): ?>
+            <h6 class="show-updated"><?php echo e($model->getTimeLastPlayed($last->season_id,$last->section_id,$last->time)); ?></h6>
+        <?php endif; ?>
         <?php if(isset($updated)): ?>
         <h6 class="show-updated">
             <?php echo e($model->last_updated()); ?>
@@ -42,5 +45,6 @@
             دوبله سیوان
         </h6>
         <?php endif; ?>
+
     </div>
 </a><?php /**PATH C:\xampp1\htdocs\sione\resources\views/components/article.blade.php ENDPATH**/ ?>

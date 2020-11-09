@@ -1,7 +1,7 @@
 @extends('Layout.Panel')
 
 @section('content')
-@component('components.modal',['name'=>'collection'])
+@component('components.modal',['name'=>'collection','url'=>route('Panel.DeleteCollection')])
 @endcomponent
 
 <div class="card">

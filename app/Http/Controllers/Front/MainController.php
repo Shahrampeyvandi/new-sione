@@ -12,9 +12,12 @@ use App\Director;
 use Carbon\Carbon;
 use App\Collection;
 use App\AdvertImage;
+use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\LastPlayed;
 use App\Writer;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use function GuzzleHttp\Psr7\try_fopen;
 
@@ -23,13 +26,15 @@ class MainController extends Controller
     public function index()
     {
 
+        // dd(auth()->guard('admin')->user());
+
 
         $data['year'] = Carbon::now()->year;
         $data['newsione'] = Post::where(['comming_soon' => 0])->latest()->take(10)->get();
         $data['newseries'] = Post::where(['type' => 'series', 'comming_soon' => 0])->latest()->take(10)->get();
         $data['newyear'] = Post::where(['year' => $data['year'], 'comming_soon' => 0])->latest()->take(10)->get();
 
-   
+
         $data['newmovies'] = Post::where(['type' => 'movies', 'comming_soon' => 0])->latest()->take(10)->get();
         $data['sliders'] = Slider::latest()->get();
         $data['adverts'] = AdvertImage::orderBy('created_at', 'DESC')->take(12)->get();
@@ -45,7 +50,7 @@ class MainController extends Controller
         $data['actions'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Action');
         })->whereType('movies')->inRandomOrder()->take(10)->get();
-          $data['latestdoble'] = Post::whereHas('categories', function ($q) {
+        $data['latestdoble'] = Post::whereHas('categories', function ($q) {
             $q->where('latin', 'Double');
         })->whereType('movies')->inRandomOrder()->take(10)->get();
         $data['scifis'] = Post::whereHas('categories', function ($q) {
@@ -63,11 +68,31 @@ class MainController extends Controller
         $data['title'] = 'صفحه اصلی';
 
         // dd($data);
+        if (Auth::guard('admin')->check()) {
+            $role = 'admin';
+            $user_id = Auth::guard('admin')->user()->id;
+        } else {
+            $role = 'member';
+            $user_id = Auth::user()->id;
+        }
+
+        $data['last_played'] = LastPlayed::where(['user_id' => $user_id, 'user_role' => $role])->orderBy('updated_at', 'desc')->get();
+
+
+
         return view('Front.index', $data);
     }
 
     public function Play()
     {
+        if (Auth::guard('admin')->check()) {
+            $role = 'admin';
+            $user_id = Auth::guard('admin')->user()->id;
+        } else {
+            $role = 'member';
+            $user_id = Auth::user()->id;
+        }
+
         $model = Post::where('slug', request()->slug)->first();
         if (!$model) {
             abort(404);
@@ -82,42 +107,63 @@ class MainController extends Controller
             if (count($videos) == 0) {
                 return back();
             }
+            $season_id = null;
+            $section_id = null;
+            $last_played =  LastPlayed::where(['post_id' => $model->id, 'user_id' => $user_id, 'user_role' => $role])->first();
+            $current_time = $last_played ? $last_played->time : 0;
         }
         if ($model->type !== 'movies') {
             if (isset(request()->season)) {
                 $season = $model->seasons->where('name', request()->season)->first();
+                $season_id = $season->id;
                 if (!$season) {
                     abort(404);
                 }
                 $post = $season->sections->where('section', request()->section)->first();
+                $section_id = $post->id;
                 if (!$post) {
                     abort(404);
                 }
                 $title = "Sione | $model->title - $post->name ";
                 $videos = $post->videos;
+                $last_played =  LastPlayed::where(['post_id' => $model->id, 'section_id' => $section_id, 'season_id' => $season_id, 'user_id' => $user_id, 'user_role' => $role])->first();
+                 $current_time = $last_played ? $last_played->time : 0;
             } else {
+                $season_id = null;
                 $post = $model->episodes()->where('section', request()->section)->first();
+                $section_id = $post->id;
                 $videos = $post->videos;
                 $title = "Sione | $model->title - $post->name ";
+                $last_played =  LastPlayed::where(['post_id' => $model->id, 'section_id' => $section_id, 'user_id' => $user_id, 'user_role' => $role])->first();
+                 $current_time = $last_played ? $last_played->time : 0;
             }
         }
+        $type = $model->type;
+        $post_id = $model->id;
 
 
-        return view('Front.play', compact(['videos', 'post', 'title']));
+        return view('Front.play', compact(['videos', 'post', 'post_id', 'title', 'type', 'season_id', 'section_id','current_time']));
     }
 
     public function Trailer()
     {
+
         $model = Post::where('slug', request()->slug)->first();
         if (!$model) {
             abort(404);
         }
+
         $trailer = $model->trailer;
         if (!$trailer) {
             abort(404);
         }
 
         $data['post'] = $model;
+        $data['type'] = 'trailer';
+        $data['post_id'] = null;
+        $data['season_id'] = null;
+        $data['section_id'] = null;
+
         $data['trailer_url'] = $trailer->url;
         $data['title'] = $data['post']->title;
 
@@ -206,16 +252,49 @@ class MainController extends Controller
 
     public function ShowMore()
     {
+        // dd(request()->all());
 
         $year = Carbon::now()->year;
         $c = request()->c;
         $type = request()->type;
+        $data['type'] = $type;
+        $data['c'] = $c;
+
+        $categories = Category::pluck('latin')->toArray();
+        $categories = array_map('strtolower', $categories);
+        // dd($categories);
+        if (in_array($data['c'], $categories)) {
+
+            if ($type == 'all') {
+                $data['posts'] = Post::whereHas('categories', function ($q) {
+                    $q->where('latin', request()->c);
+                })->where(['comming_soon' => 0])->latest()->get();;
+                $data['title'] = Category::whereLatin(request()->c)->first()->name;
+            }
+            if ($type == 'movie') {
+                $data['posts'] = Post::whereHas('categories', function ($q) {
+                    $q->where('latin', request()->c);
+                })->where(['comming_soon' => 0, 'type' => 'movies'])->latest()->get();
+                $data['title'] = Category::whereLatin(request()->c)->first()->name;
+            }
+            if ($type == 'serie') {
+                $data['posts'] = Post::whereHas('categories', function ($q) {
+                    $q->where('latin', request()->c);
+                })->where(['comming_soon' => 0, 'type' => 'series'])->latest()->get();
+                $data['title'] = Category::whereLatin(request()->c)->first()->name;
+            }
+        }
+
+
+
+
+
 
         if ($c == 'collections') {
             if ($type == 'all') {
                 $data['posts'] = Collection::latest()->get();
                 $data['title'] = 'مجموعه فیلم ها';
-                $data['type'] = 'collection';
+                $data['q'] = 'collection';
             }
         }
         if ($c == $year) {
@@ -233,26 +312,7 @@ class MainController extends Controller
                 $data['title'] = 'سریال های امسال';
             }
         }
-        if ($c == 'doble') {
-            if ($type == 'all') {
-                $data['posts'] = Post::whereHas('categories', function ($q) {
-                    $q->where('name', 'دوبله فارسی');
-                })->where(['comming_soon' => 0])->latest()->get();
-                $data['title'] = 'دوبله فارسی';
-            }
-            if ($type == 'movie') {
-                $data['posts'] = Post::whereHas('categories', function ($q) {
-                    $q->where('name', 'دوبله فارسی');
-                })->where(['comming_soon' => 0, 'type' => 'movies'])->latest()->get();
-                $data['title'] = 'دوبله فارسی';
-            }
-            if ($type == 'serie') {
-                $data['posts'] = Post::whereHas('categories', function ($q) {
-                    $q->where('name', 'دوبله فارسی');
-                })->where(['comming_soon' => 0, 'type' => 'series'])->latest()->get();
-                $data['title'] = 'دوبله فارسی';
-            }
-        }
+
 
         if ($c == 'updated') {
             if ($type == 'serie') {
@@ -262,82 +322,8 @@ class MainController extends Controller
                 $data['title'] = 'سریال های بروز شده';
             }
         }
-        if ($c == 'action') {
-            if ($type == 'all') {
-                $data['posts'] =  Post::where(['comming_soon' => 0])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Action');
-                })->latest()->get();
-                $data['title'] = 'اکشن';
-            }
 
-            if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Action');
-                })->latest()->get();
-                $data['title'] = 'اکشن';
-            }
-        }
-        if ($c == 'animation') {
-            if ($type == 'all') {
-                $data['posts'] =  Post::where(['comming_soon' => 0])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Animation');
-                })->latest()->get();
-                $data['title'] = 'انیمیشن';
-            }
 
-            if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Animation');
-                })->latest()->get();
-                $data['title'] = 'انیمیشن';
-            }
-        }
-        if ($c == 'sci-fi') {
-            if ($type == 'all') {
-                $data['posts'] =  Post::where(['comming_soon' => 0])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Sci-Fi');
-                })->latest()->get();
-                $data['title'] = 'ابر قهرمانی';
-            }
-
-            if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Sci-Fi');
-                })->latest()->get();
-                $data['title'] = 'ابر قهرمانی';
-            }
-        }
-        if ($c == 'horror') {
-            if ($type == 'all') {
-                $data['posts'] =  Post::where(['comming_soon' => 0])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Horror');
-                })->latest()->get();
-                $data['title'] = 'ترسناک';
-            }
-
-            if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Horror');
-                })->latest()->get();
-                $data['title'] = 'ترسناک';
-            }
-        }
-
-        if ($c == 'comedy') {
-            if ($type == 'all') {
-                $data['posts'] =  Post::where(['comming_soon' => 0])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Comedy');
-                })->latest()->get();
-                $data['title'] = 'کمدی';
-            }
-
-            if ($type == 'movie') {
-                $data['posts'] =  Post::where(['comming_soon' => 0, 'type' => 'movies'])->whereHas('categories', function ($q) {
-                    $q->where('latin', 'Comedy');
-                })->latest()->get();
-                $data['title'] = 'کمدی';
-            }
-        }
         if ($c == 'top250') {
             if ($type == 'all') {
                 $data['posts'] = Post::where('comming_soon', 0)->where('top_250', '!=', null)->orderBy("top_250", "desc")->get();
@@ -372,6 +358,17 @@ class MainController extends Controller
             }
         }
 
+
+
+        if (isset(request()->order)) {
+            if (request()->order == 'asc') {
+                $data['posts'] = $data['posts']->sortBy('year');
+            }
+            if (request()->order == 'desc') {
+                $data['posts'] = $data['posts']->sortByDesc('year');
+            }
+            $data['order'] = request()->order;
+        }
 
 
 
@@ -410,7 +407,7 @@ class MainController extends Controller
                     $q->where('name', $name);
                 })->orderBy('year', 'desc')->get();
             }
-        } 
+        }
 
 
 
@@ -430,7 +427,54 @@ class MainController extends Controller
             $data['posts'] = $collection->posts()->orderBy('year', 'asc')->latest()->get();
         }
         $data['title'] = $collection->name;
+        $data['c'] = 'collections';
+        $data['type'] = 'collection';
 
         return view('Front.ShowMore', $data);
+    }
+
+    public function LastPlayed()
+    {
+
+        // dd(request()->all());
+        if (request()->type == 'trailer') {
+            return false;
+        }
+
+        if (Auth::guard('admin')->check()) {
+            $role = 'admin';
+            $user_id = Auth::guard('admin')->user()->id;
+        } else {
+            $role = 'member';
+            $user_id = Auth::user()->id;
+        }
+
+        $check =  LastPlayed::where(['post_id' => request()->id, 'user_id' => $user_id, 'user_role' => $role])->first();
+
+        if (request()->q == 'remove') {
+            $check->delete();
+            return 'deleted';
+        }
+
+        if ($check) {
+            $check->time = request()->time;
+            $check->update();
+        } else {
+            if ((int)request()->time > 5) {
+                $lastplayed = new LastPlayed;
+                $lastplayed->user_id = $user_id;
+                $lastplayed->time = request()->time;
+                $lastplayed->user_role = $role;
+                $lastplayed->post_id = request()->id;
+
+                if (request()->type !== 'movies') {
+                    $lastplayed->season_id = request()->season;
+                    $lastplayed->section_id = request()->section;
+                }
+                $lastplayed->save();
+            }
+        }
+
+        return 'success';
     }
 }

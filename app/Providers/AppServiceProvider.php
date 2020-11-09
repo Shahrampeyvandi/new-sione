@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\BugReport;
 use App\Caption;
 use App\Category;
+use App\MovieRequest;
 use App\Setting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -54,10 +56,14 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $setting = Setting::first();
+
+        $movie_requests = MovieRequest::where('new',1)->get();
+        $reports = BugReport::where('new',1)->get();
+        $merge_noty = $movie_requests->concat($reports)->sortByDesc('created_at');
         
     
 
-        $view->with(['user'=> $user,'setting'=>$setting,'year'=>$year,'genres'=>$genres,'captions'=>$captions]);
+        $view->with(['user'=> $user,'setting'=>$setting,'year'=>$year,'genres'=>$genres,'captions'=>$captions,'merge_noty'=>$merge_noty]);
     });
     }
 }

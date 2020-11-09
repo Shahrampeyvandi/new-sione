@@ -148,10 +148,10 @@ class MoviesController extends Controller
 
 
         // dd($request->all());
-        $slug = Str::slug($post->name);
-        $destinationPath = "files/movies/$slug";
+        // $slug = Str::slug($post->name);
+        $destinationPath = "files/movies/$request->slug";
         if ($request->hasFile('poster')) {
-            File::deleteDirectory(public_path("files/movies/$slug/"));
+            File::deleteDirectory(public_path("files/movies/$post->slug/"));
             if (!File::exists($destinationPath)) {
                 File::makeDirectory($destinationPath, 0777, true);
             }
@@ -164,6 +164,7 @@ class MoviesController extends Controller
 
         $post->post_author = Auth::guard('admin')->user()->id;
         $post->title = $request->title;
+        $post->slug = $request->slug;
         $post->name = $request->name;
         $post->type = 'movies';
         $post->description = $request->desc;
@@ -189,7 +190,6 @@ class MoviesController extends Controller
 
     public function DeletePost(Request $request)
     {
-
 
         $post = Post::find($request->post_id);
         $post->sliders()->delete();
@@ -245,7 +245,7 @@ class MoviesController extends Controller
     public function DeleteImage(Request $request)
     {
         $image = Image::find($request->id);
-        File::delete(public_path() . $image->url);
+        File::delete(public_path() .'/'. $image->url);
         $image->delete();
         return response()->json('تصویر با موفقیت حذف شد');
     }

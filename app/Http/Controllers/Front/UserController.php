@@ -20,8 +20,9 @@ class UserController extends Controller
   public function Orders()
   {
 
-    $payments = Payment::where('user_id', auth()->user()->id)->latest()->get();
-    return view('Front.orders', ['payments' => $payments]);
+    $data['title'] = 'گزارش سفارشات';
+    $data['payments'] = Payment::where('user_id', auth()->user()->id)->latest()->get();
+    return view('Front.orders',$data);
   }
   public function MovieRequest()
   {
@@ -40,7 +41,7 @@ class UserController extends Controller
       $req->name = $request->name;
       $req->user_id = Auth::user()->id;
       $req->save();
-      toastr()->success('درخواست شما با موفقیت ثبت شد');
+      toastr()->info('درخواست شما با موفقیت ثبت شد');
       return back();
     }
   }
@@ -57,7 +58,7 @@ class UserController extends Controller
     BugReport::create([
       'user_id' => $user_id,
       'post_id' => $post_id,
-      'content' => $content
+      'name' => $content
     ]);
     toastr()->info('گزارش شما با موفقیت ثبت شد');
     return back();

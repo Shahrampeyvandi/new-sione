@@ -44,18 +44,18 @@
         return false;
     });
 
-$.validator.addMethod('maxWidth', function(value, element, maxwidth) {
-  return ($(element).data('imageWidth') || 0) < maxwidth;
-})
-   
-     $.validator.addMethod(
-         "maxsize",
-         function (value, element, param) {
-             return this.optional(element) || element.files[0].size <= param;
-         },
-         "سایز تصویر نمی تواند بیشتر از 200 kb باشد"
-     );
- 
+    $.validator.addMethod('maxWidth', function (value, element, maxwidth) {
+        return ($(element).data('imageWidth') || 0) < maxwidth;
+    })
+
+    $.validator.addMethod(
+        "maxsize",
+        function (value, element, param) {
+            return this.optional(element) || element.files[0].size <= param;
+        },
+        "سایز تصویر نمی تواند بیشتر از 200 kb باشد"
+    );
+
     $.validator.addMethod(
         "filesize",
         function (value, element, param) {
@@ -183,23 +183,23 @@ $.validator.addMethod('maxWidth', function(value, element, maxwidth) {
 
 
 
-$("#add-slider").validate({
-    rules: {
-        poster: {
-            required:true,
-            maxsize:350000,
-            accept: "jpg|jpeg|png|JPG|JPEG|PNG",
+    $("#add-slider").validate({
+        rules: {
+            poster: {
+                required: true,
+                maxsize: 350000,
+                accept: "jpg|jpeg|png|JPG|JPEG|PNG",
+            },
         },
-    },
-    messages: {
-        poster: {
-            required:"لطفا تصویر اسلایدشو را وارد نمایید",
-           
-            accept: "فرمت تصویر غیرمجاز میباشد",
-        }
+        messages: {
+            poster: {
+                required: "لطفا تصویر اسلایدشو را وارد نمایید",
 
-    },
-});
+                accept: "فرمت تصویر غیرمجاز میباشد",
+            }
+
+        },
+    });
 
     $("#sendsms").validate({
         rules: {
@@ -226,7 +226,7 @@ $("#add-slider").validate({
             number: "required",
             release: "required",
             poster: {
-                
+
                 filesize: 200 * 1024,
                 maxWidth: 400,
                 accept: "jpg|jpeg|png|JPG|JPEG|PNG",
@@ -251,7 +251,7 @@ $("#add-slider").validate({
             release: "تاریخ پخش را انتخاب کنید",
             poster: {
                 required: "لطفا پوستر قسمت را وارد نمایید",
-               
+
                 maxWidth: "تصویر بزرگ تر از 400 پیکسل میباشد",
                 accept: "فایل دارای فرمت نامعتبر میباشد ",
             },
@@ -294,9 +294,9 @@ $("#add-slider").validate({
                 regex: /^https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}$/,
             },
             "file[1][1]": {
-                 required: function(element){
-                return  !$("#comming_soon").is(":checked");
-        },
+                required: function (element) {
+                    return !$("#comming_soon").is(":checked");
+                },
                 regex: /^https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,}$/,
             },
         },
@@ -338,17 +338,17 @@ $("#add-slider").validate({
         },
     });
 
-     $("#edit-member").validate({
+    $("#edit-member").validate({
         rules: {
             first_name: "required",
             last_name: "required",
 
             password: {
-               
+
                 minlength: 6,
             },
             cpassword: {
-               
+
                 equalTo: "#password",
             },
             mobile: {
@@ -463,21 +463,17 @@ function addFile(event, el) {
                                                 <label class="custom-control-label" for="${id}">کیفیت بالا</label>
                                             </div>
                                             <div class="custom-control custom-checkbox custom-control">
-                                                <input type="checkbox" id="${
-        id + 1
+                                                <input type="checkbox" id="${id + 1
         }" name="quality[]" value="md"
                                                     class="custom-control-input">
-                                                <label class="custom-control-label" for="${
-        id + 1
+                                                <label class="custom-control-label" for="${id + 1
         }">کیفیت متوسط</label>
                                             </div>
                                             <div class="custom-control custom-checkbox custom-control">
-                                                <input type="checkbox" id="${
-        id + 2
+                                                <input type="checkbox" id="${id + 2
         }" name="quality[]" value="sd"
                                                     class="custom-control-input">
-                                                <label class="custom-control-label" for="${
-        id + 2
+                                                <label class="custom-control-label" for="${id + 2
         }">کیفیت پایین</label>
                                             </div>
                                         </div>
@@ -503,7 +499,7 @@ function addCategory(event, url) {
     var token = $('meta[name="_token"]').attr("content");
     // data = ;
 
-  var  request = $.post(url, { name: name, latin: latin, _token: token });
+    var request = $.post(url, { name: name, latin: latin, _token: token });
     request.done(function (res) {
 
         if (latin !== "" && name !== "") {
@@ -685,7 +681,7 @@ function addQuality(event) {
 }
 
 $("#poster").change(function () {
-   
+
     if (this.files && this.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
@@ -724,12 +720,12 @@ function addCaption(event) {
        `);
 }
 
-function deleteCaption(event,id,url) {
+function deleteCaption(event, id, url) {
     event.preventDefault()
     var token = $('meta[name="_token"]').attr("content");
-  var  request = $.post(url, { id: id, _token: token });
+    var request = $.post(url, { id: id, _token: token });
     request.done(function (res) {
-    $(event.target).parents('.cap-wrapper').remove()
+        $(event.target).parents('.cap-wrapper').remove()
 
     })
 
@@ -841,21 +837,89 @@ $(".dropify").dropify(dropifyOptions);
 
 
 
-function checkName(event,url) {
+function checkName(event, url) {
     var val = $(event.target).val()
     var token = $('meta[name="_token"]').attr("content");
 
-    if(val.length > 0) {
-   
+    if (val.length > 0) {
 
-  var  request = $.post(url, { name: val, _token: token });
-    request.done(function (res) {
-    if(res.error){
-        $(".error-name").text(res.error)
 
-    }else{
-$(".error-name").text('');
+        var request = $.post(url, { name: val, _token: token });
+        request.done(function (res) {
+            if (res.error) {
+                $(".error-name").text(res.error)
+
+            } else {
+                $(".error-name").text('');
+            }
+        })
     }
+}
+
+function showNotification(event, id, type) {
+    event.preventDefault()
+
+    var token = $('meta[name="_token"]').attr("content");
+    var jbox = new jBox("Modal", {
+        attach: ".openModal",
+        minWidth: 300,
+        ajax: {
+            type: "POST",
+            url: mainUrl + "/panel/getcontentnoty",
+            data: {
+                id: id,
+                type: type,
+                _token: token
+            },
+            reload: "strict",
+            setContent: false,
+            success: function (response) {
+                this.setContent(response.content);
+                this.setTitle(response.user)
+            },
+            error: function () {
+                this.setContent(
+                    '<b style="color: #d33">Error loading content.</b>'
+                );
+            }
+        }
+    });
+    jbox.open();
+}
+
+function readNoty(event, id, type) {
+    event.preventDefault()
+    var token = $('meta[name="_token"]').attr("content");
+    var request = $.post(mainUrl + '/panel/readnoty', { id: id, type: type, _token: token });
+    request.done(function (res) {
+        if(res == 'success') {
+            $(event.target).text('خوانده شد')
+        }
     })
 }
+
+function deleteNoty(event, id, type) {
+    event.preventDefault()
+    var token = $('meta[name="_token"]').attr("content");
+    var request = $.post(mainUrl + '/panel/deletenoty', { id: id, type: type, _token: token });
+    request.done(function (res) {
+        if(res == 'success') {
+            $(event.target).parents(".list-group-item").remove();
+        }
+    })
 }
+
+   function deleteImage(event,id) {
+       event.preventDefault();
+       var target = $(event.target);
+        var token = $('meta[name="_token"]').attr("content");
+        var request = $.post(mainUrl + "/panel/post/image/delete", {
+            id: id,
+
+            _token: token
+        });
+        request.done(function(res) {
+           
+            target.parents(".col-md-3").remove();
+        });
+   }

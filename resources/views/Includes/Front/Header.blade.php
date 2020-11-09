@@ -82,7 +82,7 @@
                 <div class="user-login-show">
                     <i class="fa fa-user-circle"></i>
                 </div>
-                <div class="profile-dropdown-box">
+                <div class="profile-dropdown-box hidden">
                     <ul>
                         <li>
                             <a href="{{route('S.Account')}}">

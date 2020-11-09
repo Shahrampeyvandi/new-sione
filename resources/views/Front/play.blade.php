@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="_token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{$title}}</title>
@@ -104,7 +105,7 @@
      video.responsive(true);
      
      video.videoJsResolutionSwitcher()
-    video.currentTime(localStorage.getItem('videoTime' + '{{$post->id}}')); 
+    video.currentTime('{{$current_time ?? 0}}'); 
       video.watermark({
          file: '{{asset("frontend/assets/images/s.png")}}',
          xpos: 1,
@@ -112,14 +113,45 @@
        xrepeat:1,
        opacity: 0.5
      });
-    function run_url_every_2seconds(){
-      var whereYouAt = video.currentTime();
+     function run_url_every_2seconds(){
+        var whereYouAt = video.currentTime();
             localStorage.setItem('videoTime' + '{{$post->id}}' , whereYouAt);
             
         } 
+        
         video.on('play', function() {  
             setInterval(run_url_every_2seconds,2000);
+           send = setInterval(function(){
+                sendData('insert')
+                // console.log('sended')
+            },10000)
         });
+         video.on('pause', function() {  
+           clearInterval(send)
+        //    console.log('pause')
+        });
+
+          video.on('ended', function() {  
+          localStorage.setItem('videoTime' + '{{$post->id}}' , 0);
+          sendData('remove')
+
+        });
+
+
+
+
+        function sendData(q) {
+            
+             var token = $('meta[name="_token"]').attr("content");
+             var data = {q:q,time:video.currentTime(),type:'{{$type}}',season:'{{$season_id}}',section:'{{$section_id}}',id:'{{$post_id}}',_token:token}
+               var request = $.post('{{route('Ajax.LastPlayed')}}', data);
+               request.done(function(res) {
+                   $(".results").html(res);
+                   timeout = true;
+               });
+        }
+
+
 
         function fillMode(event) {
             event.preventDefault()

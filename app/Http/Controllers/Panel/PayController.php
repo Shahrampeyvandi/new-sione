@@ -23,37 +23,37 @@ class PayController extends Controller
         // }else{
         //     dd('no');
         // }
-        
+
         if (auth()->guard('admin')->check()) {
             toastr()->success('تمام اشتراک ها در دسترس ادمین قرار دارند');
             return back();
         }
-        
-        
+
+
         $plan = Plan::whereId($request->plan_name)->first();
-        
-       
+
+
         if (!$plan) return back();
-        
+
         $expire_date = Carbon::now()->addDays($plan->days);
-  
+
         //برای تست کردن مقدار دیباگ مد رو روی یک قررا بده وگرنه صفر
         $debugmode = 0;
         $user = auth()->user();
 
-     
+
 
         $payment = new Payment;
         $payment->user_id = $user->id;
         $payment->plan_id = $plan->id;
-        if(session()->has('amount' . auth()->user()->id)) {
+        if (session()->has('amount' . auth()->user()->id)) {
             $amount = session()->get('amount' . auth()->user()->id);
-        }else{
+        } else {
             $amount =  $plan->price;
         }
         $payment->amount =  $amount;
         $payment->save();
-       
+
 
 
 
@@ -66,23 +66,27 @@ class PayController extends Controller
             } else {
                 $expire_date = Carbon::parse(auth()->user()->expire_date)->addDays($plan->days);
             }
-        
+
             $user->expire_date = $expire_date;
             $user->update();
             $user->fresh();
-           
+
+
+            $payment->success = 1;
+            $payment->update();
+
             if (session()->has('discount_id' . $user->id)) {
                 $discount = Discount::find(session()->get('discount_id' . $user->id));
-               if($discount->count !== null) {
-                $discount->decrement('count', 1);
-               }
+                if ($discount->count !== null) {
+                    $discount->decrement('count', 1);
+                }
                 $user->discounts()->attach(session()->get('discount_id' . $user->id));
             }
             session()->forget('discount_id' . $user->id);
             session()->forget('amount' . auth()->user()->id);
 
             $this->sendNoty(auth()->user(), $plan);
-         
+
             return redirect()->route('MainUrl');
         }
 
@@ -173,7 +177,7 @@ class PayController extends Controller
                 $payment->update();
 
 
-               
+
                 // به اعتبارش اضافه کن
                 // تراکنش موفق بود هر جا می خوای ریدایرکتش کن
                 $plan = Plan::find($payment->plan_id);
@@ -189,7 +193,7 @@ class PayController extends Controller
                 $user->expire_date = $expire_date;
                 $user->update();
 
-                 // برای ارسال پیامک ثبت خرید اشتراک
+                // برای ارسال پیامک ثبت خرید اشتراک
                 $patterncode = "w2z4s4pd1e";
                 $data = array("name" => auth()->user()->first_name, "day" => $plan->days);
                 $this->sendSMS($patterncode, auth()->user()->mobile, $data);
@@ -198,9 +202,9 @@ class PayController extends Controller
 
                 if (session()->has('discount_id' . $user->id)) {
                     $discount = Discount::find(session()->get('discount_id' . $user->id));
-                     if($discount->count !== null) {
-                    $discount->decrement('count', 1);
-                     }
+                    if ($discount->count !== null) {
+                        $discount->decrement('count', 1);
+                    }
                     $user->discounts()->attach(session()->get('discount_id' . $user->id));
                 }
                 session()->forget('discount_id' . $user->id);
@@ -212,7 +216,7 @@ class PayController extends Controller
             } else {
 
                 // تراکنش ناموفق بوده
-                 toastr()->error('تراکنش ناموفق بود');
+                toastr()->error('تراکنش ناموفق بود');
                 return redirect()->route('S.SiteSharing');
             }
         }

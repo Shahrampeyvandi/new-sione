@@ -13,13 +13,16 @@
     <link rel="stylesheet" href="<?php echo e(asset('assets/vendors/select2/css/select2.min.css')); ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo e(asset('assets/vendors/dropify/dropify.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/toastr.css')); ?>">
-
+    <link href="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.css" rel="stylesheet">
+    
+    
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/app.css')); ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/custom.css')); ?>" type="text/css">
     <link rel="shortcut icon" href="<?php echo e(asset('assets/media/image/favicon.png')); ?>">
     <meta name="theme-color" content="#3f51b5" />
     <?php echo $__env->yieldContent('css'); ?>
 </head>
+
 <body class="icon-side-menu">
     <div class="page-loader">
         <div class="spinner-border"></div>
@@ -33,6 +36,10 @@
         <?php echo $__env->yieldContent('content'); ?>
     </main>
     <!-- end::main content -->
+      <script>
+        var mainUrl = "<?php echo e(route('MainUrl')); ?>";
+    </script>
+
 
     <!-- begin::global scripts -->
     <script src="<?php echo e(asset('assets/vendors/bundle.js')); ?>"></script>
@@ -43,21 +50,22 @@
     <!-- end::chart -->
     <!-- dropify -->
     <script src="<?php echo e(asset('assets/vendors/dropify/dropify.min.js')); ?>"></script>
-    
+
     <!-- end::dropify -->
     <script src="<?php echo e(asset('assets/vendors/jquery-form/jquery.form.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/vendors/jquery-validate/jquery.validate.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/vendors/select2/js/select2.min.js')); ?>"></script>
     <!-- begin::custom scripts -->
-      <script src="<?php echo e(asset('assets/js/toastr.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/toastr.min.js')); ?>"></script>
     <?php echo app('toastr')->render(); ?>
-
+    
     <script src="<?php echo e(asset('assets/vendors/dataTable/jquery.dataTables.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/vendors/dataTable/dataTables.bootstrap4.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/vendors/dataTable/dataTables.responsive.min.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/examples/datatable.js')); ?>"></script>
-
+    
     <?php echo $__env->yieldContent('js'); ?>
+    <script src="https://cdn.jsdelivr.net/gh/StephanWagner/jBox@v1.2.0/dist/jBox.all.min.js"></script>
     <script src="<?php echo e(asset('assets/js/custom.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/app.js')); ?>"></script>
     <!-- end::custom scripts -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Blog;
+use App\BugReport;
 use App\Post;
 use App\User;
 use App\Visit;
@@ -10,7 +11,9 @@ use App\Category;
 use Illuminate\Http\Request;
 use Morilog\Jalali\Jalalian;
 use App\Http\Controllers\Controller;
+use App\MovieRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class DashboardController extends Controller
 {
@@ -58,9 +61,9 @@ class DashboardController extends Controller
             }
             $json_votes = json_encode($mostvotes);
             $json_posts = json_encode($postnames);
-        }else{
-               $json_votes = '';
-               $json_posts = '';
+        } else {
+            $json_votes = '';
+            $json_posts = '';
         }
 
         $movies = Post::where('type', 'movies')->count();
@@ -79,5 +82,61 @@ class DashboardController extends Controller
             'json_posts'
 
         ]));
+    }
+
+    public function get_content_noty(Request $request)
+    {
+        // dd($request->all());
+        if ($request->type == 'bug') {
+            $model = BugReport::find($request->id);
+            $content = $model->name;
+            $user = User::find($model->user_id);
+            $name = $user->first_name;
+            $family = $user->last_name;
+        }
+
+        if ($request->type == 'req') {
+            $model = MovieRequest::find($request->id);
+            $content = $model->name;
+            $user = User::find($model->user_id);
+            $name = $user->first_name;
+            $family = $user->last_name;
+        }
+
+        $content = "<div class='text-right'>$content</div>";
+        $user = '<div class="text-right">' . $name . ' ' . $family . '</div>';
+        return Response::json(['content' => $content, 'user' => $user], 200);
+    }
+
+    public function read_noty(Request $request)
+    {
+        if ($request->type == 'bug') {
+            $model = BugReport::find($request->id);
+            $model->new = 0;
+            $model->update();
+        }
+
+        if ($request->type == 'req') {
+            $model = MovieRequest::find($request->id);
+            $model->new = 0;
+            $model->update();
+        }
+
+        return Response::json('success', 200);
+    }
+
+    public function delete_noty(Request $request)
+    {
+        if ($request->type == 'bug') {
+            $model = BugReport::find($request->id);
+            $model->delete();
+        }
+
+        if ($request->type == 'req') {
+            $model = MovieRequest::find($request->id);
+            $model->delete();
+        }
+
+        return Response::json('success', 200);
     }
 }

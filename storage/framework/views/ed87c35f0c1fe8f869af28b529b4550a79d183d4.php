@@ -49,9 +49,11 @@
                         <i class="fa fa-cloud-download-alt"></i>
                     </a>
                 </h3>
+                <?php if($section->duration): ?>
                 <h4>
                     <?php echo e($section->duration); ?> دقیقه
                 </h4>
+                <?php endif; ?>
 
                 <h5>
                     <?php echo html_entity_decode(str_limit($section->description,100), ENT_QUOTES, 'UTF-8'); ?>

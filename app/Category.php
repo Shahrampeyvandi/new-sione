@@ -28,7 +28,8 @@ class Category extends Model
 
    public function path()
    {
-       return route('Category.Show',['name'=>$this->latin]);
+      return route('S.ShowMore') .'?c='.strtolower($this->latin).'&type=all';
+       
    }
 
    public function posts()

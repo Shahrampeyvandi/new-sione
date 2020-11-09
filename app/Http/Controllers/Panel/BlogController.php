@@ -179,19 +179,13 @@ class BlogController extends Controller
         $blog->poster = $Poster;
         $blog->description = $request->desc;
         $blog->views = 10;
+        $blog->category_id = $request->category;
        
         $blog->update();
 
 
 
-        if ($id = BlogCategory::check($request->category)) {
-            if ($blog->categories()->pluck('id')->contains($id)) {
-            } else {
-                $blog->categories()->attach($id);
-            }
-        } else {
-            $blog->categories()->create(['name' => $request->category]);
-        }
+       
 
 
         $blog->links()->delete();

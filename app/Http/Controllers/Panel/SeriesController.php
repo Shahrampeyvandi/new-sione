@@ -135,21 +135,21 @@ class SeriesController extends Controller
 
        
 
-        $slug = Str::slug($post->name);
+        // $slug = Str::slug($post->name);
 
         if (isset($request->t) && $request->t == 'documentary') {
-            $destinationPath = "files/documentaries/$slug";
+            $destinationPath = "files/documentaries/$request->slug";
             $post_type = 'documentary';
             $message = 'مستند با موفقیت ویرایش شد';
             $q = '?type=documentary';
         } else {
-            $destinationPath = "files/series/$slug";
+            $destinationPath = "files/series/$request->slug";
             $post_type = 'series';
             $message = 'سریال با موفقیت ویرایش شد';
             $q = '';
         }
 
-        $destinationPath = "files/series/$slug";
+        $destinationPath = "files/series/$request->slug";
         if ($request->hasFile('poster')) {
             $this->deletePosters($post);
 
@@ -167,6 +167,7 @@ class SeriesController extends Controller
 
         $post->post_author = Auth::guard('admin')->user()->id;
         $post->title = $request->title;
+        $post->slug = $request->slug;
         $post->name = $request->name;
         $post->type = $post_type;
         $post->description = $request->desc;

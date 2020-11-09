@@ -21,12 +21,13 @@
                  <span href="#" class="stars">
                         ستاره 1
                  </span>
-                <h6>
+                <h6 class="mb-0">
                     دسته بندی: &nbsp;
                     <a href="#" class="categories">
                         دسته بندی 1 -
                     </a>
                 </h6>
+                <h6 class="age-rate mt-0"></h6>
             </a>
         </div>
     </div>

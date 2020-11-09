@@ -16,7 +16,8 @@
                 @endisset
             </div>
             <div class="modal-footer">
-                <form action="{{route('Panel.DeleteCat')}}" method="post">
+                <form @isset($url) action="{{$url}}" @else action="{{route('Panel.DeleteCat')}}" @endisset
+                    method="post">
                     @csrf
                     @method('delete')
                     <input type="hidden" name="{{$name}}_id" id="{{$name}}_id" value="">

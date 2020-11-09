@@ -30,7 +30,7 @@ class Post extends Model
         $coll_pluck = $collections->pluck('id');
         $collection_posts = static::whereHas('collections', function ($q) use ($coll_pluck) {
             $q->whereIn('id', $coll_pluck);
-        })->where('id', '!=', $this->id)->where(['type' => $this->type, 'comming_soon' => 0])->orderBy('year','asc')->take(6)->get();
+        })->where('id', '!=', $this->id)->where(['type' => $this->type, 'comming_soon' => 0])->orderBy('year', 'asc')->take(6)->get();
 
         if (count($collection_posts)) {
             return $collection_posts;
@@ -39,7 +39,7 @@ class Post extends Model
             $cat_pluck = $categories->pluck('id');
             return  static::whereHas('categories', function ($q) use ($cat_pluck) {
                 $q->whereIn('id', $cat_pluck);
-            })->where('id', '!=', $this->id)->where(['type' => $this->type, 'comming_soon' => 0])->orderBy('year','asc')->take(6)->get();
+            })->where('id', '!=', $this->id)->where(['type' => $this->type, 'comming_soon' => 0])->orderBy('year', 'asc')->take(6)->get();
         }
     }
 
@@ -119,10 +119,11 @@ class Post extends Model
         return $this->hasOne(Trailer::class);
     }
 
-    public function path()
+    public function path($with = 'slug')
     {
+        
         if ($this->type == 'movies') {
-            return route('ShowMovie', $this->slug);
+            return route('ShowMovie', $this->$with);
         }
 
         if ($this->type == 'documentary' || $this->type == 'series') {
@@ -130,9 +131,9 @@ class Post extends Model
             $season = $this->seasons()->orderBy('number', 'desc')->first();
             if ($season) {
                 $id = $season->number;
-                return route('ShowMovie', ['slug' => $this->slug]) . '?season=' . $id . '';
+                return route('ShowMovie', [$with => $this->$with]) . '?season=' . $id . '';
             } else {
-                return route('ShowMovie', ['slug' => $this->slug]);
+                return route('ShowMovie', [$with => $this->$with]);
             }
         }
     }
@@ -163,6 +164,7 @@ class Post extends Model
         if ($age == '12') {
             return 'مناسب بالای 12 سال';
         }
+        return null;
     }
 
     public function show_poster($size)
@@ -243,6 +245,34 @@ class Post extends Model
             return ' قسمت ' . $last_section->section . ' ';
         }
         return null;
+    }
+
+    public function getTimeLastPlayed($season, $section, $time)
+    {
+        $minute = (int)ceil((float)$time / 60);
+        if($this->type == 'movies') {
+            $type = 'فیلم';
+        }
+        if($this->type == 'series') {
+            $type = 'سریال';
+        }
+        if($this->type == 'documentary') {
+            $type = 'مستند';
+        }
+        if ($this->type !== 'movies') {
+            if ($season !== null) {
+
+                $season = $this->seasons()->where('id', $season)->first();
+                $episode = $this->episodes()->where('id', $section)->first();
+                return 'شما فصل ' .$season->number. ' قسمت ' .$episode->section. ' از این ' .$type. ' را تا دقیقه ' .$minute. ' مشاهده کرده اید';
+            } else {
+                $season = null;
+                $episode = $this->episodes()->where('id', $section)->first();
+                return ' شما قسمت ' .$episode->section. ' از این ' .$type. ' را تا دقیقه ' .$minute. ' مشاهده کرده اید';
+            }
+        } else {
+            return 'شما تا دقیقه ' . $minute . ' از این فیلم را تماشا کرده اید';
+        }
     }
 
 

@@ -19,7 +19,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link nav-link-notify sidebar-open" data-sidebar-target="#notifications">
+                        
+                        <a href="#" class="nav-link @if(count($merge_noty)) nav-link-notify @endif sidebar-open" data-sidebar-target="#notifications">
                             <i class="fa fa-bell"></i>
                         </a>
                     </li>
